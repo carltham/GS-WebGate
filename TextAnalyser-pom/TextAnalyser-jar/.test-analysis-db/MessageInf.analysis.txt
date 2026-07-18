@@ -1,0 +1,10 @@
+Full Name: MessageInf
+Current Name: MessageInf
+Suggested Name: MessageInf
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: MessageInf - [OK] Valid PascalCase name
+Suggestion: MessageInf                     → MessageInf                     (Rename 'MessageInf' to follow PascalCase convention. identified as Component for MessageInf)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317716

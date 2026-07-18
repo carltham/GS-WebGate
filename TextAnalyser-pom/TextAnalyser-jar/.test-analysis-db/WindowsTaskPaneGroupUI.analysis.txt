@@ -1,0 +1,10 @@
+Full Name: WindowsTaskPaneGroupUI
+Current Name: WindowsTaskPaneGroupUI
+Suggested Name: WindowsTaskPaneGroupUi
+Extends Class: BasicTaskPaneGroupUI
+Purpose: Component/Helper
+Validation: WindowsTaskPaneGroupUI - [OK] Valid PascalCase name
+Suggestion: WindowsTaskPaneGroupUI         → WindowsTaskPaneGroupUi         (Rename 'WindowsTaskPaneGroupUI' to follow PascalCase convention. Extends BasicTaskPaneGroupUI - identified as Component for WindowsTaskPaneGroupUI)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317444

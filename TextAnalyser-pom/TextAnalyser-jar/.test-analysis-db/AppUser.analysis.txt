@@ -1,0 +1,10 @@
+Full Name: AppUser
+Current Name: AppUser
+Suggested Name: AppUser
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: AppUser - [OK] Valid PascalCase name
+Suggestion: AppUser                        → AppUser                        (Rename 'AppUser' to follow PascalCase convention. identified as Component for AppUser)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317890

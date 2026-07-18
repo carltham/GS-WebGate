@@ -1,0 +1,10 @@
+Full Name: JTicketsBagMulti
+Current Name: JTicketsBagMulti
+Suggested Name: JticketsBagMulti
+Extends Class: JTicketsBag
+Purpose: Component/Helper
+Validation: JTicketsBagMulti - [OK] Valid PascalCase name
+Suggestion: JTicketsBagMulti               → JticketsBagMulti               (Rename 'JTicketsBagMulti' to follow PascalCase convention. Extends JTicketsBag - identified as Component for JTicketsBagMulti)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318524

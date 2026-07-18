@@ -1,0 +1,10 @@
+Full Name: FormatsRESOURCE
+Current Name: FormatsRESOURCE
+Suggested Name: Resource
+Extends Class: Formats
+Purpose: Component/Helper
+Validation: FormatsRESOURCE - [OK] Valid PascalCase name
+Suggestion: FormatsRESOURCE                → Resource                       (Rename 'FormatsRESOURCE' to follow PascalCase convention. Extends Formats - identified as Component for Resource)
+Lint Issues: WARNING|ACRONYM_VIOLATION|Avoid consecutive uppercase acronyms; use 'XmlParser' instead of 'XMLParser'.;
+Has Lint Errors: false
+Timestamp: 1784407317682

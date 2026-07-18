@@ -1,0 +1,10 @@
+Full Name: JPanelView
+Current Name: JPanelView
+Suggested Name: JpanelViewPanel
+Extends Class: Unknown
+Purpose: Panel/View component
+Validation: JPanelView - [OK] Valid PascalCase name
+Suggestion: JPanelView                     → JpanelViewPanel                (Rename 'JPanelView' to follow PascalCase convention. identified as Panel for JPanelView)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407319243

@@ -1,0 +1,10 @@
+Full Name: KeyGetterFirst
+Current Name: KeyGetterFirst
+Suggested Name: KeyGetterFirst
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: KeyGetterFirst - [OK] Valid PascalCase name
+Suggestion: KeyGetterFirst                 → KeyGetterFirst                 (Rename 'KeyGetterFirst' to follow PascalCase convention. identified as Component for KeyGetterFirst)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317652

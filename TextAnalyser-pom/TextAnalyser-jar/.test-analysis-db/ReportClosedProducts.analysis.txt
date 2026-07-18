@@ -1,0 +1,10 @@
+Full Name: ReportClosedProducts
+Current Name: ReportClosedProducts
+Suggested Name: Product
+Extends Class: mainReports
+Purpose: Component/Helper
+Validation: ReportClosedProducts - [OK] Valid PascalCase name
+Suggestion: ReportClosedProducts           → Product                        (Rename 'ReportClosedProducts' to follow PascalCase convention. Extends mainReports - identified as Component for Product)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318007

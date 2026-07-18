@@ -1,0 +1,10 @@
+Full Name: ImageUtils
+Current Name: ImageUtils
+Suggested Name: ImageUtils
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: ImageUtils - [OK] Valid PascalCase name
+Suggestion: ImageUtils                     → ImageUtils                     (Rename 'ImageUtils' to follow PascalCase convention. identified as Component for ImageUtils)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317677

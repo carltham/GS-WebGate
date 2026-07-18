@@ -1,0 +1,10 @@
+Full Name: SupplyerEditor
+Current Name: SupplyerEditor
+Suggested Name: SupplyerEditorEditor
+Extends Class: EditorRecord
+Purpose: Editor for SupplyerEditor records
+Validation: SupplyerEditor - [OK] Valid PascalCase name
+Suggestion: SupplyerEditor                 → SupplyerEditorEditor           (Rename 'SupplyerEditor' to follow PascalCase convention. Extends EditorRecord - identified as Editor for SupplyerEditor)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407319672

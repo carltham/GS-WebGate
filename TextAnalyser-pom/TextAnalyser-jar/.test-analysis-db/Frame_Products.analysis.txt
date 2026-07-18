@@ -1,0 +1,10 @@
+Full Name: Frame_Products
+Current Name: Frame_Products
+Suggested Name: ProductEditor
+Extends Class: View_Editors
+Purpose: Editor component
+Validation: Frame_Products - [ERROR] Class name contains underscore - use PascalCase instead
+Suggestion: Frame_Products                 → ProductEditor                  (Rename 'Frame_Products' to follow PascalCase convention. Extends View_Editors - identified as Editor for Product)
+Lint Issues: WARNING|SNAKE_CASE_DISCOURAGED|Class name contains underscores. Use PascalCase instead.;
+Has Lint Errors: false
+Timestamp: 1784407319191

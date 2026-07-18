@@ -1,0 +1,10 @@
+Full Name: DBManagerPanel
+Current Name: DBManagerPanel
+Suggested Name: DbmanagerPanelPanel
+Extends Class: JPanel
+Purpose: UI panel/view component
+Validation: DBManagerPanel - [OK] Valid PascalCase name
+Suggestion: DBManagerPanel                 → DbmanagerPanelPanel            (Rename 'DBManagerPanel' to follow PascalCase convention. Extends JPanel - identified as Panel for DBManagerPanel)
+Lint Issues: WARNING|ACRONYM_VIOLATION|Avoid consecutive uppercase acronyms; use 'XmlParser' instead of 'XMLParser'.;
+Has Lint Errors: false
+Timestamp: 1784407318428

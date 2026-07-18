@@ -1,0 +1,10 @@
+Full Name: DevicePrinterESCPOS
+Current Name: DevicePrinterESCPOS
+Suggested Name: Printer
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: DevicePrinterESCPOS - [OK] Valid PascalCase name
+Suggestion: DevicePrinterESCPOS            → Printer                        (Rename 'DevicePrinterESCPOS' to follow PascalCase convention. identified as Component for Printer)
+Lint Issues: WARNING|ACRONYM_VIOLATION|Avoid consecutive uppercase acronyms; use 'XmlParser' instead of 'XMLParser'.;
+Has Lint Errors: false
+Timestamp: 1784407318277

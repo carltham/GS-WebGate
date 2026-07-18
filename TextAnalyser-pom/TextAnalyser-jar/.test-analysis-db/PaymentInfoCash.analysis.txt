@@ -1,0 +1,10 @@
+Full Name: PaymentInfoCash
+Current Name: PaymentInfoCash
+Suggested Name: Cash
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: PaymentInfoCash - [OK] Valid PascalCase name
+Suggestion: PaymentInfoCash                → Cash                           (Rename 'PaymentInfoCash' to follow PascalCase convention. identified as Component for Cash)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407319251

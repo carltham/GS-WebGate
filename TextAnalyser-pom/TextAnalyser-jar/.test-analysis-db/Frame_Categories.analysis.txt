@@ -1,0 +1,10 @@
+Full Name: Frame_Categories
+Current Name: Frame_Categories
+Suggested Name: FrameCategoriesEditor
+Extends Class: View_Editors
+Purpose: Editor component
+Validation: Frame_Categories - [ERROR] Class name contains underscore - use PascalCase instead
+Suggestion: Frame_Categories               → FrameCategoriesEditor          (Rename 'Frame_Categories' to follow PascalCase convention. Extends View_Editors - identified as Editor for Frame_Categories)
+Lint Issues: WARNING|SNAKE_CASE_DISCOURAGED|Class name contains underscores. Use PascalCase instead.;
+Has Lint Errors: false
+Timestamp: 1784407319180

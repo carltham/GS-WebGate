@@ -1,0 +1,10 @@
+Full Name: peoplePanel
+Current Name: peoplePanel
+Suggested Name: PeoplePanel
+Extends Class: editorPanel
+Purpose: Management panel for Person with editor
+Validation: peoplePanel - [ERROR] Class name must start with uppercase letter (PascalCase)
+Suggestion: peoplePanel                    → PeoplePanel                    (Rename 'peoplePanel' to follow PascalCase convention. Extends editorPanel - identified as Panel for People)
+Lint Issues: WARNING|PASCAL_CASE_VIOLATION|Class name should start with an uppercase character.;
+Has Lint Errors: false
+Timestamp: 1784407318566

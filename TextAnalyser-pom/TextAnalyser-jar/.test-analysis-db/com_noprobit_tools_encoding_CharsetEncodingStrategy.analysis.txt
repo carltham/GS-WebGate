@@ -1,0 +1,10 @@
+Full Name: com.noprobit.tools.encoding.CharsetEncodingStrategy
+Current Name: CharsetEncodingStrategy
+Suggested Name: CharsetEncodingStrategy
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: CharsetEncodingStrategy - [OK] Valid PascalCase name
+Suggestion: CharsetEncodingStrategy        → CharsetEncodingStrategy        (Rename 'CharsetEncodingStrategy' to follow PascalCase convention. identified as Component for CharsetEncodingStrategy)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407356320

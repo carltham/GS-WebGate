@@ -1,0 +1,10 @@
+Full Name: TicketPrinterException
+Current Name: TicketPrinterException
+Suggested Name: Printer
+Extends Class: Exception
+Purpose: Component/Helper
+Validation: TicketPrinterException - [OK] Valid PascalCase name
+Suggestion: TicketPrinterException         → Printer                        (Rename 'TicketPrinterException' to follow PascalCase convention. Extends Exception - identified as Component for Printer)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318264

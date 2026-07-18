@@ -1,0 +1,10 @@
+Full Name: notRegistredScreen
+Current Name: notRegistredScreen
+Suggested Name: NotRegisteredPanel
+Extends Class: mainPanel
+Purpose: UI panel/view component
+Validation: notRegistredScreen - [ERROR] Class name must start with uppercase letter (PascalCase)
+Suggestion: notRegistredScreen             → NotRegisteredPanel             (Rename 'notRegistredScreen' to follow PascalCase convention. Extends mainPanel - identified as Panel for NotRegistered)
+Lint Issues: WARNING|PASCAL_CASE_VIOLATION|Class name should start with an uppercase character.;
+Has Lint Errors: false
+Timestamp: 1784407318307

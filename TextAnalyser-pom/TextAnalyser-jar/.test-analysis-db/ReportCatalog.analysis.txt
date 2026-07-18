@@ -1,0 +1,10 @@
+Full Name: ReportCatalog
+Current Name: ReportCatalog
+Suggested Name: ReportCatalog
+Extends Class: mainReports
+Purpose: Component/Helper
+Validation: ReportCatalog - [OK] Valid PascalCase name
+Suggestion: ReportCatalog                  → ReportCatalog                  (Rename 'ReportCatalog' to follow PascalCase convention. Extends mainReports - identified as Component for ReportCatalog)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318063

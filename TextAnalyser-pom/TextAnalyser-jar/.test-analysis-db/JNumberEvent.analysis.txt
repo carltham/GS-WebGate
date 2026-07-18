@@ -1,0 +1,10 @@
+Full Name: JNumberEvent
+Current Name: JNumberEvent
+Suggested Name: JnumberEvent
+Extends Class: EventObject
+Purpose: Component/Helper
+Validation: JNumberEvent - [OK] Valid PascalCase name
+Suggestion: JNumberEvent                   → JnumberEvent                   (Rename 'JNumberEvent' to follow PascalCase convention. Extends EventObject - identified as Component for JNumberEvent)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317576

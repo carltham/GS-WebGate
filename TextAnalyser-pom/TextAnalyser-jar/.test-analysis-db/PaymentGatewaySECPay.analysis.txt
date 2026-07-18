@@ -1,0 +1,10 @@
+Full Name: PaymentGatewaySECPay
+Current Name: PaymentGatewaySECPay
+Suggested Name: PaymentGatewaySecpay
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: PaymentGatewaySECPay - [OK] Valid PascalCase name
+Suggestion: PaymentGatewaySECPay           → PaymentGatewaySecpay           (Rename 'PaymentGatewaySECPay' to follow PascalCase convention. identified as Component for PaymentGatewaySECPay)
+Lint Issues: WARNING|ACRONYM_VIOLATION|Avoid consecutive uppercase acronyms; use 'XmlParser' instead of 'XMLParser'.;
+Has Lint Errors: false
+Timestamp: 1784407317852

@@ -1,0 +1,10 @@
+Full Name: GSPOSJListModel
+Current Name: GSPOSJListModel
+Suggested Name: GsposjlistModel
+Extends Class: AbstractListModel
+Purpose: Component/Helper
+Validation: GSPOSJListModel - [OK] Valid PascalCase name
+Suggestion: GSPOSJListModel                → GsposjlistModel                (Rename 'GSPOSJListModel' to follow PascalCase convention. Extends AbstractListModel - identified as Component for GSPOSJListModel)
+Lint Issues: WARNING|ACRONYM_VIOLATION|Avoid consecutive uppercase acronyms; use 'XmlParser' instead of 'XMLParser'.;
+Has Lint Errors: false
+Timestamp: 1784407319674

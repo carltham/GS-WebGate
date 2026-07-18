@@ -1,0 +1,10 @@
+Full Name: configurationPanel
+Current Name: configurationPanel
+Suggested Name: ConfigurationPanelPanel
+Extends Class: viewPanel
+Purpose: UI panel/view component
+Validation: configurationPanel - [ERROR] Class name must start with uppercase letter (PascalCase)
+Suggestion: configurationPanel             → ConfigurationPanelPanel        (Rename 'configurationPanel' to follow PascalCase convention. Extends viewPanel - identified as Panel for configurationPanel)
+Lint Issues: WARNING|PASCAL_CASE_VIOLATION|Class name should start with an uppercase character.;
+Has Lint Errors: false
+Timestamp: 1784407319166

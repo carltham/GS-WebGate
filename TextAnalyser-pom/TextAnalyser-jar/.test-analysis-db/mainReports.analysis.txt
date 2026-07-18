@@ -1,0 +1,10 @@
+Full Name: mainReports
+Current Name: mainReports
+Suggested Name: MainReports
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: mainReports - [ERROR] Class name must start with uppercase letter (PascalCase)
+Suggestion: mainReports                    → MainReports                    (Rename 'mainReports' to follow PascalCase convention. identified as Component for mainReports)
+Lint Issues: WARNING|PASCAL_CASE_VIOLATION|Class name should start with an uppercase character.;
+Has Lint Errors: false
+Timestamp: 1784407317998

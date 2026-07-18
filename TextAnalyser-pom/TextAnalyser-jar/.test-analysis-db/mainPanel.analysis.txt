@@ -1,0 +1,10 @@
+Full Name: mainPanel
+Current Name: mainPanel
+Suggested Name: MainPanelPanel
+Extends Class: JPanel
+Purpose: UI panel/view component
+Validation: mainPanel - [ERROR] Class name must start with uppercase letter (PascalCase)
+Suggestion: mainPanel                      → MainPanelPanel                 (Rename 'mainPanel' to follow PascalCase convention. Extends JPanel - identified as Panel for mainPanel)
+Lint Issues: WARNING|PASCAL_CASE_VIOLATION|Class name should start with an uppercase character.;
+Has Lint Errors: false
+Timestamp: 1784407318986

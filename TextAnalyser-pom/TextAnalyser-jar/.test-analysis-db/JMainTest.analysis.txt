@@ -1,0 +1,10 @@
+Full Name: JMainTest
+Current Name: JMainTest
+Suggested Name: JmainTest
+Extends Class: JFrame
+Purpose: Component/Helper
+Validation: JMainTest - [OK] Valid PascalCase name
+Suggestion: JMainTest                      → JmainTest                      (Rename 'JMainTest' to follow PascalCase convention. Extends JFrame - identified as Component for JMainTest)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317569

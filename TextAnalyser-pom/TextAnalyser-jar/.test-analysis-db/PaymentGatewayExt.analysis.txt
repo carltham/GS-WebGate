@@ -1,0 +1,10 @@
+Full Name: PaymentGatewayExt
+Current Name: PaymentGatewayExt
+Suggested Name: PaymentGatewayExt
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: PaymentGatewayExt - [OK] Valid PascalCase name
+Suggestion: PaymentGatewayExt              → PaymentGatewayExt              (Rename 'PaymentGatewayExt' to follow PascalCase convention. identified as Component for PaymentGatewayExt)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317862

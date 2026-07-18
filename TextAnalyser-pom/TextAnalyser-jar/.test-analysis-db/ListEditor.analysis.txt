@@ -1,0 +1,10 @@
+Full Name: ListEditor
+Current Name: ListEditor
+Suggested Name: ListEditorEditor
+Extends Class: Unknown
+Purpose: Editor component
+Validation: ListEditor - [OK] Valid PascalCase name
+Suggestion: ListEditor                     → ListEditorEditor               (Rename 'ListEditor' to follow PascalCase convention. identified as Editor for ListEditor)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407319230

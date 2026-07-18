@@ -1,0 +1,10 @@
+Full Name: MainFrame
+Current Name: MainFrame
+Suggested Name: MainFramePanel
+Extends Class: JPanel
+Purpose: UI panel/view component
+Validation: MainFrame - [OK] Valid PascalCase name
+Suggestion: MainFrame                      → MainFramePanel                 (Rename 'MainFrame' to follow PascalCase convention. Extends JPanel - identified as Panel for MainFrame)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407319169

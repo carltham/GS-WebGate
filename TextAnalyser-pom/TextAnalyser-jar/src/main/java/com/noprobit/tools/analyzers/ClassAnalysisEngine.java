@@ -2,6 +2,9 @@ package com.noprobit.tools.analyzers;
 
 import com.noprobit.tools.db.FileDB;
 import com.noprobit.tools.linting.JavaClassLinter;
+import com.noprobit.tools.linting.JavaMethodLinter;
+import com.noprobit.tools.linting.JavaImportLinter;
+import com.noprobit.tools.linting.JavaMethodOrderLinter;
 import com.noprobit.tools.reporters.ClassNameSuggester;
 import com.noprobit.tools.validators.ClassNameValidator;
 import java.io.IOException;
@@ -9,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class ClassAnalysisEngine {
 
@@ -16,7 +21,10 @@ public class ClassAnalysisEngine {
     private final ClassNameValidator validator = new ClassNameValidator();
     private final ClassNameSuggester suggester = new ClassNameSuggester();
     private final PurposeAnalyser purposeAnalyser = new PurposeAnalyser();
-    private final JavaClassLinter linter = new JavaClassLinter();
+    private final JavaClassLinter classLinter = new JavaClassLinter();
+    private final JavaMethodLinter methodLinter = new JavaMethodLinter();
+    private final JavaImportLinter importLinter = new JavaImportLinter();
+    private final JavaMethodOrderLinter methodOrderLinter = new JavaMethodOrderLinter();
     private final FileDB database;
 
     public ClassAnalysisEngine() {
@@ -37,6 +45,12 @@ public class ClassAnalysisEngine {
         public ClassNameSuggester.SuggestionResult suggestionResult;
         public List<JavaClassLinter.LintIssue> lintIssues;
         public boolean hasErrors;
+        public Map<String, List<JavaMethodLinter.LintIssue>> methodLintIssues;
+        public int totalMethodIssues;
+        public List<JavaImportLinter.LintIssue> importLintIssues;
+        public int totalImportIssues;
+        public List<JavaMethodOrderLinter.LintIssue> methodOrderIssues;
+        public int totalMethodOrderIssues;
     }
 
     public List<AnalysisResult> analyzeProjectClasses(Path sourceDir) throws IOException {
@@ -86,9 +100,34 @@ public class ClassAnalysisEngine {
         result.suggestedName = result.suggestionResult.suggestedName;
         result.purpose = purposeAnalyser.analyzePurpose(className, extendsClass);
 
-        result.lintIssues = linter.analyze(className);
+        result.lintIssues = classLinter.analyze(className);
         result.hasErrors = result.lintIssues.stream()
                 .anyMatch(issue -> issue.severity == JavaClassLinter.Severity.ERROR);
+
+        result.methodLintIssues = new HashMap<>();
+        List<String> methodNames = fileAnalyzer.extractMethodNames(fileContent);
+        for (String methodName : methodNames) {
+            List<JavaMethodLinter.LintIssue> methodIssues = methodLinter.analyze(methodName);
+            if (!methodIssues.isEmpty()) {
+                result.methodLintIssues.put(methodName, methodIssues);
+            }
+        }
+        result.totalMethodIssues = result.methodLintIssues.values().stream()
+                .mapToInt(List::size).sum();
+
+        result.importLintIssues = new ArrayList<>();
+        List<String> imports = fileAnalyzer.extractImports(fileContent);
+        if (!imports.isEmpty()) {
+            result.importLintIssues = importLinter.analyze(imports);
+        }
+        result.totalImportIssues = result.importLintIssues.size();
+
+        result.methodOrderIssues = new ArrayList<>();
+        List<JavaMethodOrderLinter.MethodMetadata> methodMetadata = fileAnalyzer.extractMethodMetadata(className, fileContent);
+        if (!methodMetadata.isEmpty()) {
+            result.methodOrderIssues = methodOrderLinter.analyze(methodMetadata);
+        }
+        result.totalMethodOrderIssues = result.methodOrderIssues.size();
 
         return result;
     }

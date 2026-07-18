@@ -1,0 +1,10 @@
+Full Name: BasicLinkButtonUI
+Current Name: BasicLinkButtonUI
+Suggested Name: BasicLinkButtonUi
+Extends Class: BasicButtonUI
+Purpose: Component/Helper
+Validation: BasicLinkButtonUI - [OK] Valid PascalCase name
+Suggestion: BasicLinkButtonUI              → BasicLinkButtonUi              (Rename 'BasicLinkButtonUI' to follow PascalCase convention. Extends BasicButtonUI - identified as Component for BasicLinkButtonUI)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317483

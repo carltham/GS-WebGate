@@ -1,0 +1,10 @@
+Full Name: AppConfig
+Current Name: AppConfig
+Suggested Name: AppConfig
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: AppConfig - [OK] Valid PascalCase name
+Suggestion: AppConfig                      → AppConfig                      (Rename 'AppConfig' to follow PascalCase convention. identified as Component for AppConfig)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317902

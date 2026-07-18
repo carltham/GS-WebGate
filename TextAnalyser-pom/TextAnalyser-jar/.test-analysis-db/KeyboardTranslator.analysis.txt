@@ -1,0 +1,10 @@
+Full Name: KeyboardTranslator
+Current Name: KeyboardTranslator
+Suggested Name: KeyboardTranslator
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: KeyboardTranslator - [OK] Valid PascalCase name
+Suggestion: KeyboardTranslator             → KeyboardTranslator             (Rename 'KeyboardTranslator' to follow PascalCase convention. identified as Component for KeyboardTranslator)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318116

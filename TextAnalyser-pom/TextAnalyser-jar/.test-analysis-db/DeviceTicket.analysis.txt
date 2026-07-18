@@ -1,0 +1,10 @@
+Full Name: DeviceTicket
+Current Name: DeviceTicket
+Suggested Name: DeviceTicket
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: DeviceTicket - [OK] Valid PascalCase name
+Suggestion: DeviceTicket                   → DeviceTicket                   (Rename 'DeviceTicket' to follow PascalCase convention. identified as Component for DeviceTicket)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318262

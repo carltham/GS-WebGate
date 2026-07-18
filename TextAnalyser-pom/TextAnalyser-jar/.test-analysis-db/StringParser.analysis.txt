@@ -1,0 +1,10 @@
+Full Name: StringParser
+Current Name: StringParser
+Suggested Name: StringParser
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: StringParser - [OK] Valid PascalCase name
+Suggestion: StringParser                   → StringParser                   (Rename 'StringParser' to follow PascalCase convention. identified as Component for StringParser)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317830

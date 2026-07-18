@@ -1,0 +1,10 @@
+Full Name: TaxEditor
+Current Name: TaxEditor
+Suggested Name: TaxEditor
+Extends Class: EditorRecord
+Purpose: Editor for Tax records
+Validation: TaxEditor - [OK] Valid PascalCase name
+Suggestion: TaxEditor                      → TaxEditor                      (Rename 'TaxEditor' to follow PascalCase convention. Extends EditorRecord - identified as Editor for Tax)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407319429

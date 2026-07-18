@@ -1,0 +1,10 @@
+Full Name: RegisterDialog
+Current Name: RegisterDialog
+Suggested Name: RegisterDialog
+Extends Class: JDialog
+Purpose: Modal dialog window
+Validation: RegisterDialog - [OK] Valid PascalCase name
+Suggestion: RegisterDialog                 → RegisterDialog                 (Rename 'RegisterDialog' to follow PascalCase convention. Extends JDialog - identified as Dialog for Register)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318397

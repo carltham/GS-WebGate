@@ -1,0 +1,10 @@
+Full Name: PrinterWritter
+Current Name: PrinterWritter
+Suggested Name: Printer
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: PrinterWritter - [OK] Valid PascalCase name
+Suggestion: PrinterWritter                 → Printer                        (Rename 'PrinterWritter' to follow PascalCase convention. identified as Component for Printer)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318283

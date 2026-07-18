@@ -1,0 +1,10 @@
+Full Name: LookAndFeelAddons
+Current Name: LookAndFeelAddons
+Suggested Name: LookAndFeelAddons
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: LookAndFeelAddons - [OK] Valid PascalCase name
+Suggestion: LookAndFeelAddons              → LookAndFeelAddons              (Rename 'LookAndFeelAddons' to follow PascalCase convention. identified as Component for LookAndFeelAddons)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317427

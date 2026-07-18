@@ -1,0 +1,10 @@
+Full Name: JFind
+Current Name: JFind
+Suggested Name: JfindDialog
+Extends Class: JDialog
+Purpose: Modal dialog window
+Validation: JFind - [OK] Valid PascalCase name
+Suggestion: JFind                          → JfindDialog                    (Rename 'JFind' to follow PascalCase convention. Extends JDialog - identified as Dialog for JFind)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317736

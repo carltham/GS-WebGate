@@ -5,9 +5,12 @@ import com.noprobit.tools.linting.JavaClassLinter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -250,9 +253,8 @@ public class FileDB {
 
     public void exportToCSV(String csvFilePath) throws IOException {
         List<AnalysisRecord> records = getAllAnalysisResults();
-        List<String> lines = new ArrayList<>();
-
-        lines.add("Full Name,Current Name,Suggested Name,Extends Class,Purpose,Validation,Lint Errors,Lint Warnings,Lint Issues,Timestamp");
+        StringBuilder sb = new StringBuilder();
+        sb.append("Full Name,Current Name,Suggested Name,Extends Class,Purpose,Validation,Lint Errors,Lint Warnings,Lint Issues,Timestamp\n");
 
         for (AnalysisRecord record : records) {
             List<JavaClassLinter.LintIssue> issues = record.getLintIssues();
@@ -271,10 +273,13 @@ public class FileDB {
                     warningCount,
                     escapeCSV(issueDetails),
                     record.timestamp);
-            lines.add(line);
+            sb.append(line).append("\n");
         }
 
-        Files.write(Paths.get(csvFilePath), lines, StandardCharsets.UTF_8);
+        try (FileOutputStream fos = new FileOutputStream(csvFilePath);
+             OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8)) {
+            writer.write(sb.toString());
+        }
     }
 
     private String escapeCSV(String value) {

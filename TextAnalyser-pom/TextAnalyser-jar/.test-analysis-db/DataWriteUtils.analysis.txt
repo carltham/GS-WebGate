@@ -1,0 +1,10 @@
+Full Name: DataWriteUtils
+Current Name: DataWriteUtils
+Suggested Name: DataWriteUtils
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: DataWriteUtils - [OK] Valid PascalCase name
+Suggestion: DataWriteUtils                 → DataWriteUtils                 (Rename 'DataWriteUtils' to follow PascalCase convention. identified as Component for DataWriteUtils)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317666

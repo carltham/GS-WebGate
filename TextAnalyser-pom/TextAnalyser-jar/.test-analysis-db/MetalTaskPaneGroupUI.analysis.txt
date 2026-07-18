@@ -1,0 +1,10 @@
+Full Name: MetalTaskPaneGroupUI
+Current Name: MetalTaskPaneGroupUI
+Suggested Name: MetalTaskPaneGroupUi
+Extends Class: BasicTaskPaneGroupUI
+Purpose: Component/Helper
+Validation: MetalTaskPaneGroupUI - [OK] Valid PascalCase name
+Suggestion: MetalTaskPaneGroupUI           → MetalTaskPaneGroupUi           (Rename 'MetalTaskPaneGroupUI' to follow PascalCase convention. Extends BasicTaskPaneGroupUI - identified as Component for MetalTaskPaneGroupUI)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317463

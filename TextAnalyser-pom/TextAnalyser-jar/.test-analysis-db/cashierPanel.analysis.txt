@@ -1,0 +1,10 @@
+Full Name: cashierPanel
+Current Name: cashierPanel
+Suggested Name: CashierPanel
+Extends Class: editorPanel
+Purpose: Management panel for Cashier with editor
+Validation: cashierPanel - [ERROR] Class name must start with uppercase letter (PascalCase)
+Suggestion: cashierPanel                   → CashierPanel                   (Rename 'cashierPanel' to follow PascalCase convention. Extends editorPanel - identified as Panel for Cashier)
+Lint Issues: WARNING|PASCAL_CASE_VIOLATION|Class name should start with an uppercase character.;
+Has Lint Errors: false
+Timestamp: 1784407318913

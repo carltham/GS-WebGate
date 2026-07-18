@@ -1,0 +1,10 @@
+Full Name: JTicketsBagTicket
+Current Name: JTicketsBagTicket
+Suggested Name: JticketsBagTicket
+Extends Class: JTicketsBag
+Purpose: Component/Helper
+Validation: JTicketsBagTicket - [OK] Valid PascalCase name
+Suggestion: JTicketsBagTicket              → JticketsBagTicket              (Rename 'JTicketsBagTicket' to follow PascalCase convention. Extends JTicketsBag - identified as Component for JTicketsBagTicket)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318598

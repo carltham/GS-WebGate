@@ -1,0 +1,10 @@
+Full Name: AppLocal
+Current Name: AppLocal
+Suggested Name: AppLocal
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: AppLocal - [OK] Valid PascalCase name
+Suggestion: AppLocal                       → AppLocal                       (Rename 'AppLocal' to follow PascalCase convention. identified as Component for AppLocal)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407319365

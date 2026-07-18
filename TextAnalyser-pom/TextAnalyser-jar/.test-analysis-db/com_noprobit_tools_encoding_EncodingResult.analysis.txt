@@ -1,0 +1,10 @@
+Full Name: com.noprobit.tools.encoding.EncodingResult
+Current Name: EncodingResult
+Suggested Name: EncodingResult
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: EncodingResult - [OK] Valid PascalCase name
+Suggestion: EncodingResult                 → EncodingResult                 (Rename 'EncodingResult' to follow PascalCase convention. identified as Component for EncodingResult)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407356315

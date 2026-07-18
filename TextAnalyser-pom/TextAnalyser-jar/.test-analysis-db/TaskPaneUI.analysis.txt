@@ -1,0 +1,10 @@
+Full Name: TaskPaneUI
+Current Name: TaskPaneUI
+Suggested Name: TaskPaneUi
+Extends Class: ComponentUI
+Purpose: Component/Helper
+Validation: TaskPaneUI - [OK] Valid PascalCase name
+Suggestion: TaskPaneUI                     → TaskPaneUi                     (Rename 'TaskPaneUI' to follow PascalCase convention. Extends ComponentUI - identified as Component for TaskPaneUI)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317476

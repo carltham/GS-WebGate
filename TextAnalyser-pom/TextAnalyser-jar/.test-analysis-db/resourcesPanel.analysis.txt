@@ -1,0 +1,10 @@
+Full Name: resourcesPanel
+Current Name: resourcesPanel
+Suggested Name: ResourcePanel
+Extends Class: editorPanel
+Purpose: Management panel for Resource with editor
+Validation: resourcesPanel - [ERROR] Class name must start with uppercase letter (PascalCase)
+Suggestion: resourcesPanel                 → ResourcePanel                  (Rename 'resourcesPanel' to follow PascalCase convention. Extends editorPanel - identified as Panel for Resource)
+Lint Issues: WARNING|PASCAL_CASE_VIOLATION|Class name should start with an uppercase character.;
+Has Lint Errors: false
+Timestamp: 1784407318549

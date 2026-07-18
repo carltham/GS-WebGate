@@ -1,0 +1,10 @@
+Full Name: com.noprobit.tools.analyzers.ClassFileAnalyzer
+Current Name: ClassFileAnalyzer
+Suggested Name: ClassFileAnalyzer
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: ClassFileAnalyzer - [OK] Valid PascalCase name
+Suggestion: ClassFileAnalyzer              → ClassFileAnalyzer              (Rename 'ClassFileAnalyzer' to follow PascalCase convention. identified as Component for ClassFileAnalyzer)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407356243

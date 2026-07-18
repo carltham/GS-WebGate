@@ -1,0 +1,10 @@
+Full Name: DevicePrinterNull
+Current Name: DevicePrinterNull
+Suggested Name: Printer
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: DevicePrinterNull - [OK] Valid PascalCase name
+Suggestion: DevicePrinterNull              → Printer                        (Rename 'DevicePrinterNull' to follow PascalCase convention. identified as Component for Printer)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318252

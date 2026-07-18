@@ -1,0 +1,10 @@
+Full Name: JFrmConfig
+Current Name: JFrmConfig
+Suggested Name: JfrmConfig
+Extends Class: JFrame
+Purpose: Component/Helper
+Validation: JFrmConfig - [OK] Valid PascalCase name
+Suggestion: JFrmConfig                     → JfrmConfig                     (Rename 'JFrmConfig' to follow PascalCase convention. Extends JFrame - identified as Component for JFrmConfig)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407319371

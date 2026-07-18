@@ -1,0 +1,10 @@
+Full Name: KeyGetterBasic
+Current Name: KeyGetterBasic
+Suggested Name: KeyGetterBasic
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: KeyGetterBasic - [OK] Valid PascalCase name
+Suggestion: KeyGetterBasic                 → KeyGetterBasic                 (Rename 'KeyGetterBasic' to follow PascalCase convention. identified as Component for KeyGetterBasic)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317693

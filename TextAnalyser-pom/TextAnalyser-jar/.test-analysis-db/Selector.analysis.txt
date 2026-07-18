@@ -1,0 +1,10 @@
+Full Name: Selector
+Current Name: Selector
+Suggested Name: SelectorDialog
+Extends Class: JDialog
+Purpose: Modal dialog window
+Validation: Selector - [OK] Valid PascalCase name
+Suggestion: Selector                       → SelectorDialog                 (Rename 'Selector' to follow PascalCase convention. Extends JDialog - identified as Dialog for Selector)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318414

@@ -1,0 +1,10 @@
+Full Name: Help
+Current Name: Help
+Suggested Name: Help
+Extends Class: JFrame
+Purpose: Component/Helper
+Validation: Help - [OK] Valid PascalCase name
+Suggestion: Help                           → Help                           (Rename 'Help' to follow PascalCase convention. Extends JFrame - identified as Component for Help)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407319730

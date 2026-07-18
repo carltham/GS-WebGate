@@ -1,0 +1,10 @@
+Full Name: FormatsValidate
+Current Name: FormatsValidate
+Suggested Name: FormatsValidate
+Extends Class: Formats
+Purpose: Component/Helper
+Validation: FormatsValidate - [OK] Valid PascalCase name
+Suggestion: FormatsValidate                → FormatsValidate                (Rename 'FormatsValidate' to follow PascalCase convention. Extends Formats - identified as Component for FormatsValidate)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317657

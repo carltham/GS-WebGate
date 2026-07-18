@@ -1,0 +1,10 @@
+Full Name: com.noprobit.tools.reporters.ClassNameAnalysisReporter
+Current Name: ClassNameAnalysisReporter
+Suggested Name: ClassNameAnalysisReporter
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: ClassNameAnalysisReporter - [OK] Valid PascalCase name
+Suggestion: ClassNameAnalysisReporter      → ClassNameAnalysisReporter      (Rename 'ClassNameAnalysisReporter' to follow PascalCase convention. identified as Component for ClassNameAnalysisReporter)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407356278

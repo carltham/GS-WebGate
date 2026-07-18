@@ -1,0 +1,10 @@
+Full Name: TableSorter
+Current Name: TableSorter
+Suggested Name: TableSorter
+Extends Class: AbstractTableModel
+Purpose: Component/Helper
+Validation: TableSorter - [OK] Valid PascalCase name
+Suggestion: TableSorter                    → TableSorter                    (Rename 'TableSorter' to follow PascalCase convention. Extends AbstractTableModel - identified as Component for TableSorter)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407319710

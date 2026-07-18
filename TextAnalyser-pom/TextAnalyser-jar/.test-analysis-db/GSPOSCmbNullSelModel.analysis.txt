@@ -1,0 +1,10 @@
+Full Name: GSPOSCmbNullSelModel
+Current Name: GSPOSCmbNullSelModel
+Suggested Name: Null
+Extends Class: AbstractListModel
+Purpose: Component/Helper
+Validation: GSPOSCmbNullSelModel - [OK] Valid PascalCase name
+Suggestion: GSPOSCmbNullSelModel           → Null                           (Rename 'GSPOSCmbNullSelModel' to follow PascalCase convention. Extends AbstractListModel - identified as Component for Null)
+Lint Issues: WARNING|ACRONYM_VIOLATION|Avoid consecutive uppercase acronyms; use 'XmlParser' instead of 'XMLParser'.;
+Has Lint Errors: false
+Timestamp: 1784407319715

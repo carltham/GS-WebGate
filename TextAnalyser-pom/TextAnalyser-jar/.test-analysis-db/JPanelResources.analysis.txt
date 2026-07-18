@@ -1,0 +1,10 @@
+Full Name: JPanelResources
+Current Name: JPanelResources
+Suggested Name: ResourcePanel
+Extends Class: mainSales
+Purpose: Panel/View component
+Validation: JPanelResources - [OK] Valid PascalCase name
+Suggestion: JPanelResources                → ResourcePanel                  (Rename 'JPanelResources' to follow PascalCase convention. Extends mainSales - identified as Panel for Resource)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318921

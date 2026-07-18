@@ -1,0 +1,10 @@
+Full Name: TicketInfo
+Current Name: TicketInfo
+Suggested Name: TicketInfo
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: TicketInfo - [OK] Valid PascalCase name
+Suggestion: TicketInfo                     → TicketInfo                     (Rename 'TicketInfo' to follow PascalCase convention. identified as Component for TicketInfo)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407319258

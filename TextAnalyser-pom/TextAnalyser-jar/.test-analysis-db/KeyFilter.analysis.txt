@@ -1,0 +1,10 @@
+Full Name: KeyFilter
+Current Name: KeyFilter
+Suggested Name: KeyFilter
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: KeyFilter - [OK] Valid PascalCase name
+Suggestion: KeyFilter                      → KeyFilter                      (Rename 'KeyFilter' to follow PascalCase convention. identified as Component for KeyFilter)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318148

@@ -1,0 +1,10 @@
+Full Name: ShelfHandler
+Current Name: ShelfHandler
+Suggested Name: ShelfHandlerDialog
+Extends Class: JDialog
+Purpose: Modal dialog window
+Validation: ShelfHandler - [OK] Valid PascalCase name
+Suggestion: ShelfHandler                   → ShelfHandlerDialog             (Rename 'ShelfHandler' to follow PascalCase convention. Extends JDialog - identified as Dialog for ShelfHandler)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318370

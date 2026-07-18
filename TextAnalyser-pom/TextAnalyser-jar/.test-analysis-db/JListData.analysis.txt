@@ -1,0 +1,10 @@
+Full Name: JListData
+Current Name: JListData
+Suggested Name: JlistDataDialog
+Extends Class: JDialog
+Purpose: Modal dialog window
+Validation: JListData - [OK] Valid PascalCase name
+Suggestion: JListData                      → JlistDataDialog                (Rename 'JListData' to follow PascalCase convention. Extends JDialog - identified as Dialog for JListData)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317797

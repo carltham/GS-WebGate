@@ -1,0 +1,10 @@
+Full Name: com.noprobit.tools.linting.JavaMethodOrderLinter
+Current Name: JavaMethodOrderLinter
+Suggested Name: JavaMethodOrderLinter
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: JavaMethodOrderLinter - [OK] Valid PascalCase name
+Suggestion: JavaMethodOrderLinter          → JavaMethodOrderLinter          (Rename 'JavaMethodOrderLinter' to follow PascalCase convention. identified as Component for JavaMethodOrderLinter)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407356286

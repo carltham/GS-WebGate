@@ -1,0 +1,10 @@
+Full Name: DirtyManager
+Current Name: DirtyManager
+Suggested Name: DirtyManager
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: DirtyManager - [OK] Valid PascalCase name
+Suggestion: DirtyManager                   → DirtyManager                   (Rename 'DirtyManager' to follow PascalCase convention. identified as Component for DirtyManager)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318191

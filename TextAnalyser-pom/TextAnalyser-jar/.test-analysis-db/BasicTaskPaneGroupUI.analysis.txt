@@ -1,0 +1,10 @@
+Full Name: BasicTaskPaneGroupUI
+Current Name: BasicTaskPaneGroupUI
+Suggested Name: BasicTaskPaneGroupUi
+Extends Class: TaskPaneGroupUI
+Purpose: Component/Helper
+Validation: BasicTaskPaneGroupUI - [OK] Valid PascalCase name
+Suggestion: BasicTaskPaneGroupUI           → BasicTaskPaneGroupUi           (Rename 'BasicTaskPaneGroupUI' to follow PascalCase convention. Extends TaskPaneGroupUI - identified as Component for BasicTaskPaneGroupUI)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317509

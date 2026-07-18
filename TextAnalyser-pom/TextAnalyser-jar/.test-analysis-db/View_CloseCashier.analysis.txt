@@ -1,0 +1,10 @@
+Full Name: View_CloseCashier
+Current Name: View_CloseCashier
+Suggested Name: Cashier
+Extends Class: MainFrame
+Purpose: Component/Helper
+Validation: View_CloseCashier - [ERROR] Class name contains underscore - use PascalCase instead
+Suggestion: View_CloseCashier              → Cashier                        (Rename 'View_CloseCashier' to follow PascalCase convention. Extends MainFrame - identified as Component for Cashier)
+Lint Issues: WARNING|SNAKE_CASE_DISCOURAGED|Class name contains underscores. Use PascalCase instead.;
+Has Lint Errors: false
+Timestamp: 1784407319012

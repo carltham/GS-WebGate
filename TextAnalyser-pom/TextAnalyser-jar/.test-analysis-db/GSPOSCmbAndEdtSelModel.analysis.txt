@@ -1,0 +1,10 @@
+Full Name: GSPOSCmbAndEdtSelModel
+Current Name: GSPOSCmbAndEdtSelModel
+Suggested Name: GsposcmbAndEdtSelModel
+Extends Class: AbstractListModel
+Purpose: Component/Helper
+Validation: GSPOSCmbAndEdtSelModel - [OK] Valid PascalCase name
+Suggestion: GSPOSCmbAndEdtSelModel         → GsposcmbAndEdtSelModel         (Rename 'GSPOSCmbAndEdtSelModel' to follow PascalCase convention. Extends AbstractListModel - identified as Component for GSPOSCmbAndEdtSelModel)
+Lint Issues: WARNING|ACRONYM_VIOLATION|Avoid consecutive uppercase acronyms; use 'XmlParser' instead of 'XMLParser'.;
+Has Lint Errors: false
+Timestamp: 1784407319683

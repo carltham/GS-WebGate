@@ -1,0 +1,10 @@
+Full Name: View_Editors
+Current Name: View_Editors
+Suggested Name: ViewEditorsEditor
+Extends Class: Unknown
+Purpose: Editor component
+Validation: View_Editors - [ERROR] Class name contains underscore - use PascalCase instead
+Suggestion: View_Editors                   → ViewEditorsEditor              (Rename 'View_Editors' to follow PascalCase convention. identified as Editor for View_Editors)
+Lint Issues: WARNING|SNAKE_CASE_DISCOURAGED|Class name contains underscores. Use PascalCase instead.;
+Has Lint Errors: false
+Timestamp: 1784407318809

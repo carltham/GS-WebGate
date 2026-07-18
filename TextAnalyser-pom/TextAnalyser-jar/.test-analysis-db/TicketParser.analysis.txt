@@ -1,0 +1,10 @@
+Full Name: TicketParser
+Current Name: TicketParser
+Suggested Name: TicketParser
+Extends Class: DefaultHandler
+Purpose: Component/Helper
+Validation: TicketParser - [OK] Valid PascalCase name
+Suggestion: TicketParser                   → TicketParser                   (Rename 'TicketParser' to follow PascalCase convention. Extends DefaultHandler - identified as Component for TicketParser)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318218

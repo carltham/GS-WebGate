@@ -1,0 +1,10 @@
+Full Name: JRDataSourceBasic
+Current Name: JRDataSourceBasic
+Suggested Name: JrdataSourceBasic
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: JRDataSourceBasic - [OK] Valid PascalCase name
+Suggestion: JRDataSourceBasic              → JrdataSourceBasic              (Rename 'JRDataSourceBasic' to follow PascalCase convention. identified as Component for JRDataSourceBasic)
+Lint Issues: WARNING|ACRONYM_VIOLATION|Avoid consecutive uppercase acronyms; use 'XmlParser' instead of 'XMLParser'.;
+Has Lint Errors: false
+Timestamp: 1784407318010

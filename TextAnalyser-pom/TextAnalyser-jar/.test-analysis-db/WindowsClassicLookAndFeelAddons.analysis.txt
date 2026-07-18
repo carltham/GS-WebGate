@@ -1,0 +1,10 @@
+Full Name: WindowsClassicLookAndFeelAddons
+Current Name: WindowsClassicLookAndFeelAddons
+Suggested Name: WindowsClassicLookAndFeelAddons
+Extends Class: WindowsLookAndFeelAddons
+Purpose: Component/Helper
+Validation: WindowsClassicLookAndFeelAddons - [OK] Valid PascalCase name
+Suggestion: WindowsClassicLookAndFeelAddons → WindowsClassicLookAndFeelAddons (Rename 'WindowsClassicLookAndFeelAddons' to follow PascalCase convention. Extends WindowsLookAndFeelAddons - identified as Component for WindowsClassicLookAndFeelAddons)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317431

@@ -1,0 +1,10 @@
+Full Name: GSPOSCmbTaskSelModel
+Current Name: GSPOSCmbTaskSelModel
+Suggested Name: GsposcmbTaskSelModel
+Extends Class: AbstractListModel
+Purpose: Component/Helper
+Validation: GSPOSCmbTaskSelModel - [OK] Valid PascalCase name
+Suggestion: GSPOSCmbTaskSelModel           → GsposcmbTaskSelModel           (Rename 'GSPOSCmbTaskSelModel' to follow PascalCase convention. Extends AbstractListModel - identified as Component for GSPOSCmbTaskSelModel)
+Lint Issues: WARNING|ACRONYM_VIOLATION|Avoid consecutive uppercase acronyms; use 'XmlParser' instead of 'XMLParser'.;
+Has Lint Errors: false
+Timestamp: 1784407319680

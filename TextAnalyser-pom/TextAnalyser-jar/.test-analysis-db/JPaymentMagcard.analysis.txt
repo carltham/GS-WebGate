@@ -1,0 +1,10 @@
+Full Name: JPaymentMagcard
+Current Name: JPaymentMagcard
+Suggested Name: JpaymentMagcardPanel
+Extends Class: JPanel
+Purpose: UI panel/view component
+Validation: JPaymentMagcard - [OK] Valid PascalCase name
+Suggestion: JPaymentMagcard                → JpaymentMagcardPanel           (Rename 'JPaymentMagcard' to follow PascalCase convention. Extends JPanel - identified as Panel for JPaymentMagcard)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318188

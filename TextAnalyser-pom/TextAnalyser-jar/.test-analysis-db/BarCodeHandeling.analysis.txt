@@ -1,0 +1,10 @@
+Full Name: BarCodeHandeling
+Current Name: BarCodeHandeling
+Suggested Name: BarCodeHandelingDialog
+Extends Class: JDialog
+Purpose: Modal dialog window
+Validation: BarCodeHandeling - [OK] Valid PascalCase name
+Suggestion: BarCodeHandeling               → BarCodeHandelingDialog         (Rename 'BarCodeHandeling' to follow PascalCase convention. Extends JDialog - identified as Dialog for BarCodeHandeling)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317920

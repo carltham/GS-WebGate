@@ -1,0 +1,10 @@
+Full Name: gs.dialogs.FileImporter
+Current Name: FileImporter
+Suggested Name: FileImporterDialog
+Extends Class: JDialog
+Purpose: Modal dialog window
+Validation: FileImporter - [OK] Valid PascalCase name
+Suggestion: FileImporter                   → FileImporterDialog             (Rename 'FileImporter' to follow PascalCase convention. Extends JDialog - identified as Dialog for FileImporter)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318458

@@ -1,0 +1,10 @@
+Full Name: SentenceResourceLoader
+Current Name: SentenceResourceLoader
+Suggested Name: Resource
+Extends Class: ResourceLoader
+Purpose: Component/Helper
+Validation: SentenceResourceLoader - [OK] Valid PascalCase name
+Suggestion: SentenceResourceLoader         → Resource                       (Rename 'SentenceResourceLoader' to follow PascalCase convention. Extends ResourceLoader - identified as Component for Resource)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317896

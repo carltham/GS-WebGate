@@ -1,0 +1,10 @@
+Full Name: JTaskPaneGroupAddon
+Current Name: JTaskPaneGroupAddon
+Suggested Name: JtaskPaneGroupAddon
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: JTaskPaneGroupAddon - [OK] Valid PascalCase name
+Suggestion: JTaskPaneGroupAddon            → JtaskPaneGroupAddon            (Rename 'JTaskPaneGroupAddon' to follow PascalCase convention. identified as Component for JTaskPaneGroupAddon)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317407

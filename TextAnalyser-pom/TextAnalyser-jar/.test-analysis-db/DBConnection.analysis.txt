@@ -1,0 +1,10 @@
+Full Name: DBConnection
+Current Name: DBConnection
+Suggested Name: Dbconnection
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: DBConnection - [OK] Valid PascalCase name
+Suggestion: DBConnection                   → Dbconnection                   (Rename 'DBConnection' to follow PascalCase convention. identified as Component for DBConnection)
+Lint Issues: WARNING|ACRONYM_VIOLATION|Avoid consecutive uppercase acronyms; use 'XmlParser' instead of 'XMLParser'.;
+Has Lint Errors: false
+Timestamp: 1784407319331

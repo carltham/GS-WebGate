@@ -1,0 +1,10 @@
+Full Name: TableRendererBasic
+Current Name: TableRendererBasic
+Suggested Name: TableRendererBasic
+Extends Class: DefaultTableCellRenderer
+Purpose: Component/Helper
+Validation: TableRendererBasic - [OK] Valid PascalCase name
+Suggestion: TableRendererBasic             → TableRendererBasic             (Rename 'TableRendererBasic' to follow PascalCase convention. Extends DefaultTableCellRenderer - identified as Component for TableRendererBasic)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407319267

@@ -1,0 +1,10 @@
+Full Name: Formats
+Current Name: Formats
+Suggested Name: Formats
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: Formats - [OK] Valid PascalCase name
+Suggestion: Formats                        → Formats                        (Rename 'Formats' to follow PascalCase convention. identified as Component for Formats)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407319278

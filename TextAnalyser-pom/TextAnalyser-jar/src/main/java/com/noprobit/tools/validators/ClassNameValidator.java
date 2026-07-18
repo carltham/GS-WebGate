@@ -77,7 +77,7 @@ public class ClassNameValidator {
 
         @Override
         public String toString() {
-            return className + " - " + (valid ? "✓" : "❌") + " " + reason;
+            return className + " - " + (valid ? "[OK]" : "[ERROR]") + " " + reason;
         }
     }
 }

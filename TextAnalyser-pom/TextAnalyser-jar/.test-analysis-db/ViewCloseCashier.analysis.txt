@@ -1,0 +1,10 @@
+Full Name: ViewCloseCashier
+Current Name: ViewCloseCashier
+Suggested Name: Cashier
+Extends Class: MainFrame
+Purpose: Component/Helper
+Validation: ViewCloseCashier - [OK] Valid PascalCase name
+Suggestion: ViewCloseCashier               → Cashier                        (Rename 'ViewCloseCashier' to follow PascalCase convention. Extends MainFrame - identified as Component for Cashier)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407318827

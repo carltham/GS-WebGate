@@ -1,0 +1,10 @@
+Full Name: ProductOutInfo
+Current Name: ProductOutInfo
+Suggested Name: Product
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: ProductOutInfo - [OK] Valid PascalCase name
+Suggestion: ProductOutInfo                 → Product                        (Rename 'ProductOutInfo' to follow PascalCase convention. identified as Component for Product)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407319263

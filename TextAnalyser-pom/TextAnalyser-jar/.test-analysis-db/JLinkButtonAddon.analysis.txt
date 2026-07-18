@@ -1,0 +1,10 @@
+Full Name: JLinkButtonAddon
+Current Name: JLinkButtonAddon
+Suggested Name: JlinkButtonAddon
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: JLinkButtonAddon - [OK] Valid PascalCase name
+Suggestion: JLinkButtonAddon               → JlinkButtonAddon               (Rename 'JLinkButtonAddon' to follow PascalCase convention. identified as Component for JLinkButtonAddon)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784407317398

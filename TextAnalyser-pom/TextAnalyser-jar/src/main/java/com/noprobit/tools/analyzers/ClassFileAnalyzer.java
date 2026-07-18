@@ -1,6 +1,9 @@
 package com.noprobit.tools.analyzers;
 
 import com.noprobit.tools.linting.JavaMethodOrderLinter;
+import com.noprobit.tools.encoding.AdvancedEncodingEngine;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -70,6 +73,10 @@ public class ClassFileAnalyzer {
             imports.add(matcher.group().trim());
         }
         return imports;
+    }
+
+    public String readFileWithEncodingDetection(Path filePath) throws IOException {
+        return AdvancedEncodingEngine.readFileWithEncodingDetection(filePath);
     }
 
     public List<JavaMethodOrderLinter.MethodMetadata> extractMethodMetadata(String className, String content) {

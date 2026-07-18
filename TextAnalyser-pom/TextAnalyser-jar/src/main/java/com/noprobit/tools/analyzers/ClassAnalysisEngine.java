@@ -65,7 +65,7 @@ public class ClassAnalysisEngine {
             stream.filter(path -> path.toString().endsWith(".java"))
                     .forEach(path -> {
                         try {
-                            String content = new String(Files.readAllBytes(path));
+                            String content = fileAnalyzer.readFileWithEncodingDetection(path);
                             AnalysisResult result = analyzeClassFile(content);
                             if (result != null) {
                                 violations.add(result);

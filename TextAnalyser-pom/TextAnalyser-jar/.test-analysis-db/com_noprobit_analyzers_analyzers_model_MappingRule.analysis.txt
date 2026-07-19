@@ -1,0 +1,10 @@
+Full Name: com.noprobit.analyzers.analyzers.model.MappingRule
+Current Name: MappingRule
+Suggested Name: MappingRule
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: MappingRule - [OK] Valid PascalCase name
+Suggestion: MappingRule                    → MappingRule                    (Rename 'MappingRule' to follow PascalCase convention. identified as Component for MappingRule)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784491643634

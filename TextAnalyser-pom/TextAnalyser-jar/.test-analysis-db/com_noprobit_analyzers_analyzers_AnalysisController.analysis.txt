@@ -1,0 +1,10 @@
+Full Name: com.noprobit.analyzers.analyzers.AnalysisController
+Current Name: AnalysisController
+Suggested Name: AnalysisController
+Extends Class: Unknown
+Purpose: Controller component
+Validation: AnalysisController - [OK] Valid PascalCase name
+Suggestion: AnalysisController             → AnalysisController             (Rename 'AnalysisController' to follow PascalCase convention. identified as Component for AnalysisController)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784491643712

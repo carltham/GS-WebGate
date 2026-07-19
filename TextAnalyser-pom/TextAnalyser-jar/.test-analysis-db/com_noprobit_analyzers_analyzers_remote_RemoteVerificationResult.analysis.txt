@@ -1,0 +1,10 @@
+Full Name: com.noprobit.analyzers.analyzers.remote.RemoteVerificationResult
+Current Name: RemoteVerificationResult
+Suggested Name: RemoteVerificationResult
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: RemoteVerificationResult - [OK] Valid PascalCase name
+Suggestion: RemoteVerificationResult       → RemoteVerificationResult       (Rename 'RemoteVerificationResult' to follow PascalCase convention. identified as Component for RemoteVerificationResult)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784491643728

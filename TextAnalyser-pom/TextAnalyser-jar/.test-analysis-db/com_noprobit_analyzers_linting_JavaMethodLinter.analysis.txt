@@ -1,0 +1,10 @@
+Full Name: com.noprobit.analyzers.linting.JavaMethodLinter
+Current Name: JavaMethodLinter
+Suggested Name: JavaMethodLinter
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: JavaMethodLinter - [OK] Valid PascalCase name
+Suggestion: JavaMethodLinter               → JavaMethodLinter               (Rename 'JavaMethodLinter' to follow PascalCase convention. identified as Component for JavaMethodLinter)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784491643850

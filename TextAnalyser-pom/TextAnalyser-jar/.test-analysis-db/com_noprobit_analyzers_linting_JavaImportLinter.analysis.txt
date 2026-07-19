@@ -1,0 +1,10 @@
+Full Name: com.noprobit.analyzers.linting.JavaImportLinter
+Current Name: JavaImportLinter
+Suggested Name: JavaImportLinter
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: JavaImportLinter - [OK] Valid PascalCase name
+Suggestion: JavaImportLinter               → JavaImportLinter               (Rename 'JavaImportLinter' to follow PascalCase convention. identified as Component for JavaImportLinter)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784491643834

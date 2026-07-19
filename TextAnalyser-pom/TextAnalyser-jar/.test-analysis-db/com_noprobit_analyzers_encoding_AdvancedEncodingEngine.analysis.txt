@@ -1,0 +1,10 @@
+Full Name: com.noprobit.analyzers.encoding.AdvancedEncodingEngine
+Current Name: AdvancedEncodingEngine
+Suggested Name: AdvancedEncodingEngine
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: AdvancedEncodingEngine - [OK] Valid PascalCase name
+Suggestion: AdvancedEncodingEngine         → AdvancedEncodingEngine         (Rename 'AdvancedEncodingEngine' to follow PascalCase convention. identified as Component for AdvancedEncodingEngine)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784491643878

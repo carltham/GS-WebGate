@@ -1,0 +1,10 @@
+Full Name: com.noprobit.analyzers.analyzers.ClassAnalysisEngine
+Current Name: ClassAnalysisEngine
+Suggested Name: ClassAnalysisEngine
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: ClassAnalysisEngine - [OK] Valid PascalCase name
+Suggestion: ClassAnalysisEngine            → ClassAnalysisEngine            (Rename 'ClassAnalysisEngine' to follow PascalCase convention. identified as Component for ClassAnalysisEngine)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784491643670

@@ -1,0 +1,26 @@
+{
+  "engines": [
+    {
+      "engineName": "SecurityEngine",
+      "priority": 100,
+      "mappings": [
+        { "pattern": "DROP TABLE", "purpose": "MALICIOUS", "confidence": 1.0 },
+        { "pattern": "<script>", "purpose": "MALICIOUS", "confidence": 1.0 }
+      ]
+    },
+    {
+      "engineName": "IntentEngine",
+      "priority": 50,
+      "mappings": [
+        { "pattern": "buy", "purpose": "TRANSACTION", "confidence": 0.9 },
+        { "pattern": "checkout", "purpose": "TRANSACTION", "confidence": 0.95 },
+        { "pattern": "help", "purpose": "SUPPORT", "confidence": 0.85 },
+        {
+          "pattern": "how do i",
+          "purpose": "INFORMATION_SEEKING",
+          "confidence": 0.8
+        }
+      ]
+    }
+  ]
+}

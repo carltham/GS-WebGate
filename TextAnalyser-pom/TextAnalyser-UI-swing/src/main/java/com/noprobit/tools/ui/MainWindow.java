@@ -2,13 +2,18 @@ package com.noprobit.tools.ui;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.util.List;
 
 public class MainWindow extends JFrame {
     private ProjectListPanel projectListPanel;
     private ConfigurationDisplayPanel configDisplayPanel;
+    private AnalysisPanel analysisPanel;
+    private ReportPanel reportPanel;
+    private ConfigurationEditorPanel configEditorPanel;
+    private DashboardPanel dashboardPanel;
+    private JTabbedPane tabbedPane;
 
     public MainWindow() {
         this(null, new java.util.ArrayList<>());
@@ -17,24 +22,65 @@ public class MainWindow extends JFrame {
     public MainWindow(ProjectMetadata currentConfig, List<ProjectMetadata> availableProjects) {
         setTitle("TextAnalyser - Code Analysis Tool");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(800, 600);
+        setSize(1000, 700);
         setLocationRelativeTo(null);
 
-        // Create layout
         JPanel contentPane = new JPanel(new BorderLayout());
         setContentPane(contentPane);
 
-        // Add project list panel
+        // Phase 0 & 1: Project Selection
+        JPanel topPanel = new JPanel(new BorderLayout());
         projectListPanel = new ProjectListPanel();
         projectListPanel.setProjects(availableProjects);
-        contentPane.add(projectListPanel, BorderLayout.NORTH);
+        topPanel.add(projectListPanel, BorderLayout.NORTH);
+        contentPane.add(topPanel, BorderLayout.NORTH);
 
-        // Add configuration display panel
+        // Phases 2-5: Tabbed Interface
+        tabbedPane = new JTabbedPane();
+
         configDisplayPanel = new ConfigurationDisplayPanel();
         if (currentConfig != null) {
             configDisplayPanel.displayConfiguration(currentConfig);
         }
-        contentPane.add(configDisplayPanel, BorderLayout.CENTER);
+        tabbedPane.addTab("Configuration", configDisplayPanel);
+
+        analysisPanel = new AnalysisPanel();
+        tabbedPane.addTab("Analysis", analysisPanel);
+
+        reportPanel = new ReportPanel();
+        tabbedPane.addTab("Reports", reportPanel);
+
+        configEditorPanel = new ConfigurationEditorPanel();
+        tabbedPane.addTab("Settings", configEditorPanel);
+
+        dashboardPanel = new DashboardPanel();
+        tabbedPane.addTab("Dashboard", dashboardPanel);
+
+        contentPane.add(tabbedPane, BorderLayout.CENTER);
+    }
+
+    public ProjectListPanel getProjectListPanel() {
+        return projectListPanel;
+    }
+
+    public ConfigurationDisplayPanel getConfigDisplayPanel() {
+        return configDisplayPanel;
+    }
+
+    public AnalysisPanel getAnalysisPanel() {
+        return analysisPanel;
+    }
+
+    public ReportPanel getReportPanel() {
+        return reportPanel;
+    }
+
+    public ConfigurationEditorPanel getConfigEditorPanel() {
+        return configEditorPanel;
+    }
+
+    public DashboardPanel getDashboardPanel() {
+        return dashboardPanel;
     }
 
     @Override

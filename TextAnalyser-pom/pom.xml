@@ -14,5 +14,6 @@
     <modules>
         <module>TextAnalyser-UI-swing</module>
         <module>TextAnalyser-jar</module>
+        <module>TextAnalyser-webgate</module>
     </modules>
 </project>

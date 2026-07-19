@@ -93,4 +93,39 @@ class ConfigurationDisplayPanelTest {
         assertTrue(secondDisplay.contains("NewProject"),
             "Should show new project name");
     }
+
+    @Test
+    @DisplayName("Configuration updates reflect project switching")
+    void testConfigurationUpdatesOnProjectSwitch() {
+        panel = new ConfigurationDisplayPanel();
+
+        ProjectMetadata project1 = new ProjectMetadata("Project1", "/path/one");
+        panel.displayConfiguration(project1);
+        String display1 = panel.getDisplayedConfiguration();
+
+        ProjectMetadata project2 = new ProjectMetadata("Project2", "/path/two");
+        panel.displayConfiguration(project2);
+        String display2 = panel.getDisplayedConfiguration();
+
+        assertNotEquals(display1, display2,
+            "Display should be different for different projects");
+        assertTrue(display2.contains("Project2"));
+        assertTrue(display2.contains("/path/two"));
+    }
+
+    @Test
+    @DisplayName("Panel correctly displays selected project configuration")
+    void testDisplaysSelectedProjectConfiguration() {
+        panel = new ConfigurationDisplayPanel();
+
+        ProjectMetadata selectedProject = new ProjectMetadata("SelectedProject", "/selected/path");
+        selectedProject.setReportPath("/selected/reports");
+
+        panel.displayConfiguration(selectedProject);
+        String displayed = panel.getDisplayedConfiguration();
+
+        assertTrue(displayed.contains("SelectedProject"));
+        assertTrue(displayed.contains("/selected/path"));
+        assertTrue(displayed.contains("/selected/reports"));
+    }
 }

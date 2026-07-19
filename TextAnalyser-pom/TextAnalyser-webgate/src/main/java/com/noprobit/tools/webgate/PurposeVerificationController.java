@@ -1,34 +1,21 @@
 package com.noprobit.tools.webgate;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 
-/**
- * REST Controller for Purpose Verification
- * Handles requests from PurposeAnalyser to verify purposes via internet search
- */
-@Path("/verify-purpose")
+@RestController
+@RequestMapping("/api/verify-purpose")
 public class PurposeVerificationController {
 
     private final Gson gson = new Gson();
     private final InternetSearchService searchService = new InternetSearchService();
 
-    /**
-     * Verify purpose via internet search
-     */
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response verifyPurpose(String payload) {
+    @PostMapping
+    public ResponseEntity<String> verifyPurpose(@RequestBody String payload) {
         try {
             JsonObject request = JsonParser.parseString(payload).getAsJsonObject();
 
@@ -37,11 +24,9 @@ public class PurposeVerificationController {
             String keyword = request.get("keyword").getAsString();
             String timestamp = request.get("timestamp").getAsString();
 
-            // Search internet for keywords related to purpose
             String searchQuery = className + " " + keyword + " " + detectedPurpose;
             SearchResult result = searchService.search(searchQuery);
 
-            // Build response
             JsonObject response = new JsonObject();
             response.addProperty("className", className);
             response.addProperty("detectedPurpose", detectedPurpose);
@@ -53,7 +38,7 @@ public class PurposeVerificationController {
             response.addProperty("processingTime", Long.valueOf(result.getProcessingTime()));
             response.addProperty("timestamp", timestamp);
 
-            return Response.ok(response.toString()).build();
+            return ResponseEntity.ok(response.toString());
 
         } catch (Exception e) {
             JsonObject error = new JsonObject();
@@ -62,24 +47,17 @@ public class PurposeVerificationController {
             error.addProperty("reason", "Verification failed: " + e.getMessage());
             error.addProperty("internetSource", (String) null);
 
-            return Response.status(Response.Status.BAD_REQUEST)
-                .entity(error.toString())
-                .build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error.toString());
         }
     }
 
-    /**
-     * Health check endpoint
-     */
-    @GET
-    @Path("/health")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response health() {
+    @GetMapping("/health")
+    public ResponseEntity<String> health() {
         JsonObject response = new JsonObject();
         response.addProperty("status", "UP");
         response.addProperty("service", "PurposeVerification");
         response.addProperty("version", "1.0");
 
-        return Response.ok(response.toString()).build();
+        return ResponseEntity.ok(response.toString());
     }
 }

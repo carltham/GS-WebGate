@@ -34,7 +34,7 @@ public class PurposeAnalyser {
     private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     // REST Gateway Configuration
-    private String webgateUrl = "http://localhost:8080/webgate";
+    private String webgateUrl = "http://localhost:8080/webgate/api";
     private boolean enableRemoteVerification = true;
     private final Gson gson = new Gson();
 

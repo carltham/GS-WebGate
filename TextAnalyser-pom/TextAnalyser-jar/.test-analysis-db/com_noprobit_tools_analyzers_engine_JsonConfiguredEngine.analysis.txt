@@ -1,0 +1,10 @@
+Full Name: com.noprobit.tools.analyzers.engine.JsonConfiguredEngine
+Current Name: JsonConfiguredEngine
+Suggested Name: JsonConfiguredEngine
+Extends Class: Unknown
+Purpose: Component/Helper
+Validation: JsonConfiguredEngine - [OK] Valid PascalCase name
+Suggestion: JsonConfiguredEngine           → JsonConfiguredEngine           (Rename 'JsonConfiguredEngine' to follow PascalCase convention. identified as Component for JsonConfiguredEngine)
+Lint Issues: 
+Has Lint Errors: false
+Timestamp: 1784490945232

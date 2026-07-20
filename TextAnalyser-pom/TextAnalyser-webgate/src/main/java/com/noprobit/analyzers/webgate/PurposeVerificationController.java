@@ -1,20 +1,24 @@
 package com.noprobit.analyzers.webgate;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonArray;
 
 @RestController
-@RequestMapping("/api/verify-purpose")
+@RequestMapping("/api")
 public class PurposeVerificationController {
 
     private final Gson gson = new Gson();
-    private final InternetSearchService searchService = new InternetSearchService();
 
-    @PostMapping
+    @Autowired
+    private InternetSearchService searchService;
+
+    @PostMapping("/verify-purpose")
     public ResponseEntity<String> verifyPurpose(@RequestBody String payload) {
         try {
             JsonObject request = JsonParser.parseString(payload).getAsJsonObject();
@@ -51,13 +55,53 @@ public class PurposeVerificationController {
         }
     }
 
+    @PostMapping("/query")
+    public ResponseEntity<String> queryGeneric(@RequestBody QueryRequest request) {
+        try {
+            if (request.getQuestion() == null || request.getQuestion().trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(gson.toJson(createErrorResponse("Question cannot be empty")));
+            }
+
+            QueryResponse queryResponse = searchService.queryGeneric(request);
+
+            JsonObject response = new JsonObject();
+            response.addProperty("question", queryResponse.getQuestion());
+            response.addProperty("answerFound", queryResponse.isAnswerFound());
+            response.addProperty("answer", queryResponse.getAnswer());
+            response.addProperty("confidence", queryResponse.getConfidence());
+            response.addProperty("summary", queryResponse.getSummary());
+            response.addProperty("processingTime", queryResponse.getProcessingTime());
+
+            JsonArray sourcesArray = new JsonArray();
+            for (String source : queryResponse.getSources()) {
+                sourcesArray.add(source);
+            }
+            response.add("sources", sourcesArray);
+
+            return ResponseEntity.ok(response.toString());
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(gson.toJson(createErrorResponse("Query failed: " + e.getMessage())));
+        }
+    }
+
     @GetMapping("/health")
     public ResponseEntity<String> health() {
         JsonObject response = new JsonObject();
         response.addProperty("status", "UP");
-        response.addProperty("service", "PurposeVerification");
-        response.addProperty("version", "1.0");
+        response.addProperty("service", "WebGate");
+        response.addProperty("version", "2.0");
+        response.addProperty("features", "Purpose Verification + Generic Queries");
 
         return ResponseEntity.ok(response.toString());
+    }
+
+    private JsonObject createErrorResponse(String message) {
+        JsonObject error = new JsonObject();
+        error.addProperty("error", message);
+        error.addProperty("success", false);
+        return error;
     }
 }

@@ -6,9 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonArray;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class InternetSearchService {
@@ -144,5 +147,83 @@ public class InternetSearchService {
         result.setProcessingTime(System.currentTimeMillis() - startTime);
 
         return result;
+    }
+
+    public QueryResponse queryGeneric(QueryRequest request) {
+        long startTime = System.currentTimeMillis();
+        QueryResponse response = new QueryResponse();
+        response.setQuestion(request.getQuestion());
+
+        try {
+            if (!searchEnabled) {
+                return fallbackGenericResponse(request, startTime);
+            }
+
+            String enhancedQuery = request.getQuestion();
+            if (request.getContext() != null && !request.getContext().isEmpty()) {
+                enhancedQuery += " " + request.getContext();
+            }
+
+            String encodedQuery = URLEncoder.encode(enhancedQuery, StandardCharsets.UTF_8);
+            String url = DUCKDUCKGO_API + "?q=" + encodedQuery + "&format=json&no_html=1&t=textanalyser";
+
+            String apiResponse = restTemplate.getForObject(url, String.class);
+
+            if (apiResponse != null && !apiResponse.isEmpty()) {
+                JsonObject json = JsonParser.parseString(apiResponse).getAsJsonObject();
+
+                String abstractText = json.has("AbstractText") ? json.get("AbstractText").getAsString() : "";
+                String instantAnswer = json.has("Answer") ? json.get("Answer").getAsString() : "";
+                String redirect = json.has("Redirect") ? json.get("Redirect").getAsString() : "";
+
+                if (!instantAnswer.isEmpty()) {
+                    response.setAnswer(instantAnswer);
+                    response.setAnswerFound(true);
+                    response.setConfidence(0.95);
+                    response.addSource("DuckDuckGo (Instant Answer)");
+                    response.setSummary("Direct answer found");
+                } else if (!abstractText.isEmpty()) {
+                    response.setAnswer(abstractText);
+                    response.setAnswerFound(true);
+                    response.setConfidence(0.80);
+                    response.addSource("DuckDuckGo (Abstract)");
+                    response.setSummary("Summary answer found");
+                } else if (!redirect.isEmpty()) {
+                    response.setAnswer("Redirect to: " + redirect);
+                    response.setAnswerFound(true);
+                    response.setConfidence(0.70);
+                    response.addSource("DuckDuckGo (Related Topic)");
+                    response.setSummary("Related topic found");
+                } else {
+                    response.setAnswerFound(false);
+                    response.setConfidence(0.20);
+                    response.setSummary("No direct answer found");
+                    response.addSource("DuckDuckGo");
+                }
+            } else {
+                response.setAnswerFound(false);
+                response.setConfidence(0.0);
+                response.setSummary("No search results");
+                response.addSource("DuckDuckGo");
+            }
+
+        } catch (Exception e) {
+            logger.warning("Generic query failed: " + e.getMessage());
+            return fallbackGenericResponse(request, startTime);
+        }
+
+        response.setProcessingTime(System.currentTimeMillis() - startTime);
+        return response;
+    }
+
+    private QueryResponse fallbackGenericResponse(QueryRequest request, long startTime) {
+        QueryResponse response = new QueryResponse();
+        response.setQuestion(request.getQuestion());
+        response.setAnswerFound(false);
+        response.setConfidence(0.0);
+        response.setSummary("Service temporarily unavailable - using fallback");
+        response.addSource("LocalFallback");
+        response.setProcessingTime(System.currentTimeMillis() - startTime);
+        return response;
     }
 }

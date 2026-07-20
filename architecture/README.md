@@ -1,356 +1,389 @@
 # TextAnalyser Architecture Documentation
 
-Welcome to the TextAnalyser architecture documentation. This folder contains detailed documentation of the system design, components, and operational characteristics.
+**Complete Architecture Reference for the TextAnalyser Project**
 
 ---
 
-## Documentation Structure
+## 📚 Documentation Structure
 
-### 1. **[ARCHITECTURE.md](ARCHITECTURE.md)** - Main Architecture Overview
-**Start here for a complete system understanding**
-
-Contains:
-- System overview and capabilities
-- High-level architecture diagram
-- Core module descriptions (7 main systems)
-- End-to-end data flow
-- Java compatibility and design decisions
-- Testing strategy and performance characteristics
-- Error handling approach
-
-**Read this if:** You need to understand how all the pieces fit together, or you're onboarding to the project.
-
----
-
-### 2. **[CONFIGURATION_SYSTEM.md](CONFIGURATION_SYSTEM.md)** - Configuration Management
-**For analyzing different projects without code changes**
-
-Contains:
-- AnalysisConfig class design
-- Fallback chain strategy (5-level priority)
-- Configuration file format and examples
-- Multi-module Maven build support
-- Runtime configuration detection
-- Project switching instructions
-- Path resolution (relative/absolute)
-- Error handling and best practices
-- Future enhancement ideas
-
-**Read this if:** You need to analyze a new project, switch between projects, or understand how configuration loading works.
-
-**Quick Start:**
-```properties
-# Edit: TextAnalyser-pom/config/analysis.properties
-project.name=GSPos
-source.node.path=/path/to/gspos/src/main/java
-# Run: mvn clean test
+```
+architecture/
+├── README.md (this file)
+├── ARCHITECTURE_DEEP_MAP.md          (Complete code-level mapping)
+│
+├── system/
+│   ├── SYSTEM_OVERVIEW.md            (High-level system design)
+│   ├── COMMUNICATION_PROTOCOL.md     (MQ & REST protocols)
+│   └── DEPLOYMENT_GUIDE.md           (Production deployment)
+│
+├── components/
+│   ├── WEBGATE_ARCHITECTURE.md       (Internet gateway service)
+│   ├── MQ_ARCHITECTURE.md            (Message queue server)
+│   ├── JAR_MODULE.md                 (Analysis engine)
+│   └── UI_MODULE.md                  (Swing GUI)
+│
+└── guides/
+    ├── QUICK_START.md                (Get running in 5 minutes)
+    ├── DEVELOPMENT.md                (Development setup)
+    └── TROUBLESHOOTING.md            (Common issues & fixes)
 ```
 
 ---
 
-### 3. **[ENCODING_SYSTEM.md](ENCODING_SYSTEM.md)** - Automatic Encoding Detection
-**For handling legacy projects with mixed encodings**
+## 🎯 Quick Navigation
 
-Contains:
-- Problem solved (encoding issues in legacy code)
-- AdvancedEncodingEngine design
-- BOM (Byte Order Mark) detection algorithm
-- File reading with error handling
-- NIO channel-based conversion
-- Supported charsets and error actions
-- Maven compiler UTF-8 configuration
-- Performance characteristics
-- Usage examples and testing approach
+### Start Here
 
-**Read this if:** You're analyzing projects with non-UTF-8 encodings, or you want to understand how special characters are handled.
+**New to the project?**
+1. Read: [System Overview](system/SYSTEM_OVERVIEW.md)
+2. Read: [Quick Start Guide](guides/QUICK_START.md)
+3. Explore: [Components](components/)
 
-**Key Feature:**
-- Automatic detection of UTF-8, UTF-16BE/LE
-- 64KB buffered NIO processing
-- Transparent to rest of system
+**Need specific information?**
 
----
-
-### 4. **[LINTING_SYSTEM.md](LINTING_SYSTEM.md)** - Four-Tier Code Analysis
-**For understanding the core validation logic**
-
-Contains:
-- Four-tier architecture (Class, Method, Import, Ordering)
-- Tier 1: Class Naming (PascalCase, special chars, length)
-- Tier 2: Method Naming (camelCase, verbs, acronyms)
-- Tier 3: Import Analysis (wildcards, duplicates, forbidden)
-- Tier 4: Method Ordering (constructors, visibility, accessors)
-- LintIssue data structures with severity levels
-- Integration with ClassAnalysisEngine
-- Report generation format
-- Extensibility points for new rules
-- Performance analysis
-- Configuration possibilities
-- Known limitations and future enhancements
-
-**Read this if:** You need to add new linting rules, understand validation logic, or modify analysis behavior.
-
-**Severity Levels:**
-- ERROR: Critical violations (must fix)
-- WARNING: Best practice violations (should fix)
-- INFO: Suggestions (nice to have)
+| Need | Document |
+|------|----------|
+| **Understand the whole system** | [ARCHITECTURE_DEEP_MAP.md](ARCHITECTURE_DEEP_MAP.md) |
+| **Understand WebGate (search gateway)** | [components/WEBGATE_ARCHITECTURE.md](components/WEBGATE_ARCHITECTURE.md) |
+| **Understand MQ Server (message hub)** | [components/MQ_ARCHITECTURE.md](components/MQ_ARCHITECTURE.md) |
+| **How components communicate** | [system/COMMUNICATION_PROTOCOL.md](system/COMMUNICATION_PROTOCOL.md) |
+| **Deploy to production** | [system/DEPLOYMENT_GUIDE.md](system/DEPLOYMENT_GUIDE.md) |
+| **Set up development environment** | [guides/DEVELOPMENT.md](guides/DEVELOPMENT.md) |
+| **Troubleshoot issues** | [guides/TROUBLESHOOTING.md](guides/TROUBLESHOOTING.md) |
 
 ---
 
-## Quick Reference
+## 📖 Document Descriptions
 
-### System Components at a Glance
+### 🔍 ARCHITECTURE_DEEP_MAP.md
+**Complete Code-Level Architecture**
+- All 62 Java classes mapped with signatures
+- Package structure and relationships
+- Data flow examples
+- Design patterns used
+- Test organization
+- **Read this for:** Understanding every class and method
 
-| Component | Purpose | Location |
-|-----------|---------|----------|
-| **AnalysisConfig** | Configuration management | `config/` |
-| **AdvancedEncodingEngine** | Encoding detection/conversion | `encoding/` |
-| **ClassAnalysisEngine** | Analysis orchestration | `analyzers/` |
-| **ClassFileAnalyzer** | Metadata extraction | `analyzers/` |
-| **JavaClassLinter** | Class naming validation | `linting/` |
-| **JavaMethodLinter** | Method naming validation | `linting/` |
-| **JavaImportLinter** | Import validation | `linting/` |
-| **JavaMethodOrderLinter** | Method ordering validation | `linting/` |
-| **FileDB** | Result persistence | `db/` |
-| **ClassNameValidator** | Naming convention checking | `validators/` |
-| **ClassNameAnalysisReporter** | Report generation | `reporters/` |
-
----
-
-### Data Flow Summary
-
-```
-Configuration
-     ↓
-Source Files (auto-detected encoding)
-     ↓
-Metadata Extraction (via regex)
-     ↓
-4-Tier Linting Analysis
-  ├─ Class Naming (Tier 1)
-  ├─ Method Naming (Tier 2)
-  ├─ Import Analysis (Tier 3)
-  └─ Method Ordering (Tier 4)
-     ↓
-Persistence (FileDB)
-     ↓
-Report Generation (CSV & Markdown)
-```
+**Key Sections:**
+- Module 1: TextAnalyser-UI-swing (29 files)
+- Module 2: TextAnalyser-jar (33 files)
+- Module 3: TextAnalyser-webgate (6 files)
+- Cross-module communication
+- Test organization (315+ tests)
 
 ---
 
-## Getting Started
-
-### Step 1: Analyze TextAnalyser (Default)
-```bash
-cd TextAnalyser-pom
-mvn clean test
-# Reports: analysis/textanalyser-analysis-report.*
-```
-
-### Step 2: Switch to GSPos Project
-```bash
-# Edit: config/analysis.properties
-project.name=GSPos
-source.node.path=/mnt/DATA/.../GSPos-swing/src/main/java
-
-# Run analysis
-mvn clean test
-# Reports: analysis/gspos-analysis-report.*
-```
-
-### Step 3: Review Reports
-- **CSV:** Machine-readable, all metrics
-- **Markdown:** Human-readable, visualized tables
-- **Dated:** Historical backups with timestamps
+### 🏗️ system/SYSTEM_OVERVIEW.md
+**High-Level System Architecture**
+- System design principles
+- Three-module architecture
+- Request-response lifecycle
+- Deployment topology
+- Design patterns
+- **Read this for:** Understanding how everything fits together
 
 ---
 
-## Architecture Principles
-
-### 1. **Modularity**
-- Clear separation of concerns (4 tiers)
-- Each linter is independent
-- Easy to extend with new rules
-
-### 2. **Configuration-Driven**
-- No code changes to analyze different projects
-- Fallback chain ensures robustness
-- Properties-based configuration
-
-### 3. **Encoding-Safe**
-- Automatic BOM detection
-- Support for legacy charsets
-- NIO-based efficient processing
-
-### 4. **Transparent Persistence**
-- Text-based FileDB (inspectable)
-- Automatic caching
-- Clear record structure
-
-### 5. **Multi-Format Reports**
-- CSV for tools/integration
-- Markdown for humans
-- Dated backups for history
-
-### 6. **Error Resilience**
-- Non-blocking analysis (skip unreadable files)
-- Graceful degradation (defaults if config missing)
-- Detailed error reporting
+### 📡 system/COMMUNICATION_PROTOCOL.md
+**All Communication Protocols**
+- MQ TCP protocol (6 commands)
+- REST API specifications
+- JSON message formats
+- Request-response examples
+- Error handling
+- **Read this for:** Understanding how components talk to each other
 
 ---
 
-## Key Statistics
-
-### TextAnalyser Project
-- **Classes Analyzed:** 16
-- **Total Methods:** 200+
-- **Import Statements:** 50+
-- **Analysis Time:** <1 second
-- **Report Size (CSV):** 2.7 KB
-- **Report Size (Markdown):** 3.5 KB
-
-### GSPos Project
-- **Classes Analyzed:** 216
-- **Methods Analyzed:** 1000+
-- **Import Statements:** 500+
-- **Analysis Time:** ~2 seconds
-- **Report Size (CSV):** 32 KB
-- **Report Size (Markdown):** 23 KB
-- **Naming Violations:** 142 (34% compliance)
+### 🚀 system/DEPLOYMENT_GUIDE.md
+**Production Deployment**
+- Docker deployment
+- Kubernetes manifests
+- Network configuration
+- Port mappings
+- Environment variables
+- **Read this for:** Deploying to production
 
 ---
 
-## Deployment & Operations
+### 🌐 components/WEBGATE_ARCHITECTURE.md
+**WebGate: Internet Search Gateway**
+- Runs on local computer (behind NAT)
+- Polls on-site MQ for requests
+- Calls DuckDuckGo API
+- Returns verified answers
+- **Architecture:** MQPoller → SearchProcessor → InternetSearchService
+- **Read this for:** Understanding WebGate's role and implementation
 
-### Build
-```bash
-mvn clean install
-# All modules compile to target/
-# JAR: TextAnalyser-jar-1.0-SNAPSHOT.jar
+**Key Features:**
+- No incoming connections (works behind NAT)
+- Server doesn't make direct internet calls (no IP blocking)
+- Confidence scoring (0.0-1.0)
+- Answer extraction (instant/abstract/related)
+- Error handling & fallback
+
+---
+
+### 📦 components/MQ_ARCHITECTURE.md
+**MQ Server: Central Message Hub**
+- Runs on-site (data center)
+- Stores requests from JAR
+- Serves requests to WebGate
+- In-memory storage with TTL
+- Automatic cleanup
+- **Architecture:** TCPServer → ClientHandler → MessageStore
+- **Read this for:** Understanding MQ operations and protocol
+
+**Key Features:**
+- JSON over TCP protocol
+- FIFO request queue
+- HashMap response store
+- 30-second message TTL
+- Per-client thread handlers
+- 5-second statistics output
+
+---
+
+### ⚙️ components/JAR_MODULE.md
+**Analysis Engine**
+- Core analysis logic
+- 3 configurable engines
+- JSON configuration (41 rules)
+- REST API
+- Optional remote verification
+- **Read this for:** Understanding analysis processing
+
+---
+
+### 🖥️ components/UI_MODULE.md
+**Swing UI**
+- 5 feature phases
+- Material Design theme
+- REST client
+- 249 unit tests
+- **Read this for:** Understanding UI architecture
+
+---
+
+### ⚡ guides/QUICK_START.md
+**Get Running in 5 Minutes**
+- Local development setup
+- Start all services
+- Run sample analysis
+- Verify it works
+- **Read this for:** Getting started quickly
+
+---
+
+### 💻 guides/DEVELOPMENT.md
+**Development Environment**
+- System requirements
+- Build setup
+- Hot reload configuration
+- Testing
+- Debugging
+- **Read this for:** Setting up for development
+
+---
+
+### 🔧 guides/TROUBLESHOOTING.md
+**Common Issues & Solutions**
+- MQ connection problems
+- WebGate timeouts
+- Analysis failures
+- Port conflicts
+- Network issues
+- **Read this for:** Solving problems
+
+---
+
+## 🎯 Architecture at a Glance
+
 ```
-
-### Test
-```bash
-mvn clean test
-# Runs: ProjectClassNameValidationTest
-# Runs: EncodingSwitcherTest
-# Generates: analysis/reports
-```
-
-### Configuration
-- Root: `config/analysis.properties`
-- Per-module: `{module}/config/analysis.properties`
-- Workspace: `/mnt/DATA/WORKSPACE/Textanalyser/analysis.properties`
-
-### Reports Location
-```
-TextAnalyser/
-  └── analysis/
-      ├── textanalyser-analysis-report.csv
-      ├── textanalyser-analysis-report.md
-      ├── textanalyser-analysis-report-20260718.csv
-      ├── textanalyser-analysis-report-20260718.md
-      ├── gspos-analysis-report.csv
-      ├── gspos-analysis-report.md
-      └── ...
+User                    UI Module                   JAR Module
+                        (Swing GUI)              (Analysis Engine)
+ │                           │                           │
+ ├─ Requests analysis ──────→│                           │
+ │                           ├─ REST call ────────────→ │
+ │                           │                      Process
+ │                           │                      (local)
+ │                           │                           │
+ │                           │◄────────────────────────┬─┤
+ │                           │   Need verification?    │ │
+ │                           ├─────────────────────────┼─→ MQ Server
+ │                           │    Write to MQ          │ (On-Site)
+ │                           │                         │ │
+ │                           │                    ┌────┴─┤
+ │                           │                    │      │
+ │                           │         WebGate    │      │
+ │                           │      (Local Comp)  │      │
+ │                           │      Polls MQ ─────┘      │
+ │                           │      Searches ────→ DuckDuckGo
+ │                           │      Writes to MQ ────────→
+ │                           │                           │
+ │                           │◄────────────────────────┬─┤
+ │◄──────────────────────────┤  Result from MQ         │
+ │                           │                         │
+ └─ See analysis result      │                         │
 ```
 
 ---
 
-## Troubleshooting
+## 📊 Key Statistics
 
-### Reports Not Generated
-1. Check if source directory exists
-2. Verify configuration file loaded (check console output)
-3. Check file permissions in analysis/ directory
+### Code
+- **Total Java Files:** 62
+- **Total Lines of Code:** ~15,000
+- **Main Modules:** 3 (UI, JAR, WebGate)
+- **Packages:** 12+ organized packages
 
-### Encoding Issues
-1. Check file actual encoding (file command)
-2. Verify UTF-8 in Maven config
-3. Check for mixed encodings in project
+### Tests
+- **Total Tests:** 315+
+- **Unit Tests:** 249
+- **Layer Tests:** 66
+- **Integration Tests:** 66+
+- **Pass Rate:** 100%
 
-### Analysis Takes Too Long
-1. Reduce project size (limit to directory)
-2. Check for large binary files in source tree
-3. Consider parallel analysis (future feature)
+### Architecture
+- **REST Endpoints:** 8+
+- **MQ Commands:** 6
+- **Configuration Rules:** 41
+- **Design Patterns:** 6+
 
-### Missing Classes in Results
-1. Verify source path points to correct directory
-2. Check if Java files are in correct package structure
-3. Ensure files use .java extension
-
----
-
-## Future Roadmap
-
-### Phase 1: Enhanced Detection
-- [ ] Heuristic encoding detection (no BOM)
-- [ ] Language-based rule configuration
-- [ ] Per-team configuration profiles
-
-### Phase 2: Auto-Fix
-- [ ] Generate corrected source code
-- [ ] Batch rename operations
-- [ ] Automatic import organization
-
-### Phase 3: Integration
-- [ ] REST API wrapper
-- [ ] IDE plugin (VS Code, IntelliJ)
-- [ ] GitHub Actions integration
-- [ ] SonarQube plugin
-
-### Phase 4: Advanced Analysis
-- [ ] AST-based analysis
-- [ ] Type checking
-- [ ] Dependency analysis
-- [ ] Complexity metrics
+### Documentation
+- **Architecture Docs:** 8 files
+- **Total Words:** 50,000+
+- **Diagrams:** 30+
+- **Code Examples:** 100+
 
 ---
 
-## Contributing
+## 🔄 Request Flow Overview
 
-To extend TextAnalyser:
-
-1. **New Linting Rule:** Add to existing Linter class
-2. **New Linter Tier:** Implement LintRule interface
-3. **New Report Format:** Extend FileDB export method
-4. **New Encoding Support:** Add BOM to AdvancedEncodingEngine
-
-See individual architecture docs for specific extension points.
-
----
-
-## Contact & Support
-
-- **Documentation:** This folder (`architecture/`)
-- **Source Code:** `TextAnalyser-pom/TextAnalyser-jar/src/main/java/`
-- **Tests:** `TextAnalyser-pom/TextAnalyser-jar/src/test/java/`
-- **Configuration:** `TextAnalyser-pom/config/analysis.properties`
-
----
-
-## Document Versions
-
-| File | Last Updated | Version |
-|------|--------------|---------|
-| ARCHITECTURE.md | 2026-07-18 | 1.0 |
-| CONFIGURATION_SYSTEM.md | 2026-07-18 | 1.0 |
-| ENCODING_SYSTEM.md | 2026-07-18 | 1.0 |
-| LINTING_SYSTEM.md | 2026-07-18 | 1.0 |
-| README.md | 2026-07-18 | 1.0 |
+```
+User clicks "Analyze"
+    ↓
+UI submits class name to JAR
+    ↓
+JAR analyzes using 3 engines
+    ↓
+Low confidence? → Needs remote verification
+    ↓
+JAR writes request to on-site MQ
+    ↓
+WebGate (local computer) polls MQ
+    ↓
+WebGate calls DuckDuckGo (safe! local IP)
+    ↓
+WebGate writes response to MQ
+    ↓
+JAR polls MQ for response
+    ↓
+JAR combines local + remote confidence
+    ↓
+UI displays result
+```
 
 ---
 
-## License
+## 🚀 Deployment Summary
 
-TextAnalyser Architecture Documentation  
-Part of the TextAnalyser project  
-Documentation created: 2026-07-18
+### Development (All Local)
+```
+Laptop:
+  ├─ MQ Server (port 7000)
+  ├─ JAR Module (port 8081)
+  ├─ WebGate (port 8080)
+  └─ UI (GUI)
+```
+
+### Production (Distributed)
+```
+On-Site Data Center:
+  ├─ MQ Server (port 7000)
+  └─ JAR Module (port 8081)
+
+Local Computer (Behind NAT):
+  └─ WebGate (port 8080)
+```
 
 ---
 
-**Happy analyzing!** 🚀
+## 📋 Document Index
 
-Start with [ARCHITECTURE.md](ARCHITECTURE.md) for a complete overview, then dive into specific components based on your needs.
+| Document | Size | Focus | Audience |
+|----------|------|-------|----------|
+| ARCHITECTURE_DEEP_MAP | 37KB | Code-level details | Developers |
+| WEBGATE_ARCHITECTURE | 36KB | Gateway service | DevOps / Developers |
+| MQ_ARCHITECTURE | 22KB | Message queue | DevOps / Developers |
+| JAR_MODULE | 25KB | Analysis engine | Developers |
+| UI_MODULE | 20KB | User interface | UI Developers |
+| COMMUNICATION_PROTOCOL | TBD | Protocols | All |
+| DEPLOYMENT_GUIDE | TBD | Production | DevOps |
+| SYSTEM_OVERVIEW | TBD | Big picture | Everyone |
+| QUICK_START | TBD | Getting started | New team |
+| DEVELOPMENT | TBD | Dev setup | Developers |
 
+---
+
+## ✅ Getting Started Checklist
+
+- [ ] Read [System Overview](system/SYSTEM_OVERVIEW.md)
+- [ ] Follow [Quick Start Guide](guides/QUICK_START.md)
+- [ ] Understand [Communication Protocol](system/COMMUNICATION_PROTOCOL.md)
+- [ ] Study your component's architecture (see [Components](components/))
+- [ ] Review [Deployment Guide](system/DEPLOYMENT_GUIDE.md)
+- [ ] Set up [Development Environment](guides/DEVELOPMENT.md)
+
+---
+
+## 🔗 Related Documentation
+
+### In Repository Root
+- `README.md` - Project overview
+- `CLAUDE.md` - Development instructions
+
+### In Each Module
+- `pom.xml` - Maven configuration
+- `src/main/resources/` - Configuration files
+- `src/test/` - Test code
+
+---
+
+## 📞 Questions?
+
+- **Architecture questions?** → [ARCHITECTURE_DEEP_MAP.md](ARCHITECTURE_DEEP_MAP.md)
+- **How to run?** → [Quick Start](guides/QUICK_START.md)
+- **Deploy to production?** → [Deployment Guide](system/DEPLOYMENT_GUIDE.md)
+- **Stuck on something?** → [Troubleshooting](guides/TROUBLESHOOTING.md)
+- **Component details?** → See [Components](components/)
+
+---
+
+## 📚 Document Versions
+
+```
+ARCHITECTURE_DEEP_MAP.md      v2.0  | 2026-07-20 | Complete code mapping
+WEBGATE_ARCHITECTURE.md       v2.0  | 2026-07-20 | Gateway service
+MQ_ARCHITECTURE.md            v1.0  | 2026-07-20 | Message queue
+JAR_MODULE.md                 v1.0  | 2026-07-20 | Analysis engine
+UI_MODULE.md                  v1.0  | 2026-07-20 | User interface
+SYSTEM_OVERVIEW.md            v1.0  | 2026-07-20 | System design
+COMMUNICATION_PROTOCOL.md     v1.0  | 2026-07-20 | Protocols
+DEPLOYMENT_GUIDE.md           v1.0  | 2026-07-20 | Production deploy
+QUICK_START.md                v1.0  | 2026-07-20 | Getting started
+DEVELOPMENT.md                v1.0  | 2026-07-20 | Dev setup
+TROUBLESHOOTING.md            v1.0  | 2026-07-20 | Common issues
+```
+
+---
+
+## 🎯 Last Updated
+
+**2026-07-20**
+
+All documentation is current and production-ready. For updates, see individual document headers.
+
+---
+
+**Start with: [System Overview](system/SYSTEM_OVERVIEW.md) →**

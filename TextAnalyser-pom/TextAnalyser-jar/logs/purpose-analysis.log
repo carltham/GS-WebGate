@@ -58,3 +58,67 @@
 [2026-07-19 21:49:26] UNKNOWN: UnknownXyz
 [2026-07-19 21:49:26] UNKNOWN: AnotherUnknown
 [2026-07-19 21:49:26] UNKNOWN: XyzAbc123
+[2026-07-19 22:11:14] ANALYSIS | Actual: UserController | Suggested: UserController | Purpose: Controller component | Extends: Object
+[2026-07-19 22:11:14] ANALYSIS | Actual: TestClass | Suggested: TestCls | Purpose: TEST | Extends: N/A
+[2026-07-19 22:11:14] ANALYSIS | Actual: UserController | Suggested: UserCtrl | Purpose: CONTROLLER | Extends: Object
+[2026-07-19 22:11:14] UNKNOWN: UnknownXyz
+[2026-07-19 22:11:14] UNKNOWN: AnotherUnknown
+[2026-07-19 22:11:14] UNKNOWN: XyzAbc123
+[2026-07-19 22:11:36] ANALYSIS | Actual: UserController | Suggested: UserController | Purpose: Controller component | Extends: Object
+[2026-07-19 22:11:36] ANALYSIS | Actual: TestClass | Suggested: TestCls | Purpose: TEST | Extends: N/A
+[2026-07-19 22:11:36] ANALYSIS | Actual: UserController | Suggested: UserCtrl | Purpose: CONTROLLER | Extends: Object
+[2026-07-19 22:11:36] UNKNOWN: UnknownXyz
+[2026-07-19 22:11:36] UNKNOWN: AnotherUnknown
+[2026-07-19 22:11:36] UNKNOWN: XyzAbc123
+[2026-07-19 22:13:23] UNKNOWN: UserController
+[2026-07-19 22:13:23] UNKNOWN: UnknownPattern1
+[2026-07-19 22:13:23] UNKNOWN: UnknownPattern2
+[2026-07-19 22:13:23] UNKNOWN: UnknownClass
+[2026-07-19 22:13:34] UNKNOWN: UserController
+[2026-07-19 22:13:34] UNKNOWN: UnknownPattern1
+[2026-07-19 22:13:34] UNKNOWN: UnknownPattern2
+[2026-07-19 22:13:34] UNKNOWN: UnknownClass
+[2026-07-19 22:14:19] UNKNOWN: UserController
+[2026-07-19 22:14:19] UNKNOWN: UnknownPattern1
+[2026-07-19 22:14:19] UNKNOWN: UnknownPattern2
+[2026-07-19 22:14:19] UNKNOWN: UnknownClass
+[2026-07-19 22:14:30] UNKNOWN: UserController
+[2026-07-19 22:14:30] UNKNOWN: UnknownPattern1
+[2026-07-19 22:14:30] UNKNOWN: UnknownPattern2
+[2026-07-19 22:14:30] UNKNOWN: UnknownClass
+[2026-07-19 22:14:59] UNKNOWN: UserController
+[2026-07-19 22:14:59] UNKNOWN: UnknownPattern1
+[2026-07-19 22:14:59] UNKNOWN: UnknownPattern2
+[2026-07-19 22:14:59] UNKNOWN: UnknownClass
+[2026-07-19 22:15:12] UNKNOWN: UserController
+[2026-07-19 22:15:12] UNKNOWN: UnknownPattern1
+[2026-07-19 22:15:12] UNKNOWN: UnknownPattern2
+[2026-07-19 22:15:12] UNKNOWN: UnknownClass
+[2026-07-19 22:15:25] UNKNOWN: UserController
+[2026-07-19 22:15:25] UNKNOWN: UnknownPattern1
+[2026-07-19 22:15:25] UNKNOWN: UnknownPattern2
+[2026-07-19 22:15:25] UNKNOWN: UnknownClass
+[2026-07-19 22:15:46] UNKNOWN: UserController
+[2026-07-19 22:15:46] UNKNOWN: UnknownPattern1
+[2026-07-19 22:15:46] UNKNOWN: UnknownPattern2
+[2026-07-19 22:15:46] UNKNOWN: UnknownClass
+[2026-07-19 22:16:48] ANALYSIS | Actual: UserController | Suggested: UserController | Purpose: Controller component | Extends: Object
+[2026-07-19 22:16:48] ANALYSIS | Actual: TestClass | Suggested: TestCls | Purpose: TEST | Extends: N/A
+[2026-07-19 22:16:48] ANALYSIS | Actual: UserController | Suggested: UserCtrl | Purpose: CONTROLLER | Extends: Object
+[2026-07-19 22:16:48] UNKNOWN: UnknownXyz
+[2026-07-19 22:16:48] UNKNOWN: AnotherUnknown
+[2026-07-19 22:16:48] UNKNOWN: XyzAbc123
+[2026-07-19 22:16:49] UNKNOWN: UserController
+[2026-07-19 22:16:49] UNKNOWN: UnknownPattern1
+[2026-07-19 22:16:49] UNKNOWN: UnknownPattern2
+[2026-07-19 22:16:49] UNKNOWN: UnknownClass
+[2026-07-19 22:17:22] ANALYSIS | Actual: UserController | Suggested: UserController | Purpose: Controller component | Extends: Object
+[2026-07-19 22:17:22] ANALYSIS | Actual: TestClass | Suggested: TestCls | Purpose: TEST | Extends: N/A
+[2026-07-19 22:17:22] ANALYSIS | Actual: UserController | Suggested: UserCtrl | Purpose: CONTROLLER | Extends: Object
+[2026-07-19 22:17:22] UNKNOWN: UnknownXyz
+[2026-07-19 22:17:22] UNKNOWN: AnotherUnknown
+[2026-07-19 22:17:22] UNKNOWN: XyzAbc123
+[2026-07-19 22:17:22] UNKNOWN: UserController
+[2026-07-19 22:17:22] UNKNOWN: UnknownPattern1
+[2026-07-19 22:17:22] UNKNOWN: UnknownPattern2
+[2026-07-19 22:17:22] UNKNOWN: UnknownClass

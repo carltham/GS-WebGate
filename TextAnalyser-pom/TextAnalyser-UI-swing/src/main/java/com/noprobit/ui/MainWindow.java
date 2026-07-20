@@ -20,9 +20,11 @@ public class MainWindow extends JFrame {
     }
 
     public MainWindow(ProjectMetadata currentConfig, List<ProjectMetadata> availableProjects) {
+        applyModernStyling();
+
         setTitle("TextAnalyser - Code Analysis Tool");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(1000, 700);
+        setSize(1200, 800);
         setLocationRelativeTo(null);
 
         JPanel contentPane = new JPanel(new BorderLayout());
@@ -57,6 +59,10 @@ public class MainWindow extends JFrame {
         tabbedPane.addTab("Dashboard", dashboardPanel);
 
         contentPane.add(tabbedPane, BorderLayout.CENTER);
+    }
+
+    private void applyModernStyling() {
+        UITheme.applyTheme();
     }
 
     public ProjectListPanel getProjectListPanel() {

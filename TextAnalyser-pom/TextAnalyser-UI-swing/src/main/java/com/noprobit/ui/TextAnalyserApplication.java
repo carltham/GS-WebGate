@@ -21,6 +21,12 @@ public class TextAnalyserApplication {
         LOGGER.info("TextAnalyserApplication initialized successfully");
     }
 
+    public static void main(String[] args) {
+        LOGGER.info("Starting TextAnalyser Application");
+        System.setProperty("java.util.logging.config.file", "logging.properties");
+        javax.swing.SwingUtilities.invokeLater(() -> new TextAnalyserApplication());
+    }
+
     private void initializeProjects() {
         availableProjects = new ArrayList<>();
         availableProjects.add(new ProjectMetadata("TextAnalyser", DEFAULT_SOURCE_PATH));

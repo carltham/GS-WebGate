@@ -15,6 +15,7 @@
         <module>TextAnalyser-UI-swing</module>
         <module>TextAnalyser-jar</module>
         <module>TextAnalyser-webgate</module>
+        <module>TextAnalyser-mq</module>
     </modules>
 
     <profiles>

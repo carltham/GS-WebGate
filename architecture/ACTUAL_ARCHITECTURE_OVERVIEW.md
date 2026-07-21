@@ -1,508 +1,360 @@
-# TextAnalyser: Actual Architecture Overview
+# WebGate & MQ: Architecture Overview
 
-**Version:** 1.0 (Based on actual code analysis)  
+**Version:** 1.0 (WebGate/MQ focused)  
 **Last Updated:** 2026-07-20  
-**Status:** Production (Phases 0-5 Complete, Phase 6+ Planned)
+**Status:** Production-Ready (WebGate Phase 2), Planned (MQ Phase 6+)
 
 ---
 
-## What TextAnalyser Actually Is
+## What WebGate & MQ Are
 
-TextAnalyser is a **Java code analysis and refactoring recommendation system** that:
+**WebGate** is a **standalone internet search gateway service** that:
+- Performs safe internet searches via DuckDuckGo API
+- Verifies class purposes detected by the JAR analysis module
+- Answers generic questions with confidence scoring
+- Communicates via REST API (synchronous, direct)
+- Runs on local computers (behind NAT, no incoming connections needed)
+- Provides optional verification to enhance analysis confidence
 
-1. **Analyzes Java class files** to extract structure (class names, inheritance, methods, imports)
-2. **Suggests better class names** based on detected purpose and existing naming conventions
-3. **Validates Java naming standards** (PascalCase, valid identifiers, etc.)
-4. **Detects class purposes** using pattern matching (Controller, Panel, Dialog, Service, Utility, etc.)
-5. **Optionally verifies purposes** via internet search (WebGate) for semantic validation
-6. **Persists analysis results** to local file-based database
-7. **Generates reports** with violations and recommendations
-8. **Provides a Swing desktop UI** for interactive analysis and configuration
-
----
-
-## Core Architecture
-
-### Three-Module Design
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    TextAnalyser-pom                          │
-│                  (Maven Multi-module)                        │
-└─────────────────────────────────────────────────────────────┘
-           ↓                    ↓                      ↓
-    ┌──────────────┐   ┌─────────────────┐   ┌──────────────┐
-    │ TextAnalyser │   │ TextAnalyser    │   │ TextAnalyser │
-    │    -jar      │   │   -UI-swing     │   │  -webgate    │
-    │              │   │                 │   │              │
-    │ Core Engine  │←──┤  Desktop GUI    │   │ Spring Boot  │
-    │ HTTP Server  │   │  (Swing MVC)    │   │ Gateway      │
-    │ Port: 8081   │   │                 │   │ Port: 8080   │
-    └──────────────┘   └─────────────────┘   └──────────────┘
-         ↓                                            ↓
-    ┌──────────────┐                        ┌──────────────┐
-    │ FileDB       │                        │ DuckDuckGo   │
-    │ (Analysis    │                        │ API          │
-    │  results)    │                        │              │
-    └──────────────┘                        └──────────────┘
-```
-
-### Module Responsibilities
-
-| Module | Purpose | Technology |
-|--------|---------|-----------|
-| **TextAnalyser-jar** | Core analysis engine | Java 11, Embedded HttpServer, FileDB |
-| **TextAnalyser-UI-swing** | Interactive desktop UI | Swing MVC, SwingWorker, REST client |
-| **TextAnalyser-webgate** | External verification | Spring Boot, DuckDuckGo API |
-| **TextAnalyser-mq** | Message queue (future) | TCP-based JSON protocol (Phase 6+) |
+**MQ (Message Queue)** is a **planned infrastructure component** that will:
+- Enable asynchronous communication between JAR and WebGate
+- Run on-site (data center) to receive requests from JAR
+- Store requests/responses with TTL-based auto-cleanup
+- Allow WebGate to poll for work (no incoming connections)
+- Support multiple WebGate instances for load distribution
+- Planned for Phase 6+
 
 ---
 
-## Communication Architecture
+## Architecture Diagram
 
-### REST-Based HTTP Communication
-
-**UI → Analysis Engine:**
-```
-POST http://localhost:8081/analysis/analyze
-Content-Type: application/json
-
-{
-  "className": "UserController",
-  "extendsClass": "BaseController",
-  "filePath": "/src/main/java/com/example/UserController.java"
-}
-```
-
-**Analysis Engine → WebGate (Optional Verification):**
-```
-POST http://localhost:8080/webgate/api/verify-purpose
-Content-Type: application/json
-
-{
-  "className": "UserController",
-  "detectedPurpose": "CONTROLLER",
-  "keyword": "controller"
-}
-```
-
----
-
-## Data Flow: User Runs Analysis
+### Current (Phase 0-5): REST-Based Communication
 
 ```
-1. User Opens UI
-   └─→ TextAnalyserApplication.main()
-       └─→ MainWindow (5-tab interface)
+┌─────────────────────────────────────┐
+│    On-Site Data Center              │
+│                                     │
+│  ┌──────────────────────────────┐  │
+│  │  JAR Module (port 8081)      │  │
+│  │  - Analysis engine           │  │
+│  │  - Detects class purposes    │  │
+│  │  - (optional) Calls WebGate  │  │
+│  └────────────────┬─────────────┘  │
+│                   │                 │
+│                   │ HTTP REST       │
+│                   │ (optional)      │
+└───────────────────┼─────────────────┘
+                    │
+            Internet/VPN (optional)
+                    │
+┌───────────────────┼─────────────────┐
+│  Local Computer   │                 │
+│  (Behind NAT)     ↓                 │
+│                                     │
+│  ┌──────────────────────────────┐  │
+│  │  WebGate (port 8080)         │  │
+│  │  - Receives REST requests    │  │
+│  │  - Calls DuckDuckGo          │  │
+│  │  - Returns confidence scores │  │
+│  └──────────────┬───────────────┘  │
+│                 │                   │
+│                 │ HTTPS             │
+│                 ↓                   │
+│          DuckDuckGo API             │
+└─────────────────────────────────────┘
+```
 
-2. User Selects Project
-   └─→ ProjectSelectionPanel
-       └─→ ProjectSelectionController
-           └─→ ProjectMetadata (name, sourcePath, reportPath)
+### Planned (Phase 6+): Message Queue Communication
 
-3. User Configures Analysis
-   └─→ ConfigurationEditorPanel
-       └─→ ConfigurationEditorController
-           └─→ ConfigurationPersistence (load/save .properties)
-               └─→ ConfigurationValidator
-
-4. User Clicks "Analyze"
-   └─→ AnalysisPanel
-       └─→ AnalysisController
-           └─→ AnalysisWorker (SwingWorker for non-blocking)
-               ├─→ Reads source directory
-               └─→ For each .java file:
-                   ├─→ ClassFileAnalyzer (extract metadata)
-                   ├─→ ClassAnalysisEngine (analyze)
-                   │   ├─→ PurposeAnalyser (detect purpose)
-                   │   │   ├─→ JsonConfiguredEngine (pattern matching)
-                   │   │   ├─→ JavaClassLinter (naming validation)
-                   │   │   └─→ (optional) WebGate verification
-                   │   ├─→ ClassNameSuggester (recommend names)
-                   │   └─→ JavaMethodLinter, JavaImportLinter, etc.
-                   └─→ FileDB.store(result)
-                   └─→ Publish AnalysisProgressEvent
-
-5. UI Updates with Progress
-   └─→ AnalysisPanel listens to events
-       └─→ Updates progress bar, status text
-
-6. Analysis Complete
-   └─→ Fire AnalysisCompletedEvent
-       └─→ ReportPanel becomes active
-
-7. User Views Results
-   └─→ ReportPanel displays violations
-       ├─→ ViolationTable (sortable/filterable)
-       ├─→ FilterPanel (filter by category)
-       └─→ ReportExporter (export to file)
-
-8. User Views Statistics
-   └─→ DashboardPanel (Phase 5)
-       ├─→ DashboardController
-       ├─→ DashboardRefresh (auto-update)
-       ├─→ ProjectOverview
-       └─→ StatisticsDisplay
+```
+┌─────────────────────────────────────┐
+│    On-Site Data Center              │
+│                                     │
+│  ┌──────────────────────────────┐  │
+│  │  JAR Module (port 8081)      │  │
+│  │  - Enqueues requests to MQ   │  │
+│  └────────────────┬─────────────┘  │
+│                   │                 │
+│                   │ TCP (port 7000) │
+│                   ↓                 │
+│  ┌──────────────────────────────┐  │
+│  │  MQ Server (port 7000)       │  │
+│  │  - Request queue (FIFO)      │  │
+│  │  - Response storage (HashMap)│  │
+│  │  - Auto-cleanup (30s TTL)    │  │
+│  └────────────────┬─────────────┘  │
+│                   │                 │
+│                   │ TCP Connection  │
+└───────────────────┼─────────────────┘
+                    │
+            Internet/VPN
+                    │
+┌───────────────────┼─────────────────┐
+│  Local Computer   │                 │
+│  (Behind NAT)     ↓                 │
+│                                     │
+│  ┌──────────────────────────────┐  │
+│  │  WebGate (port 8080)         │  │
+│  │  - Polls MQ (every 500ms)    │  │
+│  │  - Dequeues requests         │  │
+│  │  - Processes via DuckDuckGo  │  │
+│  │  - Enqueues responses        │  │
+│  └──────────────┬───────────────┘  │
+│                 │                   │
+│                 │ HTTPS             │
+│                 ↓                   │
+│          DuckDuckGo API             │
+└─────────────────────────────────────┘
 ```
 
 ---
 
-## Core Analysis Process
+## Key Components
 
-### Purpose Detection Pipeline
+### WebGate Module
 
+**Location:** `/TextAnalyser-pom/TextAnalyser-webgate/`  
+**Technology:** Spring Boot 2.7.14, Java 11  
+**Port:** 8080  
+**External Dependency:** DuckDuckGo (public, no auth required)
+
+**Responsibilities:**
+- Accept REST requests for search/verification
+- Query DuckDuckGo API over HTTPS
+- Calculate confidence scores
+- Parse and format responses
+- Return answers with source attribution
+
+**REST Endpoints:**
 ```
-Input: Java Class File
-  ↓
-1. Check learned patterns (in-memory cache)
-  ↓
-2. Check JSON-configured engines (priority-ordered)
-  ├─→ ClassNamingPatterns (priority 100)
-  │   └─→ "controller" → CONTROLLER (confidence 0.95)
-  ├─→ SemanticPatterns (priority 80)
-  │   └─→ Various semantic rules
-  └─→ Custom engines (user-defined)
-  ↓
-3. Check extends class keywords
-  ├─→ If extends "BaseController" → CONTROLLER
-  └─→ If extends "BasePanel" → PANEL
-  ↓
-4. Check class name keywords
-  ├─→ Contains "Controller" → CONTROLLER
-  ├─→ Contains "Panel" → PANEL
-  ├─→ Contains "Service" → SERVICE
-  └─→ ... (more patterns)
-  ↓
-5. Optional WebGate verification (if enabled)
-  └─→ Query internet for semantic validation
-  ↓
-6. Track unknown patterns
-  └─→ Log to logs/purpose-analysis.log
-  ↓
-Output: AnalysisResult {
-  actualName,
-  suggestedName,
-  purpose,
-  confidence,
-  extendsClass
-}
+POST /webgate/api/verify-purpose    - Verify detected class purpose
+POST /webgate/api/query              - Answer generic questions
+GET  /webgate/health                 - Health check
 ```
 
----
+### MQ Module (Phase 6+)
 
-## Data Models
+**Location:** `/TextAnalyser-pom/TextAnalyser-mq/`  
+**Technology:** Java 11, TCP server  
+**Port:** 7000  
+**No External Dependencies**
 
-### Core Analysis Models
+**Responsibilities:**
+- Accept TCP connections from JAR and WebGate
+- Manage FIFO request queue
+- Store responses by requestId
+- Handle command-based protocol (JSON over TCP)
+- Auto-cleanup expired messages (30s TTL)
+- Print statistics every 5 seconds
 
-**AnalysisResult** (main output)
-```java
-String actualName          // Original class name
-String suggestedName       // Recommended class name
-String purpose            // Detected purpose (CONTROLLER, PANEL, etc.)
-String extendsClass       // Parent class name
+**Commands Supported:**
 ```
-
-**PurposeType** (enum)
-```
-CONTROLLER  - REST/Web controllers
-PANEL       - Swing UI panels
-DIALOG      - Swing dialog windows
-SERVICE     - Business logic services
-UTILITY     - Utility/helper classes
-LISTENER    - Event listeners
-ADAPTER     - Adapter pattern implementations
-FACTORY     - Factory pattern implementations
-MODEL       - Data models/POJOs
-REPOSITORY  - Data access objects
-OTHER       - Unclassified
-```
-
-**PurposeMatch** (detection result)
-```java
-String purpose            // Detected purpose
-double confidence         // Confidence score (0.0-1.0)
-String source            // Detection method (pattern, extends, etc.)
-```
-
-### UI Models
-
-**ProjectMetadata**
-```java
-String projectName       // User-friendly name
-String sourcePath       // Path to source files
-String reportPath       // Path to export reports
-```
-
-**AnalysisProgressEvent**
-```java
-int filesProcessed      // Number of files analyzed
-int totalFiles          // Total files to analyze
-String currentFile      // Currently processing file
+enqueue_request   - JAR: add search request to queue
+dequeue_request   - WebGate: get next request
+enqueue_response  - WebGate: store result in MQ
+dequeue_response  - JAR: retrieve result
+has_response      - JAR: check if result ready
+stats             - Get queue statistics
 ```
 
 ---
 
-## Configuration System
+## Communication Patterns
 
-### Purpose Mappings (JSON)
+### Pattern 1: Synchronous REST (Current)
 
-**File:** `src/main/resources/purpose-mappings.json` (in jar module)
-
-```json
-{
-  "engines": [
-    {
-      "engineName": "ClassNamingPatterns",
-      "priority": 100,
-      "mappings": [
-        {
-          "pattern": "controller",
-          "purpose": "CONTROLLER",
-          "confidence": 0.95
-        },
-        {
-          "pattern": "panel",
-          "purpose": "PANEL",
-          "confidence": 0.95
-        },
-        ...more patterns...
-      ]
-    }
-  ]
-}
+```
+Timeline: JAR requests verification
+  
+  T=0ms   JAR: "Verify that UserController is a CONTROLLER"
+          └─→ POST to http://localhost:8080/webgate/api/verify-purpose
+          
+  T=50ms  WebGate: Receives request
+          └─→ Calls DuckDuckGo API
+          
+  T=300ms WebGate: "Verified, confidence 0.92"
+          └─→ Returns to JAR
+          
+  T=350ms JAR: Updates confidence score
+          └─→ Continues analysis
 ```
 
-### Application Configuration
+**Characteristics:**
+- Synchronous (JAR waits for response)
+- Direct connection (must be reachable)
+- Simple protocol (HTTP/REST)
+- Low latency (<500ms typical)
+- Gracefully degrades if WebGate unavailable
 
-**File:** `analysis.properties`
+### Pattern 2: Asynchronous Polling (Planned)
 
-```properties
-project.name=TextAnalyser
-source.node.path=src/main/java
+```
+Timeline: JAR enqueues verification
+
+  T=0ms   JAR: "Need verification for UserController"
+          └─→ Enqueue to MQ (TCP)
+          └─→ Returns immediately
+          
+  T=100ms WebGate: Polls MQ
+          └─→ Dequeue request
+          └─→ Calls DuckDuckGo API
+          
+  T=350ms WebGate: Completes search
+          └─→ Enqueue response to MQ
+          
+  T=400ms JAR: Polls MQ for response
+          └─→ Has response? Yes
+          └─→ Dequeue response
+          
+  T=450ms JAR: Updates confidence
+          └─→ Continues analysis
 ```
 
-### Environment Variables
+**Characteristics:**
+- Asynchronous (JAR doesn't wait)
+- Decoupled (services independent)
+- Polling-based (no incoming connections)
+- Handles temporary outages gracefully
+- Supports multiple WebGate instances
+
+---
+
+## Deployment Scenarios
+
+### Development (All Local)
 
 ```bash
-JAR_SERVICE_URL=http://localhost:8081/analysis  # Override analysis endpoint
+Laptop:
+├─ MQ Server (port 7000) - optional, for MQ testing
+├─ JAR Module (port 8081) - mvn -pl TextAnalyser-jar spring-boot:run
+├─ WebGate (port 8080) - mvn -pl TextAnalyser-webgate spring-boot:run
+└─ UI (GUI) - mvn -pl TextAnalyser-UI-swing exec:java
+```
+
+### Production (Distributed)
+
+```
+On-Site Data Center:
+├─ MQ Server (port 7000) - TCP server for message queue
+├─ JAR Module (port 8081) - Analysis engine
+
+Local Computer (Behind NAT):
+└─ WebGate (port 8080) - Can be multiple instances
+
+Internet:
+└─ DuckDuckGo (api.duckduckgo.com) - Public API, no auth
 ```
 
 ---
 
-## Persistence: FileDB
+## Design Principles
 
-Simple text-file-based database for analysis results.
+### 1. No Direct Internet Calls from Server
+- JAR module NEVER calls DuckDuckGo directly
+- WebGate ALWAYS handles internet communication
+- Prevents server IP from being blocked
 
-**Directory:** `.analysis-db/`  
-**Format:** One record per line (text files)  
-**Operations:**
-- `store(result)` - Save analysis result
-- `get(key)` - Retrieve analysis result
-- `query(filter)` - Query results by criteria
+### 2. Works Behind NAT
+- WebGate uses polling (no incoming connections needed)
+- No firewall rules required
+- Portable to any network
 
-**In-Memory Caching:** Results cached on first read for fast access
+### 3. Graceful Degradation
+- Analysis works without WebGate (local results only)
+- Verification is enhancement, not requirement
+- Missing MQ doesn't prevent REST-based verification
+
+### 4. Simple Protocols
+- REST: Standard HTTP/JSON
+- MQ: TCP/JSON (easy to debug)
+- No complex serialization
+
+### 5. Confidence Scoring
+- All results include confidence (0.0-1.0)
+- Allows consumers to make informed decisions
+- Transparent quality metrics
 
 ---
 
-## Logging
+## Key Metrics
 
-**Directory:** `logs/`  
-**File:** `purpose-analysis.log`
+### WebGate Performance
+- Response time: <500ms typical
+- DuckDuckGo timeout: 10 seconds default (configurable)
+- Answer types supported: instant, abstract, related topics
+- Confidence scoring: 0.95 (direct) → 0.20 (no match)
 
-Tracks:
-- All analysis runs
-- Unknown patterns encountered
-- Confidence scores for purposes
-- Time taken per analysis
+### MQ Performance
+- Message latency: <1ms
+- Throughput: ~1000 msg/sec (per DuckDuckGo limits)
+- Storage: In-memory, ~10-20MB per 1000 messages
+- Cleanup: Automatic (30-second TTL)
 
 ---
 
-## Testing Strategy: Three-Tier TDD
+## Configuration
 
-**Naming Convention:**
-- `*Test.java` - Unit tests (isolated, mocked dependencies)
-- `*LT.java` - Layer tests (component boundaries, light integration)
-- `*IT.java` - Integration tests (full workflow, real database)
+### WebGate Settings
 
-**Maven Profiles for Selective Execution:**
+```yaml
+server.port: 8080
+server.servlet.context-path: /webgate
+search.duckduckgo.enabled: true
+search.duckduckgo.timeout-ms: 10000
+search.duckduckgo.endpoint: https://api.duckduckgo.com/
+```
 
-```bash
-mvn test                    # Run unit tests only (default)
-mvn test -P layer          # Run layer tests
-mvn test -P integration    # Run integration tests
-mvn test -P all-tests      # Run all three
+### MQ Settings
+
+```yaml
+mq.host: on-site-server.example.com
+mq.port: 7000
+mq.connection-timeout-ms: 10000
+mq.read-timeout-ms: 30000
 ```
 
 ---
 
-## UI Architecture: MVC Pattern
+## Testing Strategy
 
-### MainWindow Structure
+### Unit Tests
+- DuckDuckGo response parsing
+- Confidence calculation
+- JSON serialization/deserialization
+- TCP protocol handling
 
-```
-MainWindow (JFrame)
-├─ Tab 0-1: Project Selection
-│  ├─ ProjectListPanel
-│  ├─ ProjectSelectionPanel
-│  └─ ProjectSelectionController
-│
-├─ Tab 2: Configuration
-│  ├─ ConfigurationDisplayPanel
-│  ├─ ConfigurationEditorPanel
-│  └─ ConfigurationEditorController
-│
-├─ Tab 3: Analysis Execution
-│  ├─ AnalysisPanel
-│  ├─ AnalysisController
-│  └─ AnalysisWorker (SwingWorker)
-│
-├─ Tab 4: Report & Export
-│  ├─ ReportPanel
-│  ├─ ReportController
-│  ├─ ViolationTable (JTable)
-│  ├─ FilterPanel
-│  └─ ReportExporter
-│
-└─ Tab 5: Dashboard (Phase 5)
-   ├─ DashboardPanel
-   ├─ DashboardController
-   ├─ DashboardRefresh
-   ├─ ProjectOverview
-   └─ StatisticsDisplay
-```
+### Layer Tests
+- REST endpoint handling
+- MQ command processing
+- Client-server communication
 
-### Theme & Styling
-
-**UITheme** - Consistent Swing styling with modern Material Design aesthetics
-
----
-
-## Deployment Architecture
-
-### Development Environment
-
-All three modules run on localhost:
-- **UI:** Desktop application (Swing)
-- **Analysis Engine:** `http://localhost:8081` (embedded HTTP server)
-- **WebGate:** `http://localhost:8080/webgate` (Spring Boot)
-
-### Configuration Discovery Chain
-
-1. `../config/analysis.properties` (parent module)
-2. `config/analysis.properties` (project root)
-3. `/mnt/DATA/WORKSPACE/Textanalyser/analysis.properties` (workspace)
-4. Subdirectories in workspace
-5. Hard defaults (TextAnalyser, src/main/java)
-
-### Future Deployment (Phase 6+)
-
-**Planned:**
-- Docker containerization
-- Kubernetes orchestration
-- Message Queue (TCP-based) for decoupled communication
-- Cloud deployment support
-
----
-
-## Design Patterns Used
-
-| Pattern | Usage | Examples |
-|---------|-------|----------|
-| **MVC** | UI layer organization | MainWindow, Panels, Controllers |
-| **Observer/Listener** | Event-driven updates | AnalysisProgressEvent, AnalysisCompletedEvent |
-| **Strategy** | Pluggable analysis engines | JsonConfiguredEngine[] array |
-| **Factory** | Object creation | ClassNameSuggester creates suggestions |
-| **SwingWorker** | Long-running tasks off EDT | AnalysisWorker for background analysis |
-| **Service Layer** | HTTP communication abstraction | AnalysisServiceClient |
-| **REST** | Inter-module communication | HTTP endpoints on jar and webgate |
-
----
-
-## Key Architectural Decisions
-
-1. **REST over Direct Calls**
-   - Allows UI and Engine to be separate JVM processes
-   - Easier testing and deployment
-
-2. **Embedded HTTP Server in JAR**
-   - Uses Java's built-in `com.sun.net.httpserver.HttpServer`
-   - No Spring Boot overhead for simple analysis endpoint
-   - Simple, fast, lightweight
-
-3. **Optional WebGate Verification**
-   - Analysis works without internet connection
-   - Verification is enhancement, not requirement
-   - Graceful degradation if WebGate unavailable
-
-4. **FileDB for Persistence**
-   - Simple text-based storage
-   - No database setup required
-   - Human-readable format
-   - Fast in-memory caching
-
-5. **JSON Configuration**
-   - Pattern-driven purpose detection
-   - Easy to add new patterns without code changes
-   - User-configurable without recompilation
-
-6. **Three-Tier Testing**
-   - Unit tests verify logic in isolation
-   - Layer tests verify component interactions
-   - Integration tests verify end-to-end workflows
-   - Selective execution via Maven profiles
-
----
-
-## Entry Points
-
-| Component | Entry Point | Port | Type |
-|-----------|------------|------|------|
-| Desktop UI | `TextAnalyserApplication.main()` | N/A | Swing GUI |
-| Analysis Engine | Embedded in jar module | 8081 | HTTP Server |
-| WebGate | `WebGateApplication.main()` | 8080 | Spring Boot |
-| Configuration | `ConfigurationEditorController` | N/A | UI dialog |
-
----
-
-## Performance Characteristics
-
-- **Analysis Speed:** Depends on project size (processes .java files sequentially)
-- **UI Responsiveness:** Maintained via SwingWorker (long tasks off EDT)
-- **Memory Footprint:** Lightweight (in-memory cache of analysis results)
-- **Network:** Minimal (only REST calls between modules)
-
----
-
-## Phase History (TDD Approach)
-
-| Phase | Focus | Status |
-|-------|-------|--------|
-| 0 | Project Selection - RED | ✅ Complete |
-| 1 | Project Selection - GREEN/REFACTOR | ✅ Complete |
-| 2 | Analysis Execution | ✅ Complete |
-| 3 | Report Display & Export | ✅ Complete |
-| 4 | Configuration Editor | ✅ Complete |
-| 5 | Dashboard & Statistics | ✅ In Progress |
-| 6+ | Message Queue Infrastructure | 📋 Planned |
-
-**Phase 5 Additions (Latest):**
-- `DashboardController.java` - Statistics management
-- `DashboardPanel.java` - Dashboard UI
-- `DashboardRefresh.java` - Auto-refresh mechanism
-- `ProjectOverview.java` - Project information display
-- `StatisticsDisplay.java` - Statistics visualization
+### Integration Tests
+- End-to-end with real DuckDuckGo API
+- MQ request/response cycle
+- Network timeout scenarios
+- Multiple client coordination
 
 ---
 
 ## Summary
 
-TextAnalyser is a focused, modular Java code analysis system with:
-- ✅ Clear separation of concerns (UI, Engine, Gateway)
-- ✅ REST-based loose coupling
-- ✅ Pattern-driven analysis via JSON configuration
-- ✅ Optional internet-based verification
-- ✅ Simple file-based persistence
-- ✅ Comprehensive TDD coverage
-- ✅ Desktop UI for interactive use
+**WebGate & MQ provide:**
 
-The architecture prioritizes **simplicity, testability, and maintainability** over complexity, making it easy to extend with new analysis engines, export formats, or verification strategies.
+| Aspect | Benefit |
+|--------|---------|
+| **Safety** | No direct internet calls from server |
+| **Reliability** | Works without WebGate (graceful degradation) |
+| **Portability** | Works behind NAT, firewall, VPN |
+| **Transparency** | Confidence scores show result quality |
+| **Simplicity** | REST + JSON, easy to debug |
+| **Scalability** | MQ supports load distribution |
+
+**Current Status:**
+- ✅ WebGate (REST API) - Production ready
+- 📋 MQ (Message Queue) - Planned for Phase 6+
+
+**Next Phase:**
+- Implement MQ server (TCP + JSON protocol)
+- Add MQ polling to WebGate
+- Support async verification flow
+- Enable multiple WebGate instances

@@ -1,471 +1,17 @@
-# TextAnalyser: Actual Module Architecture
+# WebGate & MQ: Module Architecture
 
-**Version:** 1.0 (Based on actual code analysis)  
+**Version:** 1.0 (WebGate/MQ focused)  
 **Date:** 2026-07-20  
 
 ---
 
-## TextAnalyser-jar: Core Analysis Engine
-
-**Location:** `/TextAnalyser-pom/TextAnalyser-jar/`  
-**Purpose:** Analyzes Java class files and suggests naming improvements  
-**Port:** 8081 (Embedded HTTP Server)  
-**Dependencies:** None (standalone, no Spring)
-
-### Package Structure
-
-```
-com.noprobit.analyzers/
-├── PurposeAnalyser                      # Main orchestrator
-├── AnalysisController                   # HTTP endpoint handler
-├── ClassAnalysisEngine                  # Comprehensive analysis
-└── ClassFileAnalyzer                    # File parsing
-
-com.noprobit.analyzers.config/
-└── PurposeMappingLoader                 # JSON configuration loading
-
-com.noprobit.analyzers.engine/
-└── JsonConfiguredEngine                 # Pattern-based analysis engine
-
-com.noprobit.analyzers.model/
-├── AnalysisResult                       # Output model
-├── PurposeMatch                         # Purpose detection result
-├── PurposeType                          # Purpose enum
-└── UnknownPattern                       # Pattern tracking
-
-com.noprobit.analyzers.remote/
-└── RemoteVerificationResult             # WebGate response model
-
-com.noprobit.linting/
-├── JavaClassLinter                      # Class naming validation
-├── JavaMethodLinter                     # Method naming validation
-├── JavaImportLinter                     # Import analysis
-└── JavaMethodOrderLinter                # Method ordering validation
-
-com.noprobit.encoding/
-├── EncodingSwitcher                     # Encoding conversion
-├── AdvancedEncodingEngine               # Encoding detection
-└── Encoder                              # Encoding utilities
-
-com.noprobit.db/
-└── FileDB                               # Text file-based database
-
-com.noprobit.reporters/
-├── ClassNameAnalysisReporter            # Result formatting
-└── ClassNameSuggester                   # Name recommendations
-
-com.noprobit.validators/
-└── ClassNameValidator                   # Naming rule validation
-```
-
-### Core Classes
-
-#### PurposeAnalyser
-**Responsibility:** Coordinate purpose detection across all engines
-
-```java
-// Key Methods:
-analyzePurpose(className, extendsClass) → PurposeMatch
-│ ├─→ Check learned patterns (cache)
-│ ├─→ Query JsonConfiguredEngine[] (priority-ordered)
-│ ├─→ Check extends class keywords
-│ ├─→ Check class name keywords
-│ └─→ Track unknown patterns
-```
-
-#### ClassAnalysisEngine
-**Responsibility:** Full analysis workflow for a single class file
-
-```java
-// Key Methods:
-analyzeClassFile(filePath) → AnalysisResult
-│ ├─→ ClassFileAnalyzer.extractMetadata()
-│ ├─→ PurposeAnalyser.analyzePurpose()
-│ ├─→ JavaClassLinter.validate()
-│ ├─→ ClassNameSuggester.suggest()
-│ ├─→ (optional) RemoteVerification via WebGate
-│ └─→ Store in FileDB
-```
-
-#### ClassFileAnalyzer
-**Responsibility:** Parse Java source code
-
-```java
-// Key Methods:
-extractClassMetadata(filePath) → ClassMetadata
-│ ├─→ Read source file
-│ ├─→ Parse class name
-│ ├─→ Parse extends class
-│ ├─→ Extract methods
-│ ├─→ Extract imports
-│ └─→ Return metadata object
-```
-
-#### AnalysisController
-**Responsibility:** Handle HTTP requests for analysis
-
-```java
-// Endpoint:
-POST /analysis/analyze
-├─→ Parse JSON request
-├─→ ClassAnalysisEngine.analyzeClassFile()
-├─→ Return JSON response
-└─→ Error handling
-
-// Also provides:
-GET /analysis/health → OK
-```
-
-### Configuration
-
-**File:** `src/main/resources/purpose-mappings.json`
-
-```json
-{
-  "engines": [
-    {
-      "engineName": "ClassNamingPatterns",
-      "priority": 100,
-      "mappings": [
-        { "pattern": "controller", "purpose": "CONTROLLER", "confidence": 0.95 },
-        { "pattern": "panel", "purpose": "PANEL", "confidence": 0.95 },
-        { "pattern": "dialog", "purpose": "DIALOG", "confidence": 0.95 },
-        { "pattern": "service", "purpose": "SERVICE", "confidence": 0.90 },
-        { "pattern": "listener", "purpose": "LISTENER", "confidence": 0.90 },
-        { "pattern": "adapter", "purpose": "ADAPTER", "confidence": 0.85 },
-        { "pattern": "factory", "purpose": "FACTORY", "confidence": 0.85 },
-        { "pattern": "model", "purpose": "MODEL", "confidence": 0.80 },
-        { "pattern": "repository", "purpose": "REPOSITORY", "confidence": 0.85 }
-      ]
-    },
-    {
-      "engineName": "SemanticPatterns",
-      "priority": 80,
-      "mappings": [...]
-    }
-  ]
-}
-```
-
-### Data Flow in JAR
-
-```
-HTTP Request (JSON)
-  ↓
-AnalysisController.handleAnalysis()
-  ↓
-ClassAnalysisEngine.analyzeClassFile()
-  ├─→ ClassFileAnalyzer.extractMetadata()
-  ├─→ PurposeAnalyser.analyzePurpose()
-  │   ├─→ Check patterns
-  │   ├─→ Query JsonConfiguredEngine[]
-  │   └─→ (optional) Call WebGate
-  ├─→ JavaClassLinter.validate()
-  ├─→ JavaMethodLinter.validate()
-  ├─→ JavaImportLinter.validate()
-  ├─→ ClassNameSuggester.suggest()
-  └─→ FileDB.store(result)
-  ↓
-Return AnalysisResult (JSON)
-```
-
-### Persistence: FileDB
-
-**Directory:** `.analysis-db/`
-
-```java
-// Key Methods:
-store(classname, analysisResult) → void
-get(classname) → analysisResult
-query(filter) → List<AnalysisResult>
-```
-
-### Testing
-
-**Unit Tests** (`*Test.java`):
-- `PurposeAnalyserTest` - Purpose detection logic
-- `ClassAnalysisEngineTest` - Analysis workflow
-- `ClassFileAnalyzerTest` - Parsing logic
-- `JavaClassLinterTest` - Naming validation
-
-**Layer Tests** (`*LT.java`):
-- `AnalysisControllerLT` - HTTP handling
-- `PurposeAnalysisLT` - Detection pipeline
-
-**Integration Tests** (`*IT.java`):
-- `FullAnalysisIT` - End-to-end analysis
-- `FileDBIT` - Persistence
-
----
-
-## TextAnalyser-UI-swing: Desktop Application
-
-**Location:** `/TextAnalyser-pom/TextAnalyser-UI-swing/`  
-**Purpose:** Interactive desktop UI for managing analysis projects  
-**Technology:** Swing MVC, SwingWorker, REST client  
-**Port:** N/A (Client application)
-
-### Package Structure
-
-```
-com.noprobit.ui/
-├── TextAnalyserApplication              # Main entry point
-├── MainWindow                           # Root JFrame
-│
-├── phase0_1/ (Project Selection)
-│   ├── ProjectListPanel
-│   ├── ProjectSelectionPanel
-│   └── ProjectSelectionController
-│
-├── phase2/ (Configuration)
-│   ├── ConfigurationDisplayPanel
-│   ├── ConfigurationEditorPanel
-│   ├── ConfigurationEditorController
-│   ├── ConfigurationPersistence
-│   └── ConfigurationValidator
-│
-├── phase3/ (Analysis Execution)
-│   ├── AnalysisPanel
-│   ├── AnalysisController
-│   ├── AnalysisWorker
-│   └── AnalysisProgressEvent
-│
-├── phase4/ (Report & Export)
-│   ├── ReportPanel
-│   ├── ReportController
-│   ├── ReportExporter
-│   ├── ViolationTable
-│   └── FilterPanel
-│
-├── phase5/ (Dashboard)
-│   ├── DashboardPanel
-│   ├── DashboardController
-│   ├── DashboardRefresh
-│   ├── ProjectOverview
-│   └── StatisticsDisplay
-│
-├── service/
-│   └── AnalysisServiceClient            # REST client to jar module
-│
-└── utils/
-    ├── UITheme                          # Material Design styling
-    └── UIHelpers                        # Common UI utilities
-
-model/
-└── ProjectMetadata                      # Configuration model
-```
-
-### Core UI Flow
-
-#### MainWindow Structure
-
-```
-MainWindow (JFrame)
-├─ Title: "TextAnalyser"
-├─ 5 Tabs (TabbedPane)
-│  ├─ Tab 0: "Project Selection"
-│  ├─ Tab 1: "Project Overview"
-│  ├─ Tab 2: "Configuration"
-│  ├─ Tab 3: "Analysis"
-│  ├─ Tab 4: "Report"
-│  └─ Tab 5: "Dashboard"
-└─ Status bar with current project info
-```
-
-#### Phase 0-1: Project Selection
-
-**Components:**
-- `ProjectListPanel` - Display available projects
-- `ProjectSelectionPanel` - Project chooser UI
-- `ProjectSelectionController` - Handle selection events
-- `ProjectMetadata` - Project configuration object
-
-**Flow:**
-```
-User sees project list
-  ↓
-User clicks a project
-  ↓
-ProjectSelectionController.onProjectSelected()
-  ↓
-Load ProjectMetadata
-  └─→ name, sourcePath, reportPath
-  ↓
-Enable next tab
-```
-
-#### Phase 2: Configuration
-
-**Components:**
-- `ConfigurationDisplayPanel` - Show current config
-- `ConfigurationEditorPanel` - Edit config UI
-- `ConfigurationEditorController` - Handle changes
-- `ConfigurationPersistence` - Load/save .properties files
-- `ConfigurationValidator` - Validate config values
-
-**Flow:**
-```
-User clicks "Edit Configuration"
-  ↓
-ConfigurationEditorPanel opens
-  ├─→ Load current config
-  ├─→ Display in form fields
-  └─→ Allow editing
-  ↓
-User clicks "Save"
-  ↓
-ConfigurationValidator.validate()
-  ↓
-ConfigurationPersistence.save()
-  ├─→ Write to analysis.properties
-  └─→ Update ProjectMetadata
-  ↓
-Show success message
-```
-
-#### Phase 3: Analysis Execution
-
-**Components:**
-- `AnalysisPanel` - Progress display
-- `AnalysisController` - Orchestrate analysis
-- `AnalysisWorker` (SwingWorker) - Background processing
-- `AnalysisProgressEvent` - Progress notifications
-
-**Flow:**
-```
-User clicks "Analyze"
-  ↓
-AnalysisController.startAnalysis()
-  ↓
-Create AnalysisWorker
-  └─→ Non-blocking execution
-  ↓
-AnalysisWorker.doInBackground()
-  ├─→ Read source directory
-  └─→ For each .java file:
-      ├─→ Call AnalysisServiceClient.analyze()
-      │   └─→ HTTP POST to jar module (port 8081)
-      ├─→ Publish AnalysisProgressEvent
-      │   └─→ Update UI (file count, progress)
-      └─→ Continue to next file
-  ↓
-AnalysisWorker.done()
-  └─→ Fire AnalysisCompletedEvent
-      └─→ Activate Report tab
-```
-
-**Key Design: SwingWorker**
-- Long-running analysis happens off EDT
-- UI stays responsive during analysis
-- Progress events update GUI safely
-
-#### Phase 4: Report & Export
-
-**Components:**
-- `ReportPanel` - Display results
-- `ReportController` - Report logic
-- `ReportExporter` - Export to files
-- `ViolationTable` (JTable) - Sortable/filterable results
-- `FilterPanel` - Filter options
-
-**Flow:**
-```
-Analysis completes
-  ↓
-ReportPanel displays results
-  ├─→ ViolationTable loads analysis data
-  │   ├─→ Columns: ClassFile, ActualName, SuggestedName, Purpose
-  │   └─→ Sortable/filterable
-  └─→ FilterPanel allows filtering
-  ↓
-User can:
-  ├─→ Sort columns
-  ├─→ Filter by purpose
-  ├─→ Export to CSV/PDF
-  └─→ Print report
-```
-
-#### Phase 5: Dashboard (NEW)
-
-**Components:**
-- `DashboardPanel` - Main dashboard UI
-- `DashboardController` - Statistics management
-- `DashboardRefresh` - Auto-refresh mechanism
-- `ProjectOverview` - Project information
-- `StatisticsDisplay` - Statistics visualization
-
-**Flow:**
-```
-User opens Dashboard tab
-  ↓
-DashboardController loads statistics
-  ├─→ Number of classes analyzed
-  ├─→ Number of issues found
-  ├─→ Confidence scores
-  ├─→ Purpose distribution
-  └─→ Naming violations count
-  ↓
-StatisticsDisplay renders charts/tables
-  ↓
-DashboardRefresh auto-updates (if analysis runs)
-```
-
-### AnalysisServiceClient: REST Communication
-
-**Responsibility:** Call jar module's analysis endpoint
-
-```java
-public AnalysisResult analyze(ClassInfo classInfo) {
-    // Build JSON request
-    // POST to http://localhost:8081/analysis/analyze
-    // Parse JSON response
-    // Return AnalysisResult
-}
-
-// Default: http://localhost:8081/analysis
-// Override: JAR_SERVICE_URL environment variable
-```
-
-### UITheme: Material Design Styling
-
-**Responsibility:** Consistent modern look and feel
-
-```java
-public class UITheme {
-    public static void applyTheme(JFrame frame) {
-        // Set modern fonts
-        // Set color scheme
-        // Apply to all components
-    }
-}
-```
-
-### Testing
-
-**Unit Tests:**
-- `ProjectSelectionControllerTest`
-- `ConfigurationEditorControllerTest`
-- `AnalysisControllerTest`
-- `ReportControllerTest`
-- `DashboardControllerTest`
-
-**Layer Tests:**
-- `UIControllerLayerTests`
-- `AnalysisServiceClientLT`
-
-**Integration Tests:**
-- `FullUIWorkflowIT`
-- `ProjectAnalysisEndToEndIT`
-
----
-
-## TextAnalyser-webgate: Spring Boot Gateway
+## Module 1: WebGate - Spring Boot Gateway
 
 **Location:** `/TextAnalyser-pom/TextAnalyser-webgate/`  
-**Purpose:** Internet search verification for class purposes  
+**Purpose:** Internet search verification and generic query service  
 **Port:** 8080  
-**Technology:** Spring Boot, REST API  
-**External API:** DuckDuckGo
+**Technology:** Spring Boot, REST API, DuckDuckGo  
+**Deployment:** Standalone JAR, works behind NAT
 
 ### Package Structure
 
@@ -491,11 +37,12 @@ com.noprobit.analyzers.webgate/
 public class WebGateApplication {
     // Embedded Tomcat on port 8080
     // Context path: /webgate
+    // Auto-enables scheduling for polling (Phase 6+)
 }
 ```
 
 #### PurposeVerificationController
-**Responsibility:** Handle REST requests for verification
+**Responsibility:** Handle REST requests for verification and queries
 
 ```java
 @RestController
@@ -508,17 +55,24 @@ public class PurposeVerificationController {
         String detectedPurpose,
         String keyword
     )
+    // Verify if detected purpose makes sense
+    // Query DuckDuckGo for confirmation
+    // Return confidence score
 
     @PostMapping("/query")
     public QueryResponse queryGeneric(QueryRequest request)
+    // Answer general knowledge questions
+    // Support both technical and general queries
+    // Return answer with confidence
 
     @GetMapping("/health")
     public String health()
+    // Health check endpoint for monitoring
 }
 ```
 
 #### InternetSearchService
-**Responsibility:** Query DuckDuckGo API
+**Responsibility:** Query DuckDuckGo API and score results
 
 ```java
 public class InternetSearchService {
@@ -528,16 +82,17 @@ public class InternetSearchService {
         String detectedPurpose,
         String keyword
     )
-    // └─→ Query DuckDuckGo
-    // └─→ Parse response
-    // └─→ Score confidence
-    // └─→ Return result
+    // Build: "ClassName + keyword + pattern"
+    // Query: DuckDuckGo
+    // Score: confidence based on result type
+    // Return: RemoteVerificationResult
 
     public QueryResponse queryGeneric(QueryRequest request)
-    // └─→ Query DuckDuckGo with context
-    // └─→ Extract answer
-    // └─→ Score confidence
-    // └─→ Return response
+    // Build: question + context
+    // Query: DuckDuckGo API
+    // Extract: instant answer, abstract, or related topics
+    // Score: confidence (0.95 → 0.20)
+    // Return: QueryResponse with sources
 }
 ```
 
@@ -546,7 +101,7 @@ public class InternetSearchService {
 #### Purpose Verification
 
 ```
-POST /api/verify-purpose
+POST /webgate/api/verify-purpose
 Content-Type: application/json
 
 Request:
@@ -566,10 +121,10 @@ Response:
 }
 ```
 
-#### Generic Queries (Phase 2)
+#### Generic Queries
 
 ```
-POST /api/query
+POST /webgate/api/query
 Content-Type: application/json
 
 Request:
@@ -592,167 +147,378 @@ Response:
 }
 ```
 
+#### Health Check
+
+```
+GET /webgate/health
+Content-Type: application/json
+
+Response:
+{
+  "status": "UP",
+  "version": "2.0",
+  "mqConnected": true,
+  "processingRequests": 2,
+  "completedRequests": 1245,
+  "uptime": 86400000
+}
+```
+
 ### Configuration
 
-**File:** `application.properties`
+**File:** `application.yml` or `application.properties`
 
-```properties
-spring.application.name=TextAnalyser-WebGate
-server.port=8080
-server.servlet.context-path=/webgate
-webgate.search.enabled=true
-webgate.search.timeout=5000
-webgate.duckduckgo.endpoint=https://api.duckduckgo.com/
+```yaml
+spring:
+  application:
+    name: TextAnalyser-WebGate
+
+server:
+  port: 8080
+  servlet:
+    context-path: /webgate
+
+# DuckDuckGo Integration
+search:
+  duckduckgo:
+    enabled: true
+    url: https://api.duckduckgo.com/
+    timeout-ms: 10000
+    user-agent: TextAnalyser/2.0
+
+# Optional: Message Queue (Phase 6+)
+mq:
+  host: on-site-server.example.com
+  port: 7000
+  connection-timeout-ms: 10000
+  read-timeout-ms: 30000
+
+logging:
+  level:
+    root: INFO
+    com.noprobit.analyzers.webgate: DEBUG
 ```
 
 ### Data Models
 
-**RemoteVerificationResult** (Purpose verification)
+**RemoteVerificationResult** (Purpose verification response)
 ```java
-String className
-String purpose
-boolean verified
-double confidence
-List<String> sources
+String className          // The class being verified
+String purpose           // Verified purpose (CONTROLLER, SERVICE, etc.)
+boolean verified         // Whether verification succeeded
+double confidence        // Confidence score (0.0-1.0)
+List<String> sources     // Where answer came from
 ```
 
-**QueryRequest** (Generic queries)
+**QueryRequest** (Generic query request)
 ```java
-String question        // Required
-String context         // Optional
-int maxResults         // Optional, default 5
-long timeout           // Optional, default 5000ms
+String question          // Required: the question to answer
+String context          // Optional: contextual info (e.g., "java spring boot")
+int maxResults          // Optional: max results to return (default 5)
+long timeout            // Optional: timeout in ms (default 5000)
 ```
 
 **QueryResponse** (Generic query response)
 ```java
-String question
-boolean answerFound
-String answer
-double confidence      // Clamped to 0.0-1.0
-String summary
-long processingTime
-List<String> sources
+String question         // The original question
+boolean answerFound     // Whether an answer was found
+String answer          // The answer text
+double confidence      // Confidence score (0.0-1.0)
+String summary         // Summary of answer type (e.g., "Direct answer found")
+long processingTime    // How long the search took (ms)
+List<String> sources   // Attribution sources
 ```
 
 ### DuckDuckGo Integration
 
-**Flow:**
+**Answer Type Confidence Scoring:**
 ```
-QueryRequest
-  ↓
-InternetSearchService.queryGeneric()
-  ├─→ Build DuckDuckGo API call
-  ├─→ Add context to query
-  ├─→ Set timeout
-  └─→ HTTP GET to api.duckduckgo.com
-  ↓
-Parse Response
-  ├─→ Extract instant answer (confidence 0.95)
-  ├─→ Extract abstract (confidence 0.80)
-  ├─→ Extract related topics (confidence 0.70)
-  └─→ Handle no results (confidence 0.20)
-  ↓
-Confidence Scoring
-  ├─→ Direct answer: 0.90-1.0
-  ├─→ Summary: 0.75-0.90
-  ├─→ Related topic: 0.60-0.75
-  └─→ No results: 0.0-0.20
-  ↓
-QueryResponse (with sources)
+Instant Answer (direct, exact)
+  └─→ Confidence: 0.90-1.0
+  
+Abstract (summary, overview)
+  └─→ Confidence: 0.75-0.90
+  
+Related Topics (tangential)
+  └─→ Confidence: 0.60-0.75
+  
+No Results
+  └─→ Confidence: 0.0-0.20
+```
+
+**Search Flow:**
+```
+1. Build query: question + context keywords
+2. Call: HTTPS GET to api.duckduckgo.com/?q=...
+3. Parse: JSON response
+4. Extract: Best available answer type
+5. Score: Based on answer type and relevance
+6. Return: QueryResponse with confidence
 ```
 
 ### Testing
 
 **Unit Tests:**
-- `InternetSearchServiceTest`
-- `PurposeVerificationTest`
-- `GenericQueryServiceTest`
+- `InternetSearchServiceTest` - DuckDuckGo response parsing
+- `PurposeVerificationTest` - Confidence calculation
+- `GenericQueryServiceTest` - Query building and formatting
 
 **Layer Tests:**
-- `PurposeVerificationControllerLT`
-- `GenericQueryControllerLT`
+- `PurposeVerificationControllerLT` - REST endpoint handling
+- `GenericQueryControllerLT` - JSON serialization
 
 **Integration Tests:**
-- `PurposeVerificationIT`
-- `GenericQueryServiceIT`
-- `DuckDuckGoIntegrationIT`
+- `PurposeVerificationIT` - End-to-end with DuckDuckGo
+- `GenericQueryServiceIT` - Full query pipeline
+- `DuckDuckGoIntegrationIT` - API availability and response parsing
 
 ---
 
-## TextAnalyser-mq: Message Queue (Future)
+## Module 2: MQ - Message Queue Server
 
 **Location:** `/TextAnalyser-pom/TextAnalyser-mq/`  
-**Status:** Empty directory, planned for Phase 6+  
-**Purpose:** Decoupled communication between jar and webgate  
-**Technology:** TCP-based JSON protocol
+**Status:** Planned for Phase 6+  
+**Purpose:** Decoupled communication between JAR and WebGate  
+**Technology:** TCP-based JSON protocol  
+**Port:** 7000 (default, configurable)
 
-### Planned Architecture
+### Architecture Overview
 
-**Server:** Message Queue Server (runs locally)
+**MQ Server:**
 ```
-TCP Port: 9999 (default)
-Protocol: JSON over TCP
-Storage: In-memory (TTL-based auto-cleanup)
+TCP Server (port 7000)
+├─→ Accepts client connections (JAR, WebGate)
+├─→ Per-client thread handlers
+├─→ Shared MessageStore (thread-safe)
+└─→ Auto-cleanup (TTL-based expiration)
+
+MessageStore:
+├─→ Request Queue (FIFO)
+├─→ Response Storage (HashMap by requestId)
+└─→ Automatic cleanup (30-second TTL)
 ```
 
-**Commands:**
-1. `enqueue_request` - Add analysis request
-2. `dequeue_request` - Retrieve analysis request
-3. `enqueue_response` - Store analysis result
-4. `dequeue_response` - Retrieve analysis result
-5. `has_response` - Check if result ready
-6. `stats` - Get queue statistics
+### Core Components
 
-**Planned:** Full documentation when implementation begins
+```
+MQServer.java
+├─→ TCP ServerSocket on port 7000
+├─→ Accept client connections
+├─→ Spawn ClientHandler per connection
+└─→ Print statistics every 5 seconds
+
+ClientHandler.java (per-client thread)
+├─→ Read JSON commands from client
+├─→ Dispatch to command handlers
+├─→ Send JSON responses
+└─→ Handle client disconnection
+
+MessageStore.java (thread-safe)
+├─→ enqueueRequest(id, request)
+├─→ dequeueRequest()
+├─→ enqueueResponse(id, response)
+├─→ dequeueResponse(id)
+├─→ hasResponse(id)
+├─→ cleanup() - auto-remove expired
+└─→ getStats()
+```
+
+### Protocol: TCP Commands
+
+#### Command 1: Enqueue Request
+```json
+{
+  "command": "enqueue_request",
+  "payload": {
+    "id": "req-12345",
+    "question": "What is REST API?",
+    "context": "java spring boot"
+  }
+}
+
+Response: { "status": "ok", "message": "Request enqueued: req-12345" }
+```
+
+#### Command 2: Dequeue Request
+```json
+{
+  "command": "dequeue_request",
+  "payload": {}
+}
+
+Response (if available):
+{
+  "status": "ok",
+  "data": {
+    "id": "req-12345",
+    "question": "What is REST API?",
+    "context": "java spring boot"
+  }
+}
+
+Response (if empty):
+{ "status": "empty" }
+```
+
+#### Command 3: Enqueue Response
+```json
+{
+  "command": "enqueue_response",
+  "payload": {
+    "id": "req-12345",
+    "queryResponse": {
+      "question": "What is REST API?",
+      "answerFound": true,
+      "answer": "REST is an architectural style...",
+      "confidence": 0.85,
+      "summary": "Direct answer found",
+      "processingTime": 250,
+      "sources": ["DuckDuckGo"]
+    }
+  }
+}
+
+Response: { "status": "ok", "message": "Response enqueued: req-12345" }
+```
+
+#### Command 4: Dequeue Response
+```json
+{
+  "command": "dequeue_response",
+  "payload": {
+    "requestId": "req-12345"
+  }
+}
+
+Response: { "status": "ok", "data": { ...QueryResponse... } }
+```
+
+#### Command 5: Has Response
+```json
+{
+  "command": "has_response",
+  "payload": {
+    "requestId": "req-12345"
+  }
+}
+
+Response: { "status": "ok", "has_response": true }
+```
+
+#### Command 6: Statistics
+```json
+{
+  "command": "stats",
+  "payload": {}
+}
+
+Response:
+{
+  "status": "ok",
+  "stats": {
+    "totalMessages": 145,
+    "pendingRequests": 3,
+    "pendingResponses": 12,
+    "timestamp": 1721475600000
+  }
+}
+```
+
+### Message Lifecycle
+
+```
+1. JAR enqueues request
+   └─→ Status: "pending"
+
+2. WebGate dequeues request
+   └─→ Status: "processing"
+
+3. WebGate processes (calls DuckDuckGo)
+
+4. WebGate enqueues response
+   └─→ Status: "completed"
+
+5. JAR retrieves response
+   └─→ Status: "delivered"
+   └─→ Message deleted from storage
+
+6. Auto-cleanup (30s TTL)
+   └─→ Expired messages removed
+```
+
+### Features
+
+- **In-Memory Storage** - No database required
+- **Thread-Safe** - ConcurrentHashMap with synchronized operations
+- **Auto-Cleanup** - TTL-based message expiration (30 seconds)
+- **Statistics** - Per-command metrics (5-second reporting)
+- **Multiple Clients** - Handles JAR + multiple WebGate instances
+- **Simple Protocol** - JSON over TCP, easy to debug
+
+### Deployment
+
+**Docker:**
+```dockerfile
+FROM openjdk:11-jre-slim
+WORKDIR /mq
+COPY target/TextAnalyser-mq-1.0-SNAPSHOT.jar mq-server.jar
+EXPOSE 7000
+ENTRYPOINT ["java", "-jar", "mq-server.jar"]
+```
+
+**Run:**
+```bash
+mvn -pl TextAnalyser-mq package
+java -jar TextAnalyser-mq/target/TextAnalyser-mq-1.0-SNAPSHOT.jar
+```
 
 ---
 
-## Module Dependencies
+## Module Interactions
+
+### Current (Phase 0-5): Direct REST
 
 ```
-TextAnalyser-UI-swing
-  ├─ (depends on) TextAnalyser-jar
-  │  └─ (via HTTP REST: localhost:8081)
-  └─ (depends on) TextAnalyser-webgate
-     └─ (via HTTP REST: localhost:8080)
+JAR Module (port 8081)
+  ├─→ Calls WebGate REST API (optional)
+  │   └─→ POST http://localhost:8080/webgate/api/verify-purpose
+  └─→ DuckDuckGo (if verification enabled)
 
-TextAnalyser-jar
-  ├─ (no internal dependencies)
-  └─ (calls) DuckDuckGo API (if verification enabled)
+WebGate Module (port 8080)
+  └─→ Calls DuckDuckGo API
+      └─→ HTTPS GET https://api.duckduckgo.com/
+```
 
-TextAnalyser-webgate
-  ├─ (no internal dependencies)
-  └─ (calls) DuckDuckGo API
+### Planned (Phase 6+): Via Message Queue
 
-TextAnalyser-mq (Phase 6+)
-  ├─ (independent)
-  └─ (acts as) central message hub
+```
+JAR Module
+  └─→ Enqueue request to MQ (port 7000)
+  
+MQ Server
+  ├─→ Stores requests (FIFO)
+  └─→ Stores responses (by requestId)
+  
+WebGate Module
+  ├─→ Polls MQ for requests (every 500ms)
+  └─→ Enqueues response when done
 ```
 
 ---
 
 ## Summary
 
-**JAR Module:** Core analysis engine
-- Stateless HTTP service
-- Analyzes Java classes via pattern matching
-- Optional internet verification
-- Lightweight, fast, self-contained
-
-**UI Module:** Desktop application
-- Rich Swing interface
-- Project/configuration management
-- Async analysis via SwingWorker
-- Reports and dashboards
-
-**WebGate Module:** External verification
-- Spring Boot microservice
+**WebGate Module:**
+- Spring Boot REST service
 - DuckDuckGo API integration
-- Generic query support
-- Confidence scoring
+- Confidence scoring and answer extraction
+- Health checks and monitoring
+- Works behind NAT (no incoming connections)
 
-**MQ Module:** Future infrastructure
-- Planned for decoupled communication
+**MQ Module:**
 - TCP-based message queue
-- In-memory storage with TTL
+- FIFO request queue
+- HashMap response storage
+- Auto-cleanup and statistics
+- Enables decoupled async communication
+- Supports multiple WebGate instances

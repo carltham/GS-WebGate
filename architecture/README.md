@@ -1,6 +1,6 @@
-# TextAnalyser Architecture Documentation
+# WebGate & MQ Architecture Documentation
 
-**Complete Architecture Reference for the TextAnalyser Project**
+**Complete Architecture Reference for WebGate and Message Queue**
 
 ---
 
@@ -9,23 +9,16 @@
 ```
 architecture/
 ├── README.md (this file)
-├── ARCHITECTURE_DEEP_MAP.md          (Complete code-level mapping)
-│
-├── system/
-│   ├── SYSTEM_OVERVIEW.md            (High-level system design)
-│   ├── COMMUNICATION_PROTOCOL.md     (MQ & REST protocols)
-│   └── DEPLOYMENT_GUIDE.md           (Production deployment)
 │
 ├── components/
-│   ├── WEBGATE_ARCHITECTURE.md       (Internet gateway service)
-│   ├── MQ_ARCHITECTURE.md            (Message queue server)
-│   ├── JAR_MODULE.md                 (Analysis engine)
-│   └── UI_MODULE.md                  (Swing GUI)
+│   ├── WEBGATE_ARCHITECTURE.md      (Complete WebGate service)
+│   └── MQ_ARCHITECTURE.md            (Message queue server)
 │
-└── guides/
-    ├── QUICK_START.md                (Get running in 5 minutes)
-    ├── DEVELOPMENT.md                (Development setup)
-    └── TROUBLESHOOTING.md            (Common issues & fixes)
+├── ACTUAL_ARCHITECTURE_DATAFLOW.md  (WebGate data flows)
+├── ACTUAL_ARCHITECTURE_DESIGN_PATTERNS.md (WebGate design patterns)
+├── ACTUAL_ARCHITECTURE_MODULES.md   (Complete module specs)
+├── ACTUAL_ARCHITECTURE_OVERVIEW.md  (System overview)
+└── ARCHITECTURE_DEEP_MAP.md         (Code-level reference)
 ```
 
 ---
@@ -34,277 +27,244 @@ architecture/
 
 ### Start Here
 
-**New to the project?**
-1. Read: [System Overview](system/SYSTEM_OVERVIEW.md)
-2. Read: [Quick Start Guide](guides/QUICK_START.md)
-3. Explore: [Components](components/)
+**New to WebGate?**
+1. Read: [Architecture Overview](ACTUAL_ARCHITECTURE_OVERVIEW.md)
+2. Read: [WebGate Architecture](components/WEBGATE_ARCHITECTURE.md)
+3. Explore: [MQ Architecture](components/MQ_ARCHITECTURE.md)
 
 **Need specific information?**
 
 | Need | Document |
 |------|----------|
-| **Understand the whole system** | [ARCHITECTURE_DEEP_MAP.md](ARCHITECTURE_DEEP_MAP.md) |
-| **Understand WebGate (search gateway)** | [components/WEBGATE_ARCHITECTURE.md](components/WEBGATE_ARCHITECTURE.md) |
-| **Understand MQ Server (message hub)** | [components/MQ_ARCHITECTURE.md](components/MQ_ARCHITECTURE.md) |
-| **How components communicate** | [system/COMMUNICATION_PROTOCOL.md](system/COMMUNICATION_PROTOCOL.md) |
-| **Deploy to production** | [system/DEPLOYMENT_GUIDE.md](system/DEPLOYMENT_GUIDE.md) |
-| **Set up development environment** | [guides/DEVELOPMENT.md](guides/DEVELOPMENT.md) |
-| **Troubleshoot issues** | [guides/TROUBLESHOOTING.md](guides/TROUBLESHOOTING.md) |
+| **Understand WebGate completely** | [components/WEBGATE_ARCHITECTURE.md](components/WEBGATE_ARCHITECTURE.md) |
+| **Understand MQ Server** | [components/MQ_ARCHITECTURE.md](components/MQ_ARCHITECTURE.md) |
+| **How WebGate processes requests** | [ACTUAL_ARCHITECTURE_DATAFLOW.md](ACTUAL_ARCHITECTURE_DATAFLOW.md) |
+| **Design patterns used** | [ACTUAL_ARCHITECTURE_DESIGN_PATTERNS.md](ACTUAL_ARCHITECTURE_DESIGN_PATTERNS.md) |
+| **Module specifications** | [ACTUAL_ARCHITECTURE_MODULES.md](ACTUAL_ARCHITECTURE_MODULES.md) |
+| **System architecture** | [ACTUAL_ARCHITECTURE_OVERVIEW.md](ACTUAL_ARCHITECTURE_OVERVIEW.md) |
+| **Code-level details** | [ARCHITECTURE_DEEP_MAP.md](ARCHITECTURE_DEEP_MAP.md) |
 
 ---
 
 ## 📖 Document Descriptions
 
+### 🌐 components/WEBGATE_ARCHITECTURE.md
+**Complete WebGate Service Documentation**
+- Standalone Spring Boot gateway
+- REST API endpoints (verify-purpose, query, health)
+- DuckDuckGo integration
+- Confidence scoring (0.0-1.0)
+- Deployment (Docker, standalone JAR)
+- Monitoring & operations
+- Security considerations
+- **Read this for:** Understanding WebGate's complete architecture
+
+**Key Sections:**
+- Project overview & characteristics
+- Architecture diagram (local + distributed)
+- Core components (MQPoller, SearchProcessor, InternetSearchService)
+- Communication protocol (MQ polling)
+- Deployment topology
+- API specifications
+- Configuration options
+- Monitoring dashboard
+- Operations checklist
+- Security architecture
+- Deployment checklist
+- Quick start commands
+
+### 📦 components/MQ_ARCHITECTURE.md
+**Complete Message Queue Server Documentation**
+- TCP server on port 7000
+- FIFO request queue
+- HashMap response storage
+- Auto-cleanup with TTL
+- 6 core commands (enqueue/dequeue request/response, has_response, stats)
+- In-memory architecture
+- **Read this for:** Understanding MQ operations and protocol
+
+**Key Sections:**
+- Overview & characteristics
+- Architecture & message lifecycle
+- Core components (MQServer, ClientHandler, MessageStore)
+- Protocol specification (JSON over TCP)
+- Data models
+- Operations & monitoring
+- Docker deployment
+- Kubernetes setup
+- Performance characteristics
+- Operations checklist
+- Success metrics
+
+### 📡 ACTUAL_ARCHITECTURE_DATAFLOW.md
+**WebGate Data Flow and Communication Patterns**
+- WebGate purpose verification flow
+- Generic query flow
+- MQ request-response cycle
+- Error handling & graceful degradation
+- Communication patterns (REST vs MQ)
+- **Read this for:** Understanding how data flows through WebGate and MQ
+
+**Key Sections:**
+- Workflow 1: WebGate Verifies Purpose (REST API)
+- Workflow 2: WebGate Generic Query (REST API)
+- Workflow 3: MQ Request-Response Cycle (polling)
+- Error handling scenarios
+- Communication patterns
+
+### 🎨 ACTUAL_ARCHITECTURE_DESIGN_PATTERNS.md
+**Design Patterns Used in WebGate**
+- Adapter Pattern (DuckDuckGo integration)
+- Polling Pattern (MQ communication)
+- Graceful Degradation (optional verification)
+- **Read this for:** Understanding design philosophy
+
+**Key Sections:**
+- Adapter Pattern: Hide DuckDuckGo complexity
+- Polling Pattern: NAT-friendly communication
+- Graceful Degradation: System works without services
+- Design philosophy summary
+
+### 📦 ACTUAL_ARCHITECTURE_MODULES.md
+**Complete Module Specifications**
+- WebGate module (Spring Boot gateway)
+- MQ module (Message queue server)
+- Module interactions & dependencies
+- **Read this for:** Implementation details and specifications
+
+**Key Sections:**
+- WebGate: Package structure, classes, endpoints, configuration, data models
+- MQ: Architecture, components, protocol, deployment
+- Module interactions (REST + MQ)
+
+### 🏗️ ACTUAL_ARCHITECTURE_OVERVIEW.md
+**High-Level System Architecture**
+- What WebGate & MQ are
+- Architecture diagrams (REST vs MQ)
+- Key components
+- Communication patterns
+- Deployment scenarios
+- Design principles
+- **Read this for:** Understanding how everything fits together
+
+**Key Sections:**
+- Component overview
+- Architecture diagrams
+- Communication patterns (sync vs async)
+- Deployment scenarios
+- Design principles
+- Key metrics
+- Configuration summary
+- Testing strategy
+
 ### 🔍 ARCHITECTURE_DEEP_MAP.md
-**Complete Code-Level Architecture**
-- All 62 Java classes mapped with signatures
-- Package structure and relationships
-- Data flow examples
-- Design patterns used
-- Test organization
+**Code-Level Architecture Reference**
+- WebGate module: All classes and methods
+- Data models with field details
+- Data flow: Complete trace through code
+- REST API contracts
+- Configuration reference
 - **Read this for:** Understanding every class and method
 
 **Key Sections:**
-- Module 1: TextAnalyser-UI-swing (29 files)
-- Module 2: TextAnalyser-jar (33 files)
-- Module 3: TextAnalyser-webgate (6 files)
-- Cross-module communication
-- Test organization (315+ tests)
+- WebGate package structure
+- All class signatures and methods
+- Complete data flow with code steps
+- REST API request/response examples
+- Configuration file reference
 
 ---
 
-### 🏗️ system/SYSTEM_OVERVIEW.md
-**High-Level System Architecture**
-- System design principles
-- Three-module architecture
-- Request-response lifecycle
-- Deployment topology
-- Design patterns
-- **Read this for:** Understanding how everything fits together
+## 🚀 Getting Started
 
----
-
-### 📡 system/COMMUNICATION_PROTOCOL.md
-**All Communication Protocols**
-- MQ TCP protocol (6 commands)
-- REST API specifications
-- JSON message formats
-- Request-response examples
-- Error handling
-- **Read this for:** Understanding how components talk to each other
-
----
-
-### 🚀 system/DEPLOYMENT_GUIDE.md
-**Production Deployment**
-- Docker deployment
-- Kubernetes manifests
-- Network configuration
-- Port mappings
-- Environment variables
-- **Read this for:** Deploying to production
-
----
-
-### 🌐 components/WEBGATE_ARCHITECTURE.md
-**WebGate: Internet Search Gateway**
-- Runs on local computer (behind NAT)
-- Polls on-site MQ for requests
-- Calls DuckDuckGo API
-- Returns verified answers
-- **Architecture:** MQPoller → SearchProcessor → InternetSearchService
-- **Read this for:** Understanding WebGate's role and implementation
-
-**Key Features:**
-- No incoming connections (works behind NAT)
-- Server doesn't make direct internet calls (no IP blocking)
-- Confidence scoring (0.0-1.0)
-- Answer extraction (instant/abstract/related)
-- Error handling & fallback
-
----
-
-### 📦 components/MQ_ARCHITECTURE.md
-**MQ Server: Central Message Hub**
-- Runs on-site (data center)
-- Stores requests from JAR
-- Serves requests to WebGate
-- In-memory storage with TTL
-- Automatic cleanup
-- **Architecture:** TCPServer → ClientHandler → MessageStore
-- **Read this for:** Understanding MQ operations and protocol
-
-**Key Features:**
-- JSON over TCP protocol
-- FIFO request queue
-- HashMap response store
-- 30-second message TTL
-- Per-client thread handlers
-- 5-second statistics output
-
----
-
-### ⚙️ components/JAR_MODULE.md
-**Analysis Engine**
-- Core analysis logic
-- 3 configurable engines
-- JSON configuration (41 rules)
-- REST API
-- Optional remote verification
-- **Read this for:** Understanding analysis processing
-
----
-
-### 🖥️ components/UI_MODULE.md
-**Swing UI**
-- 5 feature phases
-- Material Design theme
-- REST client
-- 249 unit tests
-- **Read this for:** Understanding UI architecture
-
----
-
-### ⚡ guides/QUICK_START.md
-**Get Running in 5 Minutes**
-- Local development setup
-- Start all services
-- Run sample analysis
-- Verify it works
-- **Read this for:** Getting started quickly
-
----
-
-### 💻 guides/DEVELOPMENT.md
-**Development Environment**
-- System requirements
-- Build setup
-- Hot reload configuration
-- Testing
-- Debugging
-- **Read this for:** Setting up for development
-
----
-
-### 🔧 guides/TROUBLESHOOTING.md
-**Common Issues & Solutions**
-- MQ connection problems
-- WebGate timeouts
-- Analysis failures
-- Port conflicts
-- Network issues
-- **Read this for:** Solving problems
-
----
-
-## 🎯 Architecture at a Glance
-
+### 1. Understand the Architecture
 ```
-User                    UI Module                   JAR Module
-                        (Swing GUI)              (Analysis Engine)
- │                           │                           │
- ├─ Requests analysis ──────→│                           │
- │                           ├─ REST call ────────────→ │
- │                           │                      Process
- │                           │                      (local)
- │                           │                           │
- │                           │◄────────────────────────┬─┤
- │                           │   Need verification?    │ │
- │                           ├─────────────────────────┼─→ MQ Server
- │                           │    Write to MQ          │ (On-Site)
- │                           │                         │ │
- │                           │                    ┌────┴─┤
- │                           │                    │      │
- │                           │         WebGate    │      │
- │                           │      (Local Comp)  │      │
- │                           │      Polls MQ ─────┘      │
- │                           │      Searches ────→ DuckDuckGo
- │                           │      Writes to MQ ────────→
- │                           │                           │
- │                           │◄────────────────────────┬─┤
- │◄──────────────────────────┤  Result from MQ         │
- │                           │                         │
- └─ See analysis result      │                         │
+Start → ACTUAL_ARCHITECTURE_OVERVIEW.md
+       → components/WEBGATE_ARCHITECTURE.md
+       → components/MQ_ARCHITECTURE.md
+```
+
+### 2. Learn the Data Flow
+```
+Read → ACTUAL_ARCHITECTURE_DATAFLOW.md
+     → Understand request → processing → response
+```
+
+### 3. Understand Design Decisions
+```
+Review → ACTUAL_ARCHITECTURE_DESIGN_PATTERNS.md
+       → Learn why polling, adapter, graceful degradation
+```
+
+### 4. Deep Dive into Code
+```
+Reference → ACTUAL_ARCHITECTURE_MODULES.md
+          → ARCHITECTURE_DEEP_MAP.md
+          → All class details and signatures
 ```
 
 ---
 
 ## 📊 Key Statistics
 
-### Code
-- **Total Java Files:** 62
-- **Total Lines of Code:** ~15,000
-- **Main Modules:** 3 (UI, JAR, WebGate)
-- **Packages:** 12+ organized packages
+### WebGate
+- **Language:** Java 11
+- **Framework:** Spring Boot 2.7.14
+- **Port:** 8080
+- **Lines of Code:** ~500-700 (core classes)
+- **REST Endpoints:** 3 (verify-purpose, query, health)
+- **External APIs:** DuckDuckGo (public, no auth)
 
-### Tests
-- **Total Tests:** 315+
-- **Unit Tests:** 249
-- **Layer Tests:** 66
-- **Integration Tests:** 66+
-- **Pass Rate:** 100%
-
-### Architecture
-- **REST Endpoints:** 8+
-- **MQ Commands:** 6
-- **Configuration Rules:** 41
-- **Design Patterns:** 6+
-
-### Documentation
-- **Architecture Docs:** 8 files
-- **Total Words:** 50,000+
-- **Diagrams:** 30+
-- **Code Examples:** 100+
+### MQ
+- **Language:** Java 11
+- **Port:** 7000
+- **Architecture:** TCP server, in-memory storage
+- **Commands:** 6 (enqueue/dequeue request/response, has_response, stats)
+- **Storage:** HashMap (thread-safe)
+- **Message TTL:** 30 seconds (auto-cleanup)
 
 ---
 
 ## 🔄 Request Flow Overview
 
+### REST API Flow (Current)
 ```
-User clicks "Analyze"
-    ↓
-UI submits class name to JAR
-    ↓
-JAR analyzes using 3 engines
-    ↓
-Low confidence? → Needs remote verification
-    ↓
-JAR writes request to on-site MQ
-    ↓
-WebGate (local computer) polls MQ
-    ↓
-WebGate calls DuckDuckGo (safe! local IP)
-    ↓
-WebGate writes response to MQ
-    ↓
+JAR Module
+  ↓
+POST /webgate/api/verify-purpose
+  ↓
+PurposeVerificationController
+  ↓
+InternetSearchService
+  ↓
+DuckDuckGo API (HTTPS)
+  ↓
+Parse & Score
+  ↓
+Return confidence result
+  ↓
+JAR combines scores
+  ↓
+Analysis complete
+```
+
+### MQ Polling Flow (Phase 6+)
+```
+JAR enqueues request to MQ
+  ↓
+WebGate polls MQ (500ms interval)
+  ↓
+WebGate dequeues request
+  ↓
+WebGate calls DuckDuckGo
+  ↓
+WebGate enqueues response
+  ↓
 JAR polls MQ for response
-    ↓
-JAR combines local + remote confidence
-    ↓
-UI displays result
-```
-
----
-
-## 🚀 Deployment Summary
-
-### Development (All Local)
-```
-Laptop:
-  ├─ MQ Server (port 7000)
-  ├─ JAR Module (port 8081)
-  ├─ WebGate (port 8080)
-  └─ UI (GUI)
-```
-
-### Production (Distributed)
-```
-On-Site Data Center:
-  ├─ MQ Server (port 7000)
-  └─ JAR Module (port 8081)
-
-Local Computer (Behind NAT):
-  └─ WebGate (port 8080)
+  ↓
+JAR retrieves response
+  ↓
+Analysis complete
 ```
 
 ---
@@ -313,77 +273,82 @@ Local Computer (Behind NAT):
 
 | Document | Size | Focus | Audience |
 |----------|------|-------|----------|
-| ARCHITECTURE_DEEP_MAP | 37KB | Code-level details | Developers |
-| WEBGATE_ARCHITECTURE | 36KB | Gateway service | DevOps / Developers |
-| MQ_ARCHITECTURE | 22KB | Message queue | DevOps / Developers |
-| JAR_MODULE | 25KB | Analysis engine | Developers |
-| UI_MODULE | 20KB | User interface | UI Developers |
-| COMMUNICATION_PROTOCOL | TBD | Protocols | All |
-| DEPLOYMENT_GUIDE | TBD | Production | DevOps |
-| SYSTEM_OVERVIEW | TBD | Big picture | Everyone |
-| QUICK_START | TBD | Getting started | New team |
-| DEVELOPMENT | TBD | Dev setup | Developers |
+| WEBGATE_ARCHITECTURE | ~60KB | Gateway service | Developers / DevOps |
+| MQ_ARCHITECTURE | ~30KB | Message queue | Developers / DevOps |
+| ACTUAL_ARCHITECTURE_DATAFLOW | ~10KB | Data flows | Developers |
+| ACTUAL_ARCHITECTURE_DESIGN_PATTERNS | ~8KB | Design decisions | Architects |
+| ACTUAL_ARCHITECTURE_MODULES | ~30KB | Complete specs | Developers |
+| ACTUAL_ARCHITECTURE_OVERVIEW | ~20KB | Big picture | Everyone |
+| ARCHITECTURE_DEEP_MAP | ~40KB | Code details | Developers |
 
 ---
 
-## ✅ Getting Started Checklist
+## 🎯 Use Case Examples
 
-- [ ] Read [System Overview](system/SYSTEM_OVERVIEW.md)
-- [ ] Follow [Quick Start Guide](guides/QUICK_START.md)
-- [ ] Understand [Communication Protocol](system/COMMUNICATION_PROTOCOL.md)
-- [ ] Study your component's architecture (see [Components](components/))
-- [ ] Review [Deployment Guide](system/DEPLOYMENT_GUIDE.md)
-- [ ] Set up [Development Environment](guides/DEVELOPMENT.md)
+### "How does WebGate verify a class purpose?"
+→ Read: [ACTUAL_ARCHITECTURE_DATAFLOW.md](ACTUAL_ARCHITECTURE_DATAFLOW.md) - Workflow 1
+
+### "What's the DuckDuckGo integration?"
+→ Read: [ARCHITECTURE_DEEP_MAP.md](ARCHITECTURE_DEEP_MAP.md) - InternetSearchService class
+
+### "How does MQ work?"
+→ Read: [components/MQ_ARCHITECTURE.md](components/MQ_ARCHITECTURE.md) - Complete documentation
+
+### "How do I deploy WebGate?"
+→ Read: [components/WEBGATE_ARCHITECTURE.md](components/WEBGATE_ARCHITECTURE.md) - Deployment section
+
+### "What's the REST API?"
+→ Read: [ARCHITECTURE_DEEP_MAP.md](ARCHITECTURE_DEEP_MAP.md) - REST API Contracts section
+
+### "Why use polling instead of direct calls?"
+→ Read: [ACTUAL_ARCHITECTURE_DESIGN_PATTERNS.md](ACTUAL_ARCHITECTURE_DESIGN_PATTERNS.md) - Polling Pattern
+
+### "How does graceful degradation work?"
+→ Read: [ACTUAL_ARCHITECTURE_DESIGN_PATTERNS.md](ACTUAL_ARCHITECTURE_DESIGN_PATTERNS.md) - Graceful Degradation Pattern
 
 ---
 
-## 🔗 Related Documentation
+## ✅ Understanding Checklist
 
-### In Repository Root
-- `README.md` - Project overview
-- `CLAUDE.md` - Development instructions
-
-### In Each Module
-- `pom.xml` - Maven configuration
-- `src/main/resources/` - Configuration files
-- `src/test/` - Test code
+- [ ] Read [ACTUAL_ARCHITECTURE_OVERVIEW.md](ACTUAL_ARCHITECTURE_OVERVIEW.md)
+- [ ] Understand [components/WEBGATE_ARCHITECTURE.md](components/WEBGATE_ARCHITECTURE.md)
+- [ ] Study [components/MQ_ARCHITECTURE.md](components/MQ_ARCHITECTURE.md)
+- [ ] Review [ACTUAL_ARCHITECTURE_DATAFLOW.md](ACTUAL_ARCHITECTURE_DATAFLOW.md)
+- [ ] Learn design patterns [ACTUAL_ARCHITECTURE_DESIGN_PATTERNS.md](ACTUAL_ARCHITECTURE_DESIGN_PATTERNS.md)
+- [ ] Reference [ACTUAL_ARCHITECTURE_MODULES.md](ACTUAL_ARCHITECTURE_MODULES.md)
+- [ ] Deep dive [ARCHITECTURE_DEEP_MAP.md](ARCHITECTURE_DEEP_MAP.md)
 
 ---
 
 ## 📞 Questions?
 
-- **Architecture questions?** → [ARCHITECTURE_DEEP_MAP.md](ARCHITECTURE_DEEP_MAP.md)
-- **How to run?** → [Quick Start](guides/QUICK_START.md)
-- **Deploy to production?** → [Deployment Guide](system/DEPLOYMENT_GUIDE.md)
-- **Stuck on something?** → [Troubleshooting](guides/TROUBLESHOOTING.md)
-- **Component details?** → See [Components](components/)
+- **WebGate architecture?** → [components/WEBGATE_ARCHITECTURE.md](components/WEBGATE_ARCHITECTURE.md)
+- **MQ architecture?** → [components/MQ_ARCHITECTURE.md](components/MQ_ARCHITECTURE.md)
+- **How requests flow?** → [ACTUAL_ARCHITECTURE_DATAFLOW.md](ACTUAL_ARCHITECTURE_DATAFLOW.md)
+- **Design decisions?** → [ACTUAL_ARCHITECTURE_DESIGN_PATTERNS.md](ACTUAL_ARCHITECTURE_DESIGN_PATTERNS.md)
+- **Code details?** → [ARCHITECTURE_DEEP_MAP.md](ARCHITECTURE_DEEP_MAP.md)
+- **Module specs?** → [ACTUAL_ARCHITECTURE_MODULES.md](ACTUAL_ARCHITECTURE_MODULES.md)
 
 ---
 
 ## 📚 Document Versions
 
 ```
-ARCHITECTURE_DEEP_MAP.md      v2.0  | 2026-07-20 | Complete code mapping
-WEBGATE_ARCHITECTURE.md       v2.0  | 2026-07-20 | Gateway service
-MQ_ARCHITECTURE.md            v1.0  | 2026-07-20 | Message queue
-JAR_MODULE.md                 v1.0  | 2026-07-20 | Analysis engine
-UI_MODULE.md                  v1.0  | 2026-07-20 | User interface
-SYSTEM_OVERVIEW.md            v1.0  | 2026-07-20 | System design
-COMMUNICATION_PROTOCOL.md     v1.0  | 2026-07-20 | Protocols
-DEPLOYMENT_GUIDE.md           v1.0  | 2026-07-20 | Production deploy
-QUICK_START.md                v1.0  | 2026-07-20 | Getting started
-DEVELOPMENT.md                v1.0  | 2026-07-20 | Dev setup
-TROUBLESHOOTING.md            v1.0  | 2026-07-20 | Common issues
+WEBGATE_ARCHITECTURE.md              v2.0  | 2026-07-20 | Gateway service
+MQ_ARCHITECTURE.md                   v1.0  | 2026-07-20 | Message queue
+ACTUAL_ARCHITECTURE_DATAFLOW.md      v1.0  | 2026-07-20 | Data flows
+ACTUAL_ARCHITECTURE_DESIGN_PATTERNS.md v1.0 | 2026-07-20 | Design patterns
+ACTUAL_ARCHITECTURE_MODULES.md       v1.0  | 2026-07-20 | Module specs
+ACTUAL_ARCHITECTURE_OVERVIEW.md      v1.0  | 2026-07-20 | System overview
+ARCHITECTURE_DEEP_MAP.md             v1.0  | 2026-07-20 | Code reference
 ```
 
 ---
 
 ## 🎯 Last Updated
 
-**2026-07-20**
+**2026-07-22**
 
-All documentation is current and production-ready. For updates, see individual document headers.
+All documentation is current, focused on WebGate & MQ, and production-ready.
 
----
-
-**Start with: [System Overview](system/SYSTEM_OVERVIEW.md) →**
+**Start with: [ACTUAL_ARCHITECTURE_OVERVIEW.md](ACTUAL_ARCHITECTURE_OVERVIEW.md) →**

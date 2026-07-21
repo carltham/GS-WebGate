@@ -1,846 +1,450 @@
-# TextAnalyser - Deep Architecture Map
+# WebGate & MQ: Complete Code Map
 
-**Complete Code-Level Architecture Documentation**
-
----
-
-## 📊 System Overview
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    TextAnalyser Application                     │
-├─────────────────────────────────────────────────────────────────┤
-│  Modules: UI (Swing) | JAR (Analysis) | WebGate (Gateway)       │
-│  Tests:   249 Unit + 66 Layer + 66 Integration = 315+ Total     │
-│  Build:   Maven Multi-Module | Java 11                          │
-└─────────────────────────────────────────────────────────────────┘
-```
+**Version:** 1.0 (WebGate/MQ focused)  
+**Date:** 2026-07-20
 
 ---
 
-# MODULE 1: TextAnalyser-UI-swing
-
-## 📍 Package Structure
-
-```
-com.noprobit.ui/
-├── Application Core (3 files)
-│   ├── TextAnalyserApplication.java
-│   ├── MainWindow.java
-│   └── UITheme.java
-├── Controllers (6 files)
-│   ├── AnalysisController.java
-│   ├── ProjectSelectionController.java
-│   ├── ConfigurationEditorController.java
-│   ├── ReportController.java
-│   └── DashboardController.java
-├── UI Panels (7 files)
-│   ├── ProjectSelectionPanel.java
-│   ├── ProjectListPanel.java
-│   ├── AnalysisPanel.java
-│   ├── ConfigurationDisplayPanel.java
-│   ├── ConfigurationEditorPanel.java
-│   ├── ReportPanel.java
-│   └── DashboardPanel.java
-├── Service (1 file)
-│   └── AnalysisServiceClient.java (REST Client)
-├── Models & Data (8 files)
-│   ├── ProjectMetadata.java
-│   ├── AnalysisConfig.java
-│   ├── AnalysisReport.java
-│   ├── AnalysisProgressEvent.java
-│   ├── ProjectSelectionEvent.java
-│   ├── ProjectOverview.java
-│   ├── StatisticsDisplay.java
-│   └── FilterPanel.java
-├── Workers & Threading (1 file)
-│   └── AnalysisWorker.java
-├── Utilities (3 files)
-│   ├── ConfigurationPersistence.java
-│   ├── ConfigurationValidator.java
-│   └── ReportExporter.java
-└── Rendering (1 file)
-    └── ViolationTable.java
-```
-
-## 🔍 Class Details
-
-### Application Core
-
-#### **TextAnalyserApplication.java** (Entry Point)
-```java
-public class TextAnalyserApplication {
-    - main(String[] args): void
-    - initializeProjects(): void
-    - initializeConfiguration(): void
-    - initializeMainWindow(): void
-    - getMainWindow(): MainWindow
-    - getCurrentConfiguration(): ProjectMetadata
-    - getAvailableProjects(): List<ProjectMetadata>
-    - shutdown(): void
-}
-```
-
-**Responsibilities:**
-- Application lifecycle management
-- Project initialization
-- Main window creation
-- Logging setup
-
-#### **MainWindow.java** (JFrame Container)
-```java
-public class MainWindow extends JFrame {
-    - projectListPanel: ProjectListPanel
-    - configDisplayPanel: ConfigurationDisplayPanel
-    - analysisPanel: AnalysisPanel
-    - reportPanel: ReportPanel
-    - configEditorPanel: ConfigurationEditorPanel
-    - dashboardPanel: DashboardPanel
-    - tabbedPane: JTabbedPane
-    
-    Methods:
-    - MainWindow(ProjectMetadata, List<ProjectMetadata>)
-    - applyModernStyling(): void
-    - getProjectListPanel(): ProjectListPanel
-    - getConfigDisplayPanel(): ConfigurationDisplayPanel
-    - getAnalysisPanel(): AnalysisPanel
-    - getReportPanel(): ReportPanel
-    - getConfigEditorPanel(): ConfigurationEditorPanel
-    - getDashboardPanel(): DashboardPanel
-}
-```
-
-**Responsibilities:**
-- Main window layout (BorderLayout)
-- Tab management (5 feature tabs)
-- Component composition
-- Window sizing (1200x800)
-
-#### **UITheme.java** (Material Design Theme)
-```java
-public class UITheme {
-    // Color Palette (Material Design)
-    - PRIMARY: Color = #2196F3 (Blue)
-    - PRIMARY_DARK: Color = #1976D2
-    - ACCENT: Color = #4CAF50 (Green)
-    - ERROR: Color = #F44336 (Red)
-    - BACKGROUND: Color = #F5F5F5
-    - SURFACE: Color = #FFFFFF
-    - TEXT_PRIMARY: Color = #212121
-    - TEXT_SECONDARY: Color = #757575
-    - BORDER: Color = #E0E0E0
-    
-    // Font Definitions
-    - FONT_REGULAR: Font = Segoe UI 12px Plain
-    - FONT_BOLD: Font = Segoe UI 12px Bold
-    - FONT_TITLE: Font = Segoe UI 14px Bold
-    - FONT_HEADING: Font = Segoe UI 16px Bold
-    
-    Methods:
-    - applyTheme(): void [static]
-}
-```
-
-**Responsibilities:**
-- Centralized theme configuration
-- UIManager global styling
-- Material Design color scheme
-- Typography management
-
-### Controllers
-
-#### **AnalysisController.java**
-```java
-public class AnalysisController {
-    Methods:
-    - startAnalysis(String className): void
-    - cancelAnalysis(): void
-    - onAnalysisProgress(int completed, int total): void
-    - onAnalysisComplete(AnalysisResult result): void
-    - onAnalysisError(Exception error): void
-}
-```
-
-#### **ProjectSelectionController.java**
-```java
-public class ProjectSelectionController {
-    Methods:
-    - onProjectSelected(ProjectMetadata project): void
-    - onProjectDeselected(): void
-    - refreshProjectList(): void
-    - handleProjectChange(ProjectSelectionEvent event): void
-}
-```
-
-#### **ConfigurationEditorController.java**
-```java
-public class ConfigurationEditorController {
-    Methods:
-    - loadConfiguration(ProjectMetadata config): void
-    - saveConfiguration(ProjectMetadata config): boolean
-    - validateConfiguration(ProjectMetadata config): boolean
-    - onConfigurationChanged(AnalysisConfig config): void
-}
-```
-
-#### **ReportController.java**
-```java
-public class ReportController {
-    Methods:
-    - generateReport(AnalysisResult result): AnalysisReport
-    - exportReport(AnalysisReport report, String format): void
-    - displayReport(AnalysisReport report): void
-}
-```
-
-#### **DashboardController.java**
-```java
-public class DashboardController {
-    Methods:
-    - startRefresh(): void
-    - stopRefresh(): void
-    - updateStatistics(ProjectMetadata project): void
-    - loadDashboardData(): void
-}
-```
-
-### UI Panels (Phase Mapping)
-
-| Panel | Phase | Purpose | Key Methods |
-|-------|-------|---------|-------------|
-| ProjectSelectionPanel | 0-1 | Project selection | onProjectSelect, onProjectRefresh |
-| ProjectListPanel | 0-1 | Project list display | setProjects, getSelectedProject |
-| ConfigurationDisplayPanel | 1 | Show config | displayConfiguration, getConfiguration |
-| AnalysisPanel | 2 | Execute analysis | startAnalysis, updateProgress |
-| ReportPanel | 3 | View/export reports | displayReport, exportReport |
-| ConfigurationEditorPanel | 4 | Edit settings | loadConfiguration, saveConfiguration |
-| DashboardPanel | 5 | Real-time stats | updateStatistics, refreshData |
-
-### Service Layer
-
-#### **AnalysisServiceClient.java** (REST Client)
-```java
-public class AnalysisServiceClient {
-    - JAR_SERVICE_URL: String = "http://localhost:8081/analyze"
-    - restTemplate: RestTemplate
-    
-    Methods:
-    - analyze(String className, String extendsClass): AnalysisResponse
-    - isServiceAvailable(): boolean
-    - buildUrl(String path): String
-    - handleError(HttpException): AnalysisResponse
-}
-```
-
-**HTTP Contract:**
-```
-POST http://localhost:8081/analyze
-Content-Type: application/json
-
-Request:
-{
-  "className": "UserController",
-  "extendsClass": "BaseController"
-}
-
-Response:
-{
-  "actualName": "UserController",
-  "suggestedName": "UserManager",
-  "purpose": "API_CONTROLLER",
-  "extendsClass": "BaseController",
-  "success": true,
-  "error": null
-}
-```
-
-### Models & Data Objects
-
-#### **ProjectMetadata.java**
-```java
-public class ProjectMetadata {
-    - projectName: String
-    - sourcePath: String
-    - reportPath: String
-    - analysisConfig: AnalysisConfig
-    
-    Methods:
-    - getProjectName(): String
-    - getSourcePath(): String
-    - getReportPath(): String
-    - setReportPath(String path): void
-    - getAnalysisConfig(): AnalysisConfig
-}
-```
-
-#### **AnalysisConfig.java**
-```java
-public class AnalysisConfig {
-    - enableRemoteVerification: boolean
-    - confidenceThreshold: double
-    - maxAnalysisThreads: int
-    - timeoutMs: long
-}
-```
-
-#### **AnalysisReport.java**
-```java
-public class AnalysisReport {
-    - timestamp: long
-    - totalClassesAnalyzed: int
-    - violations: List<Violation>
-    - summary: String
-    
-    Methods:
-    - exportAsJson(): String
-    - exportAsCsv(): String
-    - exportAsHtml(): String
-}
-```
-
-#### **AnalysisProgressEvent.java**
-```java
-public class AnalysisProgressEvent {
-    - completedCount: int
-    - totalCount: int
-    - currentClassName: String
-    - percentage: double
-}
-```
-
-### Workers & Threading
-
-#### **AnalysisWorker.java** (SwingWorker)
-```java
-public class AnalysisWorker extends SwingWorker<AnalysisReport, AnalysisProgressEvent> {
-    Methods:
-    - doInBackground(): AnalysisReport
-    - process(List<AnalysisProgressEvent> chunks): void
-    - done(): void
-}
-```
-
-**Responsibilities:**
-- Background analysis execution
-- Progress updates without blocking UI
-- Error handling with UI notification
-
-### Utilities
-
-#### **ConfigurationPersistence.java**
-```java
-public class ConfigurationPersistence {
-    Methods:
-    - save(ProjectMetadata config, String path): void
-    - load(String path): ProjectMetadata
-    - loadDefault(): ProjectMetadata
-}
-```
-
-#### **ConfigurationValidator.java**
-```java
-public class ConfigurationValidator {
-    Methods:
-    - validate(ProjectMetadata config): ValidationResult
-    - validateSourcePath(String path): boolean
-    - validateReportPath(String path): boolean
-}
-```
-
-#### **ReportExporter.java**
-```java
-public class ReportExporter {
-    Methods:
-    - exportJson(AnalysisReport report, String path): void
-    - exportCsv(AnalysisReport report, String path): void
-    - exportHtml(AnalysisReport report, String path): void
-    - exportPdf(AnalysisReport report, String path): void
-}
-```
-
----
-
-# MODULE 2: TextAnalyser-jar
-
-## 📍 Package Structure
-
-```
-com.noprobit.analyzers/
-├── Core Analysis (2 files)
-│   ├── PurposeAnalyser.java
-│   └── AnalysisController.java
-├── Engine (2 files)
-│   ├── ClassAnalysisEngine.java
-│   └── ClassFileAnalyzer.java
-├── engine/ Package (1 file)
-│   └── JsonConfiguredEngine.java
-├── config/ Package (1 file)
-│   └── PurposeMappingLoader.java
-├── model/ Package (5 files)
-│   ├── PurposeType.java (Enum)
-│   ├── PurposeMatch.java
-│   ├── AnalysisResult.java
-│   ├── MappingRule.java
-│   └── UnknownPattern.java
-├── remote/ Package (1 file)
-│   └── RemoteVerificationResult.java
-
-com.noprobit.config/
-└── AnalysisConfig.java
-
-com.noprobit.db/
-└── FileDB.java
-
-com.noprobit.encoding/
-├── AdvancedEncodingEngine.java
-├── CharsetEncodingStrategy.java
-├── Encoder.java
-├── EncodingResult.java
-└── EncodingSwitcher.java
-
-com.noprobit.linting/
-├── JavaClassLinter.java
-├── JavaImportLinter.java
-├── JavaMethodLinter.java
-└── JavaMethodOrderLinter.java
-
-com.noprobit.reporters/
-├── ClassNameAnalysisReporter.java
-└── ClassNameSuggester.java
-
-com.noprobit.validators/
-└── ClassNameValidator.java
-```
-
-## 🔍 Class Details
-
-### Core Analysis
-
-#### **PurposeAnalyser.java** (Main Orchestrator)
-```java
-public class PurposeAnalyser {
-    - engines: List<JsonConfiguredEngine>
-    - configLoader: PurposeMappingLoader
-    
-    Methods:
-    - PurposeAnalyser(): void [constructor]
-    - analyze(String className, String extendsClass): AnalysisResult
-    - analyzeWithRemoteVerification(String className): AnalysisResult
-    - loadConfiguration(): void
-    - runEngines(String input): PurposeMatch[]
-    - combineResults(PurposeMatch[] matches): AnalysisResult
-    - getHighestConfidenceMatch(PurposeMatch[] matches): PurposeMatch
-}
-```
-
-**Analysis Pipeline:**
-```
-Input: className, extendsClass
-  ↓
-Load purpose-mappings.json
-  ↓
-Initialize 3 Engines:
-  1. ClassNamingPatterns (priority 100)
-  2. SemanticPatterns (priority 80)
-  3. WebPatterns (priority 70)
-  ↓
-Run all engines in parallel/sequential
-  ↓
-Collect PurposeMatch[] from each engine
-  ↓
-Combine results (avg confidence, select best)
-  ↓
-Optional: Call WebGate for remote verification
-  ↓
-Return AnalysisResult
-```
-
-#### **AnalysisController.java** (REST Endpoint)
-```java
-@RestController
-@RequestMapping("/analyze")
-public class AnalysisController {
-    @Autowired
-    private PurposeAnalyser purposeAnalyser;
-    
-    @PostMapping
-    public ResponseEntity<AnalysisResponse> analyze(
-        @RequestBody AnalysisRequest request
-    ): ResponseEntity<AnalysisResponse>
-    
-    @GetMapping("/health")
-    public ResponseEntity<HealthStatus> health(): ResponseEntity<HealthStatus>
-}
-```
-
-**HTTP Contract:**
-```
-POST /analyze
-Content-Type: application/json
-
-Request:
-{
-  "className": "UserController",
-  "extendsClass": "BaseController"
-}
-
-Response:
-{
-  "actualName": "UserController",
-  "suggestedName": "UserManager",
-  "purpose": "API_CONTROLLER",
-  "extendsClass": "BaseController",
-  "confidence": 0.88,
-  "allMatches": [
-    {
-      "purpose": "API_CONTROLLER",
-      "confidence": 0.95,
-      "engine": "ClassNamingPatterns"
-    },
-    ...
-  ]
-}
-```
-
-### Engine Implementations
-
-#### **JsonConfiguredEngine.java** (Generic Pattern Engine)
-```java
-public class JsonConfiguredEngine {
-    - engineName: String
-    - priority: int
-    - rules: MappingRule[]
-    
-    Methods:
-    - JsonConfiguredEngine(String name, int priority, JsonObject config)
-    - analyze(String input): PurposeMatch[]
-    - applyRules(String input): PurposeMatch[]
-    - scoreConfidence(String input, String pattern): double
-    - matchPattern(String input, String pattern): boolean
-    - getHighestMatch(PurposeMatch[] matches): PurposeMatch
-}
-```
-
-**Scoring Algorithm:**
-```
-base_score = 0.5
-
-if pattern matches:
-    confidence = base_score + keyword_bonus + semantic_bonus
-    confidence = min(1.0, confidence)
-else:
-    confidence = 0.0
-
-Return PurposeMatch(purpose, confidence, engineName)
-```
-
-#### **ClassAnalysisEngine.java**
-```java
-public class ClassAnalysisEngine {
-    Methods:
-    - analyzeClass(String className): ClassAnalysisResult
-    - extractClassStructure(String sourceCode): ClassMetadata
-    - identifyPatterns(ClassMetadata metadata): Pattern[]
-}
-```
-
-#### **ClassFileAnalyzer.java**
-```java
-public class ClassFileAnalyzer {
-    Methods:
-    - analyzeFile(File classFile): ClassAnalysisResult
-    - readClassSource(File file): String
-    - parseClassDeclaration(String source): ClassMetadata
-}
-```
-
-### Configuration
-
-#### **PurposeMappingLoader.java** (JSON Config Loader)
-```java
-public class PurposeMappingLoader {
-    Methods:
-    - loadFromClasspath(String resourcePath): JsonObject [static]
-    - loadFromFile(String filePath): JsonObject [static]
-    - loadFromString(String jsonString): JsonObject [static]
-    - mergeConfigurations(JsonObject... configs): JsonObject [static]
-    - parseEngine(JsonObject engineJson): JsonConfiguredEngine [static]
-    - parseRule(JsonObject ruleJson): MappingRule [static]
-    - validateSchema(JsonObject config): boolean [static]
-}
-```
-
-**Configuration Structure:**
-```json
-{
-  "engines": [
-    {
-      "name": "ClassNamingPatterns",
-      "priority": 100,
-      "rules": [
-        {
-          "pattern": ".*Controller$",
-          "purpose": "API_CONTROLLER",
-          "confidence": 0.95,
-          "description": "Class name ends with Controller"
-        },
-        // ... 41 total rules across 3 engines
-      ]
-    }
-  ]
-}
-```
-
-### Data Models
-
-#### **PurposeType.java** (Enum)
-```java
-public enum PurposeType {
-    API_CONTROLLER,
-    SERVICE,
-    REPOSITORY,
-    UTILITY,
-    MODEL,
-    FACTORY,
-    FILTER,
-    INTERCEPTOR,
-    VALIDATOR,
-    CONVERTER,
-    MAPPER,
-    HANDLER,
-    LISTENER,
-    CONFIG,
-    EXCEPTION,
-    // ... 26+ total purposes
-}
-```
-
-#### **PurposeMatch.java** (Single Match Result)
-```java
-public class PurposeMatch {
-    - purpose: PurposeType
-    - confidence: double (0.0-1.0)
-    - engine: String (which engine detected)
-    - description: String
-    - timestamp: long
-    
-    Methods:
-    - getPurpose(): PurposeType
-    - getConfidence(): double
-    - getEngine(): String
-    - getDescription(): String
-    - compareTo(PurposeMatch other): int
-}
-```
-
-#### **AnalysisResult.java** (Complete Analysis)
-```java
-public class AnalysisResult {
-    - actualName: String
-    - suggestedName: String
-    - purpose: PurposeType
-    - extendsClass: String
-    - allMatches: List<PurposeMatch>
-    - remoteVerification: RemoteVerificationResult
-    - confidence: double
-    - timestamp: long
-    
-    Methods:
-    - getActualName(): String
-    - getSuggestedName(): String
-    - getPurpose(): PurposeType
-    - getConfidence(): double
-    - getAllMatches(): List<PurposeMatch>
-    - getRemoteVerification(): RemoteVerificationResult
-    - selectBestMatch(): PurposeMatch
-}
-```
-
-#### **MappingRule.java**
-```java
-public class MappingRule {
-    - pattern: String (regex)
-    - purpose: PurposeType
-    - confidence: double
-    - description: String
-    - keywords: String[]
-    
-    Methods:
-    - matches(String input): boolean
-    - getConfidence(): double
-}
-```
-
-### Remote Verification
-
-#### **RemoteVerificationResult.java**
-```java
-public class RemoteVerificationResult {
-    - verified: boolean
-    - confidence: double
-    - source: String (DuckDuckGo, etc.)
-    - reason: String
-    - processingTime: long
-}
-```
-
-### Additional Packages
-
-#### com.noprobit.encoding/
-```
-AdvancedEncodingEngine.java
-├── Multiple charset support
-├── Encoding detection
-└── Automatic conversion
-
-CharsetEncodingStrategy.java
-├── UTF-8, ASCII, ISO-8859-1
-└── Custom charset support
-
-Encoder.java (interface)
-└── Abstraction for encoding strategies
-
-EncodingResult.java
-└── Result object with metadata
-
-EncodingSwitcher.java
-└── Codec selection logic
-```
-
-#### com.noprobit.linting/
-```
-JavaClassLinter.java
-├── Class-level violations
-└── Naming conventions
-
-JavaImportLinter.java
-├── Import organization
-└── Unused imports
-
-JavaMethodLinter.java
-├── Method naming
-└── Method signatures
-
-JavaMethodOrderLinter.java
-├── Method order conventions
-└── Visibility levels
-```
-
-#### com.noprobit.reporters/
-```
-ClassNameAnalysisReporter.java
-└── Report generation
-
-ClassNameSuggester.java
-└── Alternative name suggestions
-```
-
-#### com.noprobit.validators/
-```
-ClassNameValidator.java
-├── Naming conventions
-├── Pattern validation
-└── Compliance checks
-```
-
----
-
-# MODULE 3: TextAnalyser-webgate
+# WebGate Module: Complete Code Reference
 
 ## 📍 Package Structure
 
 ```
 com.noprobit.analyzers.webgate/
 ├── Application
-│   └── WebGateApplication.java (Spring Boot Entry)
+│   └── WebGateApplication.java
 ├── Controllers
 │   └── PurposeVerificationController.java
 ├── Services
 │   └── InternetSearchService.java
 ├── Models
-│   ├── SearchResult.java (Original)
-│   ├── QueryRequest.java (NEW)
-│   └── QueryResponse.java (NEW)
+│   ├── SearchResult.java
+│   ├── QueryRequest.java
+│   └── QueryResponse.java
 └── Configuration
-    └── application.properties
+    └── application.yml
 ```
 
 ## 🔍 Class Details
 
-### Application
+### Application Layer
 
-#### **WebGateApplication.java** (Spring Boot Entry)
+#### WebGateApplication.java (Spring Boot Entry Point)
+
 ```java
 @SpringBootApplication
+@EnableScheduling
 public class WebGateApplication {
+    
     public static void main(String[] args): void
+    // Starts Spring Boot application
+    // Embedded Tomcat on port 8080
+    // Enables @Scheduled annotation for MQ polling (Phase 6+)
 }
 ```
 
-**Spring Configuration:**
-- Port: 8080
-- Hot-reload: spring-boot:run
-- Context path: /webgate (optional)
+**Configuration:**
+- Server Port: 8080 (configured in application.yml)
+- Context Path: /webgate (optional)
+- Hot-reload: Enabled (mvn spring-boot:run)
 
-### Controllers
+### Controller Layer
 
-#### **PurposeVerificationController.java** (REST Endpoints)
+#### PurposeVerificationController.java (REST Endpoints)
+
 ```java
 @RestController
 @RequestMapping("/api")
 public class PurposeVerificationController {
+    
     @Autowired
     private InternetSearchService searchService;
     
-    // Original: Purpose Verification
+    // Purpose Verification Endpoint
     @PostMapping("/verify-purpose")
     public ResponseEntity<String> verifyPurpose(
         @RequestBody String payload
     ): ResponseEntity<String>
+    // Input: className, detectedPurpose, keyword
+    // Output: verified, confidence, sources
+    // Calls: InternetSearchService.search()
     
-    // NEW: Generic Query
+    // Generic Query Endpoint
     @PostMapping("/query")
     public ResponseEntity<String> queryGeneric(
         @RequestBody QueryRequest request
     ): ResponseEntity<String>
+    // Input: question, context, maxResults, timeout
+    // Output: answer, confidence, sources, processingTime
+    // Calls: InternetSearchService.queryGeneric()
     
+    // Health Check Endpoint
     @GetMapping("/health")
     public ResponseEntity<String> health(): ResponseEntity<String>
+    // Returns: status, uptime, version, processingRequests, completedRequests
 }
 ```
 
-**HTTP Endpoints:**
+### Service Layer
 
-**Original: Purpose Verification**
+#### InternetSearchService.java (DuckDuckGo Integration)
+
+```java
+@Service
+public class InternetSearchService {
+    
+    @Autowired
+    private RestTemplate restTemplate;
+    
+    @Value("${webgate.search.enabled:true}")
+    private boolean searchEnabled;
+    
+    @Value("${webgate.search.timeout-ms:10000}")
+    private long timeout;
+    
+    // Purpose Verification Search
+    public SearchResult search(String query): SearchResult
+    // 1. Build query: className + keyword + pattern
+    // 2. Call DuckDuckGo API: /api?q=...&format=json
+    // 3. Parse response (AbstractText, Answer, RelatedTopics)
+    // 4. Calculate confidence based on answer type
+    // 5. Return SearchResult with metadata
+    
+    // Generic Query Search
+    public QueryResponse queryGeneric(QueryRequest request): QueryResponse
+    // 1. Build query: question + context
+    // 2. Add maxResults parameter
+    // 3. Set timeout
+    // 4. Call DuckDuckGo API
+    // 5. Extract best answer (instant > abstract > related)
+    // 6. Score confidence based on result type
+    // 7. Return QueryResponse with sources
+    
+    // Internal Helpers
+    private SearchResult performDuckDuckGoSearch(String query): SearchResult
+    // Core DuckDuckGo API call via RestTemplate
+    // Handles timeouts and errors
+    
+    private double calculateConfidence(
+        String query, 
+        String abstractText, 
+        String answer
+    ): double
+    // Score logic:
+    // - Instant answer found: 0.95
+    // - Abstract found: 0.80
+    // - Related topics: 0.70
+    // - No results: 0.20
+    
+    private String buildSearchReason(
+        String query, 
+        String abstract_, 
+        String answer, 
+        double confidence
+    ): String
+    // Human-readable explanation of confidence score
+    // Example: "Direct answer found"
+    
+    private SearchResult fallbackKeywordAnalysis(
+        String query, 
+        long startTime
+    ): SearchResult
+    // Fallback if DuckDuckGo call fails or times out
+    // Returns low confidence result with "keyword matching" source
+    
+    private QueryResponse fallbackGenericResponse(
+        QueryRequest request, 
+        long startTime
+    ): QueryResponse
+    // Fallback for generic query if API fails
+    // Returns answerFound=false with timeout reason
+}
 ```
-POST /api/verify-purpose
-Content-Type: application/json
+
+**DuckDuckGo API Integration:**
+```
+Endpoint: https://api.duckduckgo.com/
+Method: GET
+
+Parameters:
+  q: search query (URL encoded)
+  format: json
+  no_html: 1
+  t: textanalyser (user agent for tracking)
+
+Response Fields Used:
+  AbstractText: Summary/description (confidence 0.80)
+  Answer: Instant answer (confidence 0.95)
+  RelatedTopics: Related searches (confidence 0.70)
+
+Error Handling:
+  - Timeout (>10s): Return fallback with low confidence
+  - Connection error: Return fallback with low confidence
+  - Malformed response: Return fallback with low confidence
+```
+
+### Model Layer
+
+#### SearchResult.java (Purpose Verification Response)
+
+```java
+public class SearchResult {
+    
+    private boolean relevant
+    private String reason
+    private String source
+    private double confidence
+    private long processingTime
+    
+    // Accessors
+    public boolean isRelevant(): boolean
+    public String getReason(): String
+    public String getSource(): String
+    public double getConfidence(): double
+    public long getProcessingTime(): long
+    
+    // Example Response:
+    // {
+    //   "relevant": true,
+    //   "reason": "Pattern found in search results",
+    //   "source": "DuckDuckGo",
+    //   "confidence": 0.85,
+    //   "processingTime": 245
+    // }
+}
+```
+
+#### QueryRequest.java (Generic Question Request)
+
+```java
+public class QueryRequest {
+    
+    private String question        // Required: the question
+    private String context         // Optional: contextual info
+    private int maxResults         // Optional: max results (default 5)
+    private long timeout           // Optional: timeout ms (default 5000)
+    
+    // Accessors
+    public String getQuestion(): String
+    public void setQuestion(String question): void
+    public String getContext(): String
+    public void setContext(String context): void
+    public int getMaxResults(): int
+    public void setMaxResults(int maxResults): void
+    public long getTimeout(): long
+    public void setTimeout(long timeout): void
+    
+    // Example Request:
+    // {
+    //   "question": "What is REST API?",
+    //   "context": "java spring boot",
+    //   "maxResults": 5,
+    //   "timeout": 5000
+    // }
+}
+```
+
+#### QueryResponse.java (Generic Question Response)
+
+```java
+public class QueryResponse {
+    
+    private String question         // Original question
+    private String answer           // The answer text
+    private String context          // Context used for search
+    private List<String> sources    // Source attribution
+    private double confidence       // Score 0.0-1.0
+    private long processingTime     // Time taken (ms)
+    private boolean answerFound     // Whether answer found
+    private String summary          // "Direct answer found" etc.
+    private int maxResults          // Max results parameter used
+    
+    // Accessors
+    public String getQuestion(): String
+    public void setQuestion(String question): void
+    public String getAnswer(): String
+    public void setAnswer(String answer): void
+    public String getContext(): String
+    public void setContext(String context): void
+    public List<String> getSources(): List<String>
+    public void addSource(String source): void
+    public double getConfidence(): double
+    public void setConfidence(double confidence): void
+    public long getProcessingTime(): long
+    public void setProcessingTime(long processingTime): void
+    public boolean isAnswerFound(): boolean
+    public void setAnswerFound(boolean answerFound): void
+    public String getSummary(): String
+    public void setSummary(String summary): void
+    public int getMaxResults(): int
+    public void setMaxResults(int maxResults): void
+    
+    // Example Response:
+    // {
+    //   "question": "What is REST API?",
+    //   "answer": "REST is Representational State Transfer...",
+    //   "context": "java spring boot",
+    //   "sources": ["DuckDuckGo", "Wikipedia"],
+    //   "confidence": 0.92,
+    //   "processingTime": 245,
+    //   "answerFound": true,
+    //   "summary": "Direct answer found",
+    //   "maxResults": 5
+    // }
+}
+```
+
+---
+
+# Data Flow: WebGate Processes Verification Request
+
+## Synchronous REST Flow
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ STEP 1: JAR Detects Purpose                                │
+└─────────────────────────────────────────────────────────────┘
+JAR Analysis completes:
+  ├─ Class: UserController
+  ├─ Detected Purpose: CONTROLLER
+  ├─ Local Confidence: 0.88
+  └─ Decision: Needs verification (< 0.90 threshold)
+
+┌─────────────────────────────────────────────────────────────┐
+│ STEP 2: JAR Calls WebGate REST API                         │
+└─────────────────────────────────────────────────────────────┘
+AnalysisRequest → REST call:
+  POST http://localhost:8080/webgate/api/verify-purpose
+  
+  Payload:
+  {
+    "className": "UserController",
+    "detectedPurpose": "CONTROLLER",
+    "keyword": "controller"
+  }
+
+┌─────────────────────────────────────────────────────────────┐
+│ STEP 3: WebGate Controller Receives Request               │
+└─────────────────────────────────────────────────────────────┘
+PurposeVerificationController.verifyPurpose()
+  ├─ Deserialize JSON payload
+  ├─ Validate inputs
+  └─ Call InternetSearchService.search()
+
+┌─────────────────────────────────────────────────────────────┐
+│ STEP 4: Build DuckDuckGo Query                             │
+└─────────────────────────────────────────────────────────────┘
+InternetSearchService.search()
+  ├─ Build query: "UserController controller REST API"
+  ├─ Combine className + keyword + domain patterns
+  └─ URL encode for API call
+
+┌─────────────────────────────────────────────────────────────┐
+│ STEP 5: Call DuckDuckGo API                                │
+└─────────────────────────────────────────────────────────────┘
+RestTemplate.exchange():
+  GET https://api.duckduckgo.com/?q=UserController+controller&format=json
+  
+  Response (example):
+  {
+    "AbstractText": "A controller is a class in the MVC pattern...",
+    "AbstractURL": "https://example.com/mvc",
+    "Answer": "REST API controllers handle HTTP requests",
+    "RelatedTopics": [...]
+  }
+
+┌─────────────────────────────────────────────────────────────┐
+│ STEP 6: Parse Response & Calculate Confidence             │
+└─────────────────────────────────────────────────────────────┘
+parseAndScore():
+  ├─ Found AbstractText: true → +0.40
+  ├─ Found Answer: true → +0.30
+  ├─ Pattern match: "controller" in abstract → +0.25
+  └─ Final confidence: 0.85 (clamped to 1.0)
+
+┌─────────────────────────────────────────────────────────────┐
+│ STEP 7: Build Response Object                              │
+└─────────────────────────────────────────────────────────────┘
+SearchResult result = {
+  relevant: true,
+  reason: "Pattern found in search results",
+  source: "DuckDuckGo (Abstract + Answer)",
+  confidence: 0.85,
+  processingTime: 245
+}
+
+┌─────────────────────────────────────────────────────────────┐
+│ STEP 8: Return to JAR                                       │
+└─────────────────────────────────────────────────────────────┘
+HTTP 200 OK response:
+  {
+    "relevant": true,
+    "reason": "Pattern found in search results",
+    "source": "DuckDuckGo",
+    "confidence": 0.85,
+    "processingTime": 245
+  }
+
+┌─────────────────────────────────────────────────────────────┐
+│ STEP 9: JAR Combines Scores                                │
+└─────────────────────────────────────────────────────────────┘
+JAR receives verification:
+  ├─ Local confidence: 0.88
+  ├─ Remote confidence: 0.85
+  ├─ Combined: (0.88 × 0.85) = 0.748 ≈ 0.75
+  └─ Source: "Local + DuckDuckGo verification"
+
+Final AnalysisResult:
+  {
+    actualName: "UserController",
+    suggestedName: "UserController",
+    purpose: "CONTROLLER",
+    confidence: 0.75,
+    sources: ["Pattern matching", "DuckDuckGo"]
+  }
+```
+
+---
+
+# REST API Contracts
+
+## Purpose Verification Endpoint
+
+```
+POST /webgate/api/verify-purpose
 
 Request:
 {
   "className": "UserController",
-  "detectedPurpose": "API_CONTROLLER",
-  "keyword": "REST",
-  "timestamp": "2026-07-20T00:00:00Z"
+  "detectedPurpose": "CONTROLLER",
+  "keyword": "controller",
+  "timestamp": "2026-07-20T12:00:00Z"
 }
 
-Response:
+Response (200 OK):
 {
   "className": "UserController",
-  "detectedPurpose": "API_CONTROLLER",
+  "detectedPurpose": "CONTROLLER",
   "verified": true,
-  "reason": "High confidence match found",
-  "internetSource": "DuckDuckGo",
+  "reason": "Pattern found in search results",
+  "source": "DuckDuckGo",
   "confidence": 0.85,
-  "processingTime": 250,
-  "timestamp": "2026-07-20T00:00:00Z"
+  "processingTime": 245,
+  "timestamp": "2026-07-20T12:00:00Z"
+}
+
+Response (503 Service Unavailable):
+{
+  "error": "DuckDuckGo API unavailable",
+  "verified": false,
+  "confidence": 0.0
 }
 ```
 
-**NEW: Generic Query**
+## Generic Query Endpoint
+
 ```
-POST /api/query
-Content-Type: application/json
+POST /webgate/api/query
 
 Request:
 {
@@ -850,621 +454,168 @@ Request:
   "timeout": 5000
 }
 
-Response:
+Response (200 OK):
 {
   "question": "What is REST API?",
   "answerFound": true,
-  "answer": "REST is an architectural style...",
-  "confidence": 0.85,
-  "summary": "Direct answer found",
+  "answer": "REST is Representational State Transfer, an architectural style...",
+  "context": "java spring boot",
+  "sources": ["DuckDuckGo", "Wikipedia"],
+  "confidence": 0.92,
   "processingTime": 245,
-  "sources": [
-    "DuckDuckGo (Instant Answer)"
-  ]
+  "summary": "Direct answer found",
+  "maxResults": 5
 }
-```
 
-### Services
-
-#### **InternetSearchService.java** (Search Integration)
-```java
-@Service
-public class InternetSearchService {
-    @Autowired
-    private RestTemplate restTemplate;
-    
-    @Value("${webgate.search.enabled:true}")
-    private boolean searchEnabled;
-    
-    // Original: Purpose Verification Search
-    public SearchResult search(String query): SearchResult
-    
-    // NEW: Generic Query Search
-    public QueryResponse queryGeneric(QueryRequest request): QueryResponse
-    
-    // Internal Methods
-    private SearchResult performDuckDuckGoSearch(String query): SearchResult
-    private double calculateConfidence(String query, String abstract_, String answer): double
-    private String buildSearchReason(String query, String abstract_, String answer, double confidence): String
-    private SearchResult fallbackKeywordAnalysis(String query, long startTime): SearchResult
-    
-    // NEW: Generic Query Support
-    private QueryResponse fallbackGenericResponse(QueryRequest request, long startTime): QueryResponse
-}
-```
-
-**DuckDuckGo Integration:**
-```
-API Endpoint: https://api.duckduckgo.com/
-Parameters:
-  - q: search query (URL encoded)
-  - format: json
-  - no_html: 1
-  - t: textanalyser (user agent)
-
-Response Fields:
-  - AbstractText: Summary text
-  - Answer: Instant answer
-  - Redirect: Related topic
-  - RelatedTopics: Topic suggestions
-```
-
-**Confidence Scoring:**
-```
-Purpose Verification Scoring:
-  base = 0.0
-  if abstract_text: +0.4
-  if instant_answer: +0.3
-  if pattern_match: +0.25
-  final = min(1.0, base)
-
-Generic Query Scoring:
-  Instant Answer: 0.95
-  Abstract Answer: 0.80
-  Related Topic: 0.70
-  No Results: 0.20
-```
-
-### Models
-
-#### **SearchResult.java** (Original: Purpose Verification Result)
-```java
-public class SearchResult {
-    - relevant: boolean
-    - reason: String
-    - source: String
-    - confidence: double (0.0-1.0)
-    - processingTime: long
-    
-    Methods:
-    - isRelevant(): boolean
-    - getReason(): String
-    - getSource(): String
-    - getConfidence(): double
-    - getProcessingTime(): long
-}
-```
-
-#### **QueryRequest.java** (NEW: Generic Question Request)
-```java
-public class QueryRequest {
-    - question: String
-    - context: String (optional)
-    - maxResults: int (default: 5)
-    - timeout: long (default: 5000ms)
-    
-    Methods:
-    - getQuestion(): String
-    - setQuestion(String question): void
-    - getContext(): String
-    - setContext(String context): void
-    - getMaxResults(): int
-    - setMaxResults(int maxResults): void
-    - getTimeout(): long
-    - setTimeout(long timeout): void
-}
-```
-
-#### **QueryResponse.java** (NEW: Generic Answer Response)
-```java
-public class QueryResponse {
-    - question: String
-    - answer: String
-    - context: String
-    - sources: List<String>
-    - confidence: double (0.0-1.0)
-    - processingTime: long
-    - answerFound: boolean
-    - summary: String
-    - maxResults: int
-    
-    Methods:
-    - getQuestion(): String
-    - setQuestion(String question): void
-    - getAnswer(): String
-    - setAnswer(String answer): void
-    - getContext(): String
-    - setContext(String context): void
-    - getSources(): List<String>
-    - addSource(String source): void
-    - getConfidence(): double
-    - setConfidence(double confidence): void
-    - getProcessingTime(): long
-    - setProcessingTime(long processingTime): void
-    - isAnswerFound(): boolean
-    - setAnswerFound(boolean answerFound): void
-    - getSummary(): String
-    - setSummary(String summary): void
-    - getMaxResults(): int
-    - setMaxResults(int maxResults): void
-}
-```
-
----
-
-# CROSS-MODULE COMMUNICATION
-
-## 🔄 Data Flow: User Analyzes Class
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│ STEP 1: UI User Input                                           │
-└─────────────────────────────────────────────────────────────────┘
-User enters: className="UserController", extendsClass="BaseController"
-Clicks: "Analyze" button in AnalysisPanel
-
-┌─────────────────────────────────────────────────────────────────┐
-│ STEP 2: UI Service Call                                         │
-└─────────────────────────────────────────────────────────────────┘
-AnalysisPanel.onAnalyzeClick()
-  ↓
-AnalysisServiceClient.analyze("UserController", "BaseController")
-  ↓
-RestTemplate.postForObject(
-  "http://localhost:8081/analyze",
-  AnalysisRequest,
-  AnalysisResponse.class
-)
-
-┌─────────────────────────────────────────────────────────────────┐
-│ STEP 3: JAR Service Processing                                  │
-└─────────────────────────────────────────────────────────────────┘
-AnalysisController@PostMapping("/analyze")
-  ↓
-Validate input
-  ↓
-PurposeAnalyser.analyze("UserController", "BaseController")
-  ↓
-┌─ Engine 1: ClassNamingPatterns (priority 100)
-│   JsonConfiguredEngine.analyze("UserController")
-│   Regex: ".*Controller$" matches → API_CONTROLLER (0.95)
-├─ Engine 2: SemanticPatterns (priority 80)
-│   Regex: "User" + "Controller" → API_CONTROLLER (0.88)
-└─ Engine 3: WebPatterns (priority 70)
-   Regex: "Controller" → API_CONTROLLER (0.80)
-  ↓
-Combine results → avg confidence = 0.88
-  ↓
-Decision: confidence < 0.90? Request remote verification
-  ↓
-┌─────────────────────────────────────────────────────────────────┐
-│ STEP 4: WebGate Remote Verification (Optional)                  │
-└─────────────────────────────────────────────────────────────────┘
-JAR calls:
-  GET http://localhost:8080/api/verify-purpose?className=UserController
-  ↓
-PurposeVerificationController@PostMapping("/verify-purpose")
-  ↓
-InternetSearchService.search("UserController REST API Controller")
-  ↓
-Call DuckDuckGo API:
-  GET https://api.duckduckgo.com/?q=...&format=json
-  ↓
-Parse response:
-  AbstractText: "A controller is a class that handles HTTP requests"
-  ↓
-Calculate confidence: 0.82
-  ↓
-Return SearchResult:
-  {
-    relevant: true,
-    confidence: 0.82,
-    source: "DuckDuckGo",
-    reason: "Pattern found in search results"
-  }
-  ↓
-JAR receives SearchResult
-  ↓
-Combine: local (0.88) + remote (0.82) → final (0.85)
-
-┌─────────────────────────────────────────────────────────────────┐
-│ STEP 5: Return to UI                                            │
-└─────────────────────────────────────────────────────────────────┘
-AnalysisController returns AnalysisResponse:
-  {
-    actualName: "UserController",
-    suggestedName: "UserManager",
-    purpose: "API_CONTROLLER",
-    extendsClass: "BaseController",
-    confidence: 0.85,
-    remoteVerification: {
-      verified: true,
-      confidence: 0.82,
-      source: "DuckDuckGo"
-    }
-  }
-  ↓
-AnalysisServiceClient receives response
-  ↓
-AnalysisPanel updates UI with result
-  ↓
-DashboardPanel displays statistics
-  ↓
-ReportPanel adds to analysis history
-
-┌─────────────────────────────────────────────────────────────────┐
-│ RESULT: User sees analysis                                      │
-└─────────────────────────────────────────────────────────────────┘
-✓ Actual Name: UserController
-✓ Suggested: UserManager
-✓ Purpose: API Controller
-✓ Confidence: 85%
-✓ Remote Verified: DuckDuckGo (82%)
-```
-
-## 📡 REST API Contracts
-
-### UI ↔ JAR Communication
-
-**Request Format:**
-```java
-class AnalysisRequest {
-    className: String
-    extendsClass: String
-}
-```
-
-**Response Format:**
-```java
-class AnalysisResponse {
-    actualName: String
-    suggestedName: String
-    purpose: String
-    extendsClass: String
-    confidence: double
-    remoteVerification: RemoteVerificationResult
-    success: boolean
-    error: String
-}
-```
-
-### JAR ↔ WebGate Communication
-
-**Request Format:**
-```
-GET /api/verify-purpose?className=UserController
-```
-
-**Response Format:**
-```java
-class SearchResult {
-    relevant: boolean
-    confidence: double
-    source: String (DuckDuckGo, etc.)
-    reason: String
-    processingTime: long
-}
-```
-
----
-
-# DEPENDENCY GRAPH
-
-## Module Dependencies
-
-```
-TextAnalyser-UI-swing
-  ├─ Depends on: (REST only, no source code)
-  ├─ Calls: JAR Module via REST (localhost:8081)
-  └─ Provides: Swing GUI interface
-
-TextAnalyser-jar
-  ├─ Depends on: Gson, Spring Boot (optional)
-  ├─ Calls: WebGate via REST (localhost:8080, optional)
-  ├─ Provides: Analysis REST API
-  └─ Uses: purpose-mappings.json
-
-TextAnalyser-webgate
-  ├─ Depends on: Spring Boot, Gson, RestTemplate
-  ├─ Calls: DuckDuckGo API (https://api.duckduckgo.com)
-  ├─ Provides: Verification & Query REST APIs
-  └─ Independent (no dependencies on other modules)
-```
-
-## Class Dependency Hierarchy
-
-```
-TextAnalyserApplication
-  └─ MainWindow
-      ├─ ProjectListPanel
-      ├─ ProjectSelectionPanel
-      ├─ AnalysisPanel
-      │   └─ AnalysisServiceClient
-      │       └─ RestTemplate [Spring]
-      ├─ ConfigurationDisplayPanel
-      ├─ ConfigurationEditorPanel
-      │   └─ ConfigurationValidator
-      ├─ ReportPanel
-      │   └─ ReportExporter
-      └─ DashboardPanel
-          └─ DashboardController
-
-PurposeAnalyser
-  ├─ JsonConfiguredEngine [0..N]
-  │   └─ MappingRule [0..N]
-  └─ PurposeMappingLoader
-      └─ purpose-mappings.json
-
-AnalysisController
-  └─ PurposeAnalyser
-
-PurposeVerificationController
-  └─ InternetSearchService
-      └─ RestTemplate [Spring]
-          └─ DuckDuckGo API [External]
-```
-
----
-
-# CONFIGURATION & RESOURCES
-
-## purpose-mappings.json Structure
-
-```json
+Response (408 Request Timeout):
 {
-  "engines": [
-    {
-      "name": "ClassNamingPatterns",
-      "priority": 100,
-      "description": "Pattern matching on class names",
-      "rules": [
-        {
-          "pattern": ".*Controller$",
-          "purpose": "API_CONTROLLER",
-          "confidence": 0.95,
-          "description": "Class name ends with Controller"
-        },
-        // ... 25+ rules total
-      ]
-    },
-    {
-      "name": "SemanticPatterns",
-      "priority": 80,
-      "description": "Semantic analysis of class names",
-      "rules": [
-        // ... 10+ rules
-      ]
-    },
-    {
-      "name": "WebPatterns",
-      "priority": 70,
-      "description": "Web-specific patterns",
-      "rules": [
-        // ... 6+ rules
-      ]
-    }
-  ]
+  "question": "What is REST API?",
+  "answerFound": false,
+  "error": "DuckDuckGo API timeout",
+  "confidence": 0.0,
+  "processingTime": 5000
 }
 ```
 
-**Total Rules: 41 purpose mappings**
+## Health Check Endpoint
 
-## Maven Profiles
+```
+GET /webgate/health
 
-```xml
-<profiles>
-  <profile>
-    <id>default</id>
-    <activation><activeByDefault>true</activeByDefault></activation>
-    <!-- Runs: *Test.java (unit tests) -->
-  </profile>
-  
-  <profile>
-    <id>layer</id>
-    <!-- Runs: *LT.java (layer tests) -->
-  </profile>
-  
-  <profile>
-    <id>integration</id>
-    <!-- Runs: *IT.java (integration tests) -->
-  </profile>
-  
-  <profile>
-    <id>all-tests</id>
-    <!-- Runs: All test types -->
-  </profile>
-</profiles>
+Response (200 OK):
+{
+  "status": "UP",
+  "service": "WebGate",
+  "version": "2.0",
+  "mqConnected": true,
+  "processingRequests": 2,
+  "completedRequests": 1245,
+  "uptime": 86400000
+}
 ```
 
 ---
 
-# TEST ORGANIZATION
+# Configuration
 
-## Module: TextAnalyser-UI-swing
-```
-Unit Tests (249 total):
-  *Test.java files
-  ├─ Component tests (Panel, Panel, etc.)
-  ├─ Controller tests
-  ├─ Utility tests
-  └─ Model tests
+## application.yml
 
-Layer Tests (11):
-  *LT.java files
-  └─ Single-layer tests with mocked REST
-```
+```yaml
+spring:
+  application:
+    name: TextAnalyser-WebGate
+  boot:
+    admin:
+      client:
+        enabled: false
 
-## Module: TextAnalyser-jar
-```
-Unit Tests (20+):
-  *Test.java files
-  ├─ PurposeAnalyserTest.java
-  ├─ JsonConfiguredEngineTest.java
-  ├─ PurposeMappingLoaderTest.java
-  └─ Model tests
+server:
+  port: 8080
+  servlet:
+    context-path: /webgate
+  shutdown: graceful
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 10
 
-Layer Tests (11):
-  *LT.java files
-  ├─ PurposeAnalyserLT.java (11 tests)
-  └─ AnalysisControllerLT.java (4 tests)
+# Search Configuration
+search:
+  duckduckgo:
+    enabled: true
+    url: https://api.duckduckgo.com/
+    timeout-ms: 10000
+    user-agent: TextAnalyser/2.0
+  cache:
+    enabled: false
+    ttl-minutes: 60
+    max-size: 1000
 
-Integration Tests (41):
-  *IT.java files
-  └─ PurposeAnalyserIT.java
-```
+# MQ Configuration (Phase 6+)
+mq:
+  host: on-site-server.example.com
+  port: 7000
+  connection-timeout-ms: 10000
+  read-timeout-ms: 30000
+  retry-attempts: 3
+  retry-delay-ms: 5000
 
-## Module: TextAnalyser-webgate
-```
-Unit Tests (10+):
-  *Test.java files
+# Logging
+logging:
+  level:
+    root: INFO
+    com.noprobit.analyzers.webgate: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
 
-Layer Tests (14):
-  *LT.java files
-  ├─ PurposeVerificationControllerLT.java (4)
-  └─ GenericQueryControllerLT.java (10)
-
-Integration Tests (30+):
-  *IT.java files
-  ├─ InternetSearchServiceIT.java (16)
-  └─ GenericQueryServiceIT.java (14)
-```
-
-**Total Test Coverage: 315+ Tests, 100% Passing**
-
----
-
-# KEY ARCHITECTURAL PATTERNS
-
-## 1. **REST-Based Loose Coupling**
-- UI does NOT depend on JAR source
-- All communication via HTTP REST
-- Services can be deployed independently
-- Easy to mock in tests
-
-## 2. **Strategy Pattern (Multiple Engines)**
-```
-JsonConfiguredEngine [interface concept]
-  ├─ ClassNamingPatterns [strategy]
-  ├─ SemanticPatterns [strategy]
-  └─ WebPatterns [strategy]
-```
-
-## 3. **Configuration Pattern**
-```
-PurposeMappingLoader
-  ↓
-Loads JSON (no compilation needed)
-  ↓
-JsonConfiguredEngine
-  ↓
-Analyzes input
-```
-
-## 4. **MVC Pattern (UI Module)**
-```
-View: JPanel subclasses
-Model: ProjectMetadata, AnalysisConfig, AnalysisReport
-Controller: AnalysisController, ProjectSelectionController, etc.
-```
-
-## 5. **Service Layer Pattern**
-```
-AnalysisServiceClient (UI)
-  ↓ REST
-PurposeAnalyser (JAR)
-  ↓ REST
-InternetSearchService (WebGate)
-```
-
-## 6. **Worker Pattern (Threading)**
-```
-AnalysisWorker extends SwingWorker
-  → doInBackground() [heavy computation]
-  → process() [progress updates]
-  → done() [UI update]
+# Management
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
 ```
 
 ---
 
-# DEPLOYMENT ARCHITECTURE
+# Testing
 
-```
-Development:
-  Machine 1:
-    - Port 8081: JAR service (mvn spring-boot:run)
-    - Port 8080: WebGate (mvn spring-boot:run)
-    - GUI: Swing app (mvn exec:java)
+## Unit Tests
 
-Production:
-  Server 1 (Load Balancer)
-  Server 2-N (JAR replicas, port 8081)
-  Server M (WebGate, port 8080)
-  Client (Swing app or Remote)
-```
+**InternetSearchServiceTest**
+- Test DuckDuckGo response parsing
+- Test confidence scoring logic
+- Test timeout handling
+- Test error fallback
 
----
+**PurposeVerificationControllerTest**
+- Test REST endpoint parameter validation
+- Test JSON deserialization
+- Test response formatting
 
-# METRICS & PERFORMANCE
+**QueryServiceTest**
+- Test generic query building
+- Test answer extraction
+- Test source attribution
 
-## Response Times
-```
-Local Analysis: 50-100ms
-DuckDuckGo Verification: 200-500ms
-Total with verification: 250-600ms
-```
+## Layer Tests
 
-## Test Coverage
-```
-Unit: 249 tests
-Layer: 66 tests
-Integration: 66+ tests
-Total: 315+ tests
-Pass Rate: 100%
-```
+**PurposeVerificationControllerLT**
+- End-to-end REST endpoint test
+- Mock InternetSearchService
+- Verify request/response flow
 
-## Code Statistics
-```
-Total Java Files: 62
-Lines of Code: ~15,000
-Documentation: ~3,000 lines
-Configuration: JSON-based, dynamic
-```
+**QueryControllerLT**
+- Generic query endpoint testing
+- JSON serialization testing
 
----
+## Integration Tests
 
-# VERSION HISTORY
+**PurposeVerificationIT**
+- Real DuckDuckGo API calls
+- Confidence scoring validation
+- Timeout scenario testing
 
-## Version 2.0 (CURRENT)
-- ✨ Added generic query support to WebGate
-- ✨ QueryRequest/QueryResponse models
-- ✨ InternetSearchService.queryGeneric()
-- ✨ New /api/query endpoint
-- ✨ Answer extraction from DuckDuckGo
-- ✅ Full architecture documentation
-
-## Version 1.5
-- ✨ Material Design UI theme
-- ✨ UITheme central configuration
-- ✨ Modern colors and fonts
-
-## Version 1.0
-- ✨ Initial architecture
-- ✨ Purpose verification
-- ✨ REST-based communication
-- ✨ TDD with test profiles
+**GenericQueryServiceIT**
+- Full query pipeline testing
+- Answer extraction validation
+- Source attribution testing
 
 ---
 
-**Document Generated: 2026-07-20**  
-**Architecture Version: 2.0**  
-**Last Updated: Complete Code-Level Mapping**
+# Summary
+
+WebGate provides:
+- ✅ Spring Boot REST API
+- ✅ DuckDuckGo integration
+- ✅ Confidence scoring (0.0-1.0)
+- ✅ Source attribution
+- ✅ Error handling & fallback
+- ✅ Answer type detection (instant/abstract/related)
+- ✅ Timeout protection
+- ✅ Health monitoring
+- ✅ Graceful degradation
+- ✅ Ready for MQ polling (Phase 6+)

@@ -1,4 +1,4 @@
-package com.noprobit.analyzers.webgate;
+package com.noprobit.webgate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

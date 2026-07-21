@@ -1,4 +1,4 @@
-package com.noprobit.analyzers.webgate;
+package com.noprobit.webgate;
 
 public class QueryRequest {
     private String question;

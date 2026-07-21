@@ -1,4 +1,4 @@
-package com.noprobit.analyzers.webgate;
+package com.noprobit.webgate;
 
 import java.util.ArrayList;
 import java.util.List;

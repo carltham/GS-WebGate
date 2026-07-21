@@ -1,4 +1,4 @@
-package com.noprobit.analyzers.webgate;
+package com.noprobit.webgate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +47,7 @@ public class InternetSearchService {
 
         try {
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
-            String url = DUCKDUCKGO_API + "?q=" + encodedQuery + "&format=json&no_html=1&t=textanalyser";
+            String url = DUCKDUCKGO_API + "?q=" + encodedQuery + "&format=json&no_html=1&t=websearcher";
 
             String response = restTemplate.getForObject(url, String.class);
 
@@ -88,25 +88,6 @@ public class InternetSearchService {
         if (!abstract_.isEmpty()) confidence += 0.4;
         if (!answer.isEmpty()) confidence += 0.3;
 
-        String resultsText = (abstract_ + " " + answer).toLowerCase();
-
-        if (lower.contains("controller") &&
-            (resultsText.contains("controller") || resultsText.contains("orchestrat"))) {
-            confidence += 0.25;
-        } else if (lower.contains("panel") &&
-                   (resultsText.contains("panel") || resultsText.contains("ui"))) {
-            confidence += 0.25;
-        } else if (lower.contains("worker") &&
-                   (resultsText.contains("worker") || resultsText.contains("thread"))) {
-            confidence += 0.25;
-        } else if (lower.contains("validator") &&
-                   (resultsText.contains("validator") || resultsText.contains("valid"))) {
-            confidence += 0.25;
-        } else if (lower.contains("exporter") &&
-                   (resultsText.contains("export") || resultsText.contains("convert"))) {
-            confidence += 0.25;
-        }
-
         return Math.min(1.0, confidence);
     }
 
@@ -124,26 +105,11 @@ public class InternetSearchService {
 
     private SearchResult fallbackKeywordAnalysis(String query, long startTime) {
         SearchResult result = new SearchResult();
-        String queryLower = query.toLowerCase();
 
-        boolean isController = queryLower.contains("controller") &&
-            (queryLower.contains("orchestrat") || queryLower.contains("logic"));
-        boolean isPanel = queryLower.contains("panel") &&
-            (queryLower.contains("ui") || queryLower.contains("view"));
-        boolean isWorker = queryLower.contains("worker") &&
-            (queryLower.contains("thread") || queryLower.contains("async"));
-        boolean isValidator = queryLower.contains("validator") &&
-            (queryLower.contains("valid") || queryLower.contains("check"));
-        boolean isExporter = queryLower.contains("export") &&
-            (queryLower.contains("save") || queryLower.contains("write"));
-
-        boolean isRelevant = isController || isPanel || isWorker || isValidator || isExporter;
-        double confidence = isRelevant ? 0.65 : 0.20;
-
-        result.setRelevant(isRelevant);
-        result.setReason("Local pattern matching (fallback)");
-        result.setSource("LocalAnalysis");
-        result.setConfidence(confidence);
+        result.setRelevant(false);
+        result.setReason("Search service unavailable - fallback mode");
+        result.setSource("LocalFallback");
+        result.setConfidence(0.0);
         result.setProcessingTime(System.currentTimeMillis() - startTime);
 
         return result;
@@ -165,7 +131,7 @@ public class InternetSearchService {
             }
 
             String encodedQuery = URLEncoder.encode(enhancedQuery, StandardCharsets.UTF_8);
-            String url = DUCKDUCKGO_API + "?q=" + encodedQuery + "&format=json&no_html=1&t=textanalyser";
+            String url = DUCKDUCKGO_API + "?q=" + encodedQuery + "&format=json&no_html=1&t=websearcher";
 
             String apiResponse = restTemplate.getForObject(url, String.class);
 

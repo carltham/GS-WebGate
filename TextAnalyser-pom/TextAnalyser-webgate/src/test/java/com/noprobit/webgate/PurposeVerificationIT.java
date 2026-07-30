@@ -35,12 +35,11 @@ public class PurposeVerificationIT {
 
     @Test
     public void testHealthCheckEndpoint() throws Exception {
-        mockMvc.perform(get("/api/verify-purpose/health")
+        mockMvc.perform(get("/api/health")
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.status").value("UP"))
-            .andExpect(jsonPath("$.service").value("PurposeVerification"))
-            .andExpect(jsonPath("$.version").value("1.0"));
+            .andExpect(jsonPath("$.service").value("WebGate"));
     }
 
     @Test

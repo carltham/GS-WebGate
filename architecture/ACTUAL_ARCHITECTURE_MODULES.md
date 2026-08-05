@@ -7,7 +7,7 @@
 
 ## Module 1: WebGate - Spring Boot Gateway
 
-**Location:** `/TextAnalyser-pom/TextAnalyser-webgate/`  
+**Location:** `/GS-WebGate/GS-WebGate/`  
 **Purpose:** Internet search verification and generic query service  
 **Port:** 8080  
 **Technology:** Spring Boot, REST API, DuckDuckGo  
@@ -171,7 +171,7 @@ Response:
 ```yaml
 spring:
   application:
-    name: TextAnalyser-WebGate
+    name: GS-WebGate
 
 server:
   port: 8080
@@ -184,7 +184,7 @@ search:
     enabled: true
     url: https://api.duckduckgo.com/
     timeout-ms: 10000
-    user-agent: TextAnalyser/2.0
+    user-agent: GS-WebGate/2.0
 
 # Optional: Message Queue (Phase 6+)
 mq:
@@ -276,7 +276,7 @@ No Results
 
 ## Module 2: MQ - Message Queue Server
 
-**Location:** `/TextAnalyser-pom/TextAnalyser-mq/`  
+**Location:** `/GS-WebGate/GS-mq/`  
 **Status:** Planned for Phase 6+  
 **Purpose:** Decoupled communication between JAR and WebGate  
 **Technology:** TCP-based JSON protocol  
@@ -461,15 +461,15 @@ Response:
 ```dockerfile
 FROM openjdk:11-jre-slim
 WORKDIR /mq
-COPY target/TextAnalyser-mq-1.0-SNAPSHOT.jar mq-server.jar
+COPY target/GS-mq-1.0-SNAPSHOT.jar mq-server.jar
 EXPOSE 7000
 ENTRYPOINT ["java", "-jar", "mq-server.jar"]
 ```
 
 **Run:**
 ```bash
-mvn -pl TextAnalyser-mq package
-java -jar TextAnalyser-mq/target/TextAnalyser-mq-1.0-SNAPSHOT.jar
+mvn -pl GS-mq package
+java -jar GS-mq/target/GS-mq-1.0-SNAPSHOT.jar
 ```
 
 ---

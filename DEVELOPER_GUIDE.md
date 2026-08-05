@@ -38,7 +38,7 @@ git --version
 
 ### Initial Setup
 ```bash
-cd TextAnalyser-pom/TextAnalyser-UI-swing
+cd GS-WebGate-pom/TextAnalyser-UI-swing
 mvn clean install
 ```
 

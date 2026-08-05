@@ -7,13 +7,13 @@
 
     <parent>
         <groupId>com.noprobit.analyzers</groupId>
-        <artifactId>TextAnalyser-pom</artifactId>
+        <artifactId>GS-WebGate-pom</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>TextAnalyser-mq</artifactId>
-    <name>TextAnalyser MQ Module</name>
+    <artifactId>GS-mq</artifactId>
+    <name>GS MQ Module</name>
     <description>Message Queue Server and Client for decoupled communication</description>
 
     <properties>

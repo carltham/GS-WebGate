@@ -113,7 +113,7 @@
 
 ### WebGate Module
 
-**Location:** `/TextAnalyser-pom/TextAnalyser-webgate/`  
+**Location:** `/GS-WebGate/GS-WebGate/`  
 **Technology:** Spring Boot 2.7.14, Java 11  
 **Port:** 8080  
 **External Dependency:** DuckDuckGo (public, no auth required)
@@ -134,7 +134,7 @@ GET  /webgate/health                 - Health check
 
 ### MQ Module (Phase 6+)
 
-**Location:** `/TextAnalyser-pom/TextAnalyser-mq/`  
+**Location:** `/GS-WebGate/GS-mq/`  
 **Technology:** Java 11, TCP server  
 **Port:** 7000  
 **No External Dependencies**
@@ -227,7 +227,7 @@ Timeline: JAR enqueues verification
 Laptop:
 ├─ MQ Server (port 7000) - optional, for MQ testing
 ├─ JAR Module (port 8081) - mvn -pl TextAnalyser-jar spring-boot:run
-├─ WebGate (port 8080) - mvn -pl TextAnalyser-webgate spring-boot:run
+├─ WebGate (port 8080) - mvn -pl GS-WebGate spring-boot:run
 └─ UI (GUI) - mvn -pl TextAnalyser-UI-swing exec:java
 ```
 

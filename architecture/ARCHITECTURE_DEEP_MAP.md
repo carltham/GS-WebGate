@@ -503,7 +503,7 @@ Response (200 OK):
 ```yaml
 spring:
   application:
-    name: TextAnalyser-WebGate
+    name: GS-WebGate
   boot:
     admin:
       client:
@@ -525,7 +525,7 @@ search:
     enabled: true
     url: https://api.duckduckgo.com/
     timeout-ms: 10000
-    user-agent: TextAnalyser/2.0
+    user-agent: GS-WebGate/2.0
   cache:
     enabled: false
     ttl-minutes: 60

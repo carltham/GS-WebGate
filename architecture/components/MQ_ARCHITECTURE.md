@@ -1,6 +1,6 @@
 # Message Queue Server - Complete Architecture
 
-**Central Message Hub for TextAnalyser**
+**Central Message Hub for GS-mq**
 
 **Version:** 1.0  
 **Status:** Production Ready  
@@ -160,7 +160,7 @@ Request Lifecycle:
 ## 📦 Project Structure
 
 ```
-TextAnalyser-mq/
+GS-mq/
 ├── src/main/java/com/noprobit/mq/
 │   ├── MQServer.java             (TCP Server, Entry Point)
 │   ├── ClientHandler.java         (Per-Client Thread Handler)
@@ -613,10 +613,10 @@ public class SearchResponse {
 
 ```bash
 # Build
-mvn -pl TextAnalyser-mq package
+mvn -pl GS-mq package
 
 # Run
-java -cp target/TextAnalyser-mq-1.0-SNAPSHOT.jar \
+java -cp target/GS-mq-1.0-SNAPSHOT.jar \
   com.noprobit.mq.MQServer
 
 # Output:
@@ -674,7 +674,7 @@ FROM openjdk:11-jre-slim
 
 WORKDIR /mq
 
-COPY target/TextAnalyser-mq-1.0-SNAPSHOT.jar mq-server.jar
+COPY target/GS-mq-1.0-SNAPSHOT.jar mq-server.jar
 
 EXPOSE 7000
 
@@ -692,7 +692,7 @@ services:
       context: .
       dockerfile: Dockerfile
     
-    container_name: textanalyser-mq
+    container_name: GS-mq
     
     ports:
       - "7000:7000"
@@ -723,20 +723,20 @@ networks:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: textanalyser-mq
+  name: GS-mq
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: textanalyser-mq
+      app: GS-mq
   template:
     metadata:
       labels:
-        app: textanalyser-mq
+        app: GS-mq
     spec:
       containers:
       - name: mq-server
-        image: textanalyser-mq:latest
+        image: GS-mq:latest
         ports:
         - containerPort: 7000
         
@@ -764,10 +764,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: textanalyser-mq
+  name: GS-mq
 spec:
   selector:
-    app: textanalyser-mq
+    app: GS-mq
   ports:
   - protocol: TCP
     port: 7000

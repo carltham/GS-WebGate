@@ -2,10 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.noprobit.analyzers</groupId>
-    <artifactId>TextAnalyser-pom</artifactId>
+    <artifactId>GS-WebGate-pom</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>TextAnalyser-pom</name>
+    <name>GS-WebGate-pom</name>
     <description>Overarching parent project for GSPos modules</description>
     <properties>
         <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
@@ -14,8 +14,8 @@
     <modules>
         <module>TextAnalyser-UI-swing</module>
         <module>TextAnalyser-jar</module>
-        <module>TextAnalyser-webgate</module>
-        <module>TextAnalyser-mq</module>
+        <module>GS-WebGate</module>
+        <module>GS-mq</module>
     </modules>
 
     <profiles>

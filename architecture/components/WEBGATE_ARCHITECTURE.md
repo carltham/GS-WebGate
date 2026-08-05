@@ -33,7 +33,7 @@ WebGate is a **standalone internet gateway service** that:
 - ✅ Answers generic questions with confidence scoring
 - ✅ Communicates via on-site Message Queue (no direct network)
 - ✅ Runs on local computers (behind NAT, no IP blocking)
-- ✅ Processes search requests from TextAnalyser JAR module
+- ✅ Processes search requests from the GS-WebGate JAR module
 
 ## 🔍 Key Characteristics
 
@@ -214,7 +214,7 @@ Request Lifecycle:
 ## 📦 Project Structure
 
 ```
-TextAnalyser-webgate/
+GS-WebGate/
 ├── src/main/java/com/noprobit/analyzers/webgate/
 │   ├── WebGateApplication.java           (Spring Boot Entry)
 │   ├── mq/
@@ -658,7 +658,7 @@ FROM openjdk:11-jre-slim
 
 WORKDIR /app
 
-COPY target/TextAnalyser-webgate-1.0-SNAPSHOT.jar webgate.jar
+COPY target/GS-WebGate-1.0-SNAPSHOT.jar webgate.jar
 
 EXPOSE 8080
 
@@ -680,7 +680,7 @@ services:
       context: .
       dockerfile: Dockerfile
     
-    container_name: textanalyser-webgate
+    container_name: GS-WebGate
     
     ports:
       - "8080:8080"
@@ -813,7 +813,7 @@ Response (200 OK):
 ```yaml
 spring:
   application:
-    name: TextAnalyser-WebGate
+    name: GS-WebGate
   
   boot:
     admin:
@@ -847,7 +847,7 @@ search:
     enabled: true
     url: https://api.duckduckgo.com/
     timeout-ms: 10000
-    user-agent: TextAnalyser/2.0
+    user-agent: GS-WebGate/2.0
   
   cache:
     enabled: false  # Optional: enable for production
@@ -1142,13 +1142,13 @@ Internal Logs:
 
 ```bash
 # Build WebGate
-mvn -pl TextAnalyser-webgate package
+mvn -pl GS-WebGate package
 
 # Run WebGate (development)
-mvn -pl TextAnalyser-webgate spring-boot:run
+mvn -pl GS-WebGate spring-boot:run
 
 # Run WebGate (production)
-java -jar TextAnalyser-webgate/target/TextAnalyser-webgate-1.0-SNAPSHOT.jar \
+java -jar GS-WebGate/target/GS-WebGate-1.0-SNAPSHOT.jar \
   --mq.host=on-site-server.com \
   --mq.port=7000 \
   --server.port=8080
@@ -1163,4 +1163,4 @@ docker run -e MQ_HOST=on-site-mq -p 8080:8080 webgate:latest
 **Document Version: 2.0**  
 **Status: Production Ready**  
 **Last Updated: 2026-07-20**  
-**Maintainer: TextAnalyser Team**
+**Maintainer: GS Team**

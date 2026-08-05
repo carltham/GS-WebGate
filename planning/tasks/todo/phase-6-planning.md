@@ -85,7 +85,7 @@ WebGate Module (localhost:8080)
 ### Directory Structure to Create
 
 ```
-TextAnalyser-pom/
+GS-WebGate-pom/
 └── TextAnalyser-mq/
     ├── pom.xml (Maven configuration)
     ├── src/

@@ -14,7 +14,7 @@ TextAnalyser Swing UI is a comprehensive code analysis tool with a graphical int
 
 ### Build from Source
 ```bash
-cd TextAnalyser-pom/TextAnalyser-UI-swing
+cd GS-WebGate-pom/TextAnalyser-UI-swing
 mvn clean package
 ```
 

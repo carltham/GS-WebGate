@@ -48,7 +48,7 @@ Run all Phase 5 (Dashboard) tests to verify correctness and identify any issues 
 ### Test Execution Commands
 
 ```bash
-cd /mnt/DATA/Projects/0.present-projects/Active/TextAnalyser/TextAnalyser-pom/TextAnalyser-UI-swing
+cd /mnt/DATA/Projects/0.present-projects/Active/TextAnalyser/GS-WebGate-pom/TextAnalyser-UI-swing
 
 # Run unit tests only (default)
 mvn test

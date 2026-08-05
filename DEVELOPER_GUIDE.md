@@ -37,7 +37,7 @@ See [planning/TDD_TOP_DOWN_GUIDE.md](planning/TDD_TOP_DOWN_GUIDE.md) for the ful
 ```
 GS-WebGate-pom/
 ├── GS-WebGate/                             # Private worker / gateway module
-├── GS-mq/                                  # Queue and correlation module
+├── GS-relay/                                  # Queue and correlation module
 ├── config/                                 # Shared configuration
 └── pom.xml                                 # Parent Maven build
 ```
@@ -87,7 +87,7 @@ mvn -pl GS-WebGate spring-boot:run
 ```
 Phase 0: Contracts and test harness
     ↓
-Phase 1: GS-mq queue behavior
+Phase 1: GS-relay queue behavior
     ↓
 Phase 2: GS-WebGate worker loop
     ↓

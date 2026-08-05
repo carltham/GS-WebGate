@@ -8,17 +8,17 @@
 ## System Layers
 
 ### 1. Client layer
-- Submits search requests to GS-mq
-- Polls GS-mq for responses
+- Submits search requests to GS-relay
+- Polls GS-relay for responses
 - Owns the business use case that requires a search
 
 ### 2. Queue layer
-- GS-mq stores requests and responses
+- GS-relay stores requests and responses
 - Correlates them via request ID
 - Decouples the client from the searcher
 
 ### 3. Searcher layer
-- GS-WebGate polls GS-mq for work
+- GS-WebGate polls GS-relay for work
 - Executes the internet search
 - Publishes a structured response back to the queue
 
@@ -27,11 +27,11 @@
 ## Message Flow
 
 ```text
-Client -> GS-mq : enqueue request
-GS-WebGate -> GS-mq : dequeue request
+Client -> GS-relay : enqueue request
+GS-WebGate -> GS-relay : dequeue request
 GS-WebGate -> Internet : run search
-GS-WebGate -> GS-mq : enqueue response
-Client -> GS-mq : fetch response
+GS-WebGate -> GS-relay : enqueue response
+Client -> GS-relay : fetch response
 ```
 
 ---
@@ -73,7 +73,7 @@ A response should contain:
 - formatting results
 - graceful error handling
 
-### GS-mq
+### GS-relay
 - persistence of pending requests
 - persistence of completed responses
 - correlation by request ID

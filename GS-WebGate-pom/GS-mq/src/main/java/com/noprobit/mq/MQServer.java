@@ -1,16 +1,21 @@
 package com.noprobit.mq;
 
+import com.noprobit.mq.models.QueueMessage;
+import com.noprobit.mq.storage.InMemoryQueueStore;
+
 import java.io.*;
 import java.net.*;
 
 public class MQServer {
-    private int port;
+    private final int port;
     private MQServerStatus status;
     private ServerSocket serverSocket;
+    private final InMemoryQueueStore queueStore;
 
     public MQServer(int port) {
         this.port = port;
         this.status = MQServerStatus.STOPPED;
+        this.queueStore = new InMemoryQueueStore();
     }
 
     public void start() {
@@ -90,4 +95,23 @@ public class MQServer {
         return String.format("MQServer{port=%d, status=%s}", port, status);
     }
 
+    public QueueMessage enqueueRequest(String requestId, String payload) {
+        return queueStore.enqueueRequest(requestId, payload);
+    }
+
+    public QueueMessage dequeueRequest() {
+        return queueStore.dequeueRequest();
+    }
+
+    public QueueMessage enqueueResponse(String requestId, String payload) {
+        return queueStore.enqueueResponse(requestId, payload);
+    }
+
+    public QueueMessage dequeueResponse(String requestId) {
+        return queueStore.dequeueResponse(requestId);
+    }
+
+    public boolean hasResponse(String requestId) {
+        return queueStore.hasResponse(requestId);
+    }
 }

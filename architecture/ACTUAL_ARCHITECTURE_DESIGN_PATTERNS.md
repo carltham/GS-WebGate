@@ -1,10 +1,10 @@
 # Design Decisions and Trade-offs
 
-## 1. Queue-based decoupling
+## 1. REST-first decoupling
 
-The core decision is to use a queue as the integration boundary. This keeps the client and searcher decoupled and allows asynchronous processing.
+The core decision is to use REST as the integration boundary. This keeps the client and searcher decoupled and allows asynchronous processing without requiring a more complex messaging broker.
 
-## 2. Polling instead of push
+## 2. Simple polling instead of push
 
 GS-WebGate uses polling because the searcher is expected to run on a private or NATed host. Polling avoids the need for inbound connectivity and keeps the system operational in restricted environments.
 
@@ -18,7 +18,7 @@ The searcher is designed to make outbound calls only. That makes it suitable for
 
 ## 5. Graceful degradation
 
-If the search provider or queue is temporarily unavailable, the system can degrade gracefully and return an incomplete or low-confidence result instead of failing completely.
+If the search provider or GS-relay is temporarily unavailable, the system can degrade gracefully and return an incomplete or low-confidence result instead of failing completely.
 
 ## Summary
 

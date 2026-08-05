@@ -1,5 +1,5 @@
 # Phase 0 Notes
 
-- Keep the first tests focused on the queue boundary.
-- Avoid introducing extra behavior before the contract is stable.
-- Record any deviations from the initial contract as they appear.
+- Keep the contract small and explicit.
+- Prefer clear request and response JSON over over-engineering.
+- Treat this phase as the foundation for all later work.

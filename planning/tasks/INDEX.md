@@ -7,9 +7,9 @@ This index replaces the old Swing-era task tree with a compact roadmap for the c
 | Phase | Goal | Next Task |
 |---|---|---|
 | Phase 0 | Define the shared contract and first tests | [phase-0/0.1-define-contracts.md](phase-0/0.1-define-contracts.md) |
-| Phase 1 | Implement queue storage and correlation | [phase-1/1.1-implement-mq-store.md](phase-1/1.1-implement-mq-store.md) |
-| Phase 2 | Implement the worker polling loop | [phase-2/2.1-implement-worker-poll-loop.md](phase-2/2.1-implement-worker-poll-loop.md) |
-| Phase 3 | Wire the full flow and harden it | [phase-3/3.1-end-to-end-integration.md](phase-3/3.1-end-to-end-integration.md) |
+| Phase 1 | Implement REST-backed persistence and correlation | [phase-1/1.1-implement-mq-store.md](phase-1/1.1-implement-mq-store.md) |
+| Phase 2 | Implement the worker poll loop over REST | [phase-2/2.1-implement-worker-poll-loop.md](phase-2/2.1-implement-worker-poll-loop.md) |
+| Phase 3 | Wire the full REST flow and harden it | [phase-3/3.1-end-to-end-integration.md](phase-3/3.1-end-to-end-integration.md) |
 
 ## Task Files
 

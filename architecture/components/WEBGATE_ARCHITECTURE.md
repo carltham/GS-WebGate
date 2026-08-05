@@ -2,25 +2,25 @@
 
 ## Role
 
-GS-WebGate is the execution component of the system. It is responsible for taking queued work, performing the search, and publishing the outcome back to the queue.
+GS-WebGate is the execution component of the system. It is responsible for taking work from GS-relay, performing the search, and publishing the outcome back to the service.
 
 ## Responsibilities
 
-- poll GS-mq for pending requests,
-- dequeue work when available,
+- poll GS-relay for pending requests over REST,
+- claim work when available,
 - call the external search provider,
 - build a structured response,
-- publish the result back to GS-mq using the original request ID,
-- recover gracefully when the queue or external provider is unavailable.
+- publish the result back to GS-relay using the original request ID,
+- recover gracefully when GS-relay or the external provider is unavailable.
 
 ## Runtime Loop
 
 ```text
-connect to GS-mq
+connect to GS-relay
 loop:
-  poll for request
+  GET pending request
   if request exists -> process it
-  publish result
+  POST result
   wait briefly
 ```
 

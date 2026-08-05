@@ -3,18 +3,17 @@
 ## Happy Path
 
 1. The client creates a search request.
-2. The request is enqueued in GS-mq.
-3. GS-WebGate polls GS-mq for pending work.
-4. GS-WebGate dequeues the request.
-5. GS-WebGate executes the search.
-6. GS-WebGate publishes a structured result back to GS-mq.
-7. The client polls for the response and consumes it.
+2. The request is submitted to GS-relay over REST.
+3. GS-WebGate polls GS-relay for pending work through a simple REST endpoint.
+4. GS-WebGate claims the request and executes the search.
+5. GS-WebGate publishes a structured result back to GS-relay.
+6. The client retrieves the response through REST and consumes it.
 
 ```text
-Client -> GS-mq -> GS-WebGate -> External Search Provider
-                ^                           |
-                |                           |
-                +------ response -----------+
+Client -> REST -> GS-relay -> GS-WebGate -> External Search Provider
+                    ^                     |
+                    |                     |
+                    +------ response -----+
 ```
 
 ## State Transitions
@@ -27,13 +26,13 @@ A request moves through a simple lifecycle:
 
 ## Failure Handling
 
-### GS-mq unavailable
-- the searcher retries its connection,
-- requests remain pending until the queue becomes reachable,
+### GS-relay unavailable
+- the searcher retries its request,
+- requests remain stored until the service becomes reachable,
 - clients can retry later if needed.
 
 ### GS-WebGate unavailable
-- requests remain queued,
+- requests remain pending in GS-relay,
 - processing resumes once the searcher is available again.
 
 ### External search provider unavailable
@@ -43,6 +42,6 @@ A request moves through a simple lifecycle:
 
 ## Operational Notes
 
-- The queue is the main integration boundary.
+- REST is the main integration boundary.
 - The client and searcher do not need to be online at the same time.
 - The design is well suited to private-host deployment and outbound-only networking.

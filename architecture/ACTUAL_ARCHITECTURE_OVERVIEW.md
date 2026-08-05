@@ -14,18 +14,18 @@ The system solves a simple integration problem:
 
 ## Main Actors
 
-- Client application: creates a search request and later consumes the result.
-- GS-mq: stores and routes requests and responses.
-- GS-WebGate: polls for work, performs the search, and publishes the result.
+- Client application: creates a search request and later consumes the result through REST.
+- GS-relay: stores pending requests and completed responses using the simplest possible persistence approach.
+- GS-WebGate: polls for work through REST, performs the search, and publishes the result back to GS-relay.
 - External search provider: provides the actual internet search results.
 
 ## High-Level Shape
 
 ```text
-Client -> GS-mq -> GS-WebGate -> External Search Provider
-                 ^                 |
-                 |                 |
-                 +-------- result <-+
+Client -> REST -> GS-relay -> GS-WebGate -> External Search Provider
+                 ^                     |
+                 |                     |
+                 +------ result <------+
 ```
 
 ## Why this architecture exists
@@ -39,13 +39,13 @@ This design is useful when:
 ## Boundaries
 
 - GS-WebGate is the execution layer.
-- GS-mq is the coordination layer.
+- GS-relay is the coordination layer.
 - Clients are the consumers of the service.
 - The external search provider is an external dependency.
 
 ## Design Principles
 
 - outbound-only connectivity for the searcher,
-- asynchronous request/response handling,
-- queue-based integration as the primary contract,
+- REST as the primary client-to-mq contract,
+- minimal persistence for requests and results,
 - no hard dependency on direct inbound connectivity.

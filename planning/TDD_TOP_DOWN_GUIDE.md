@@ -32,4 +32,4 @@ The contract between the caller and the system is the authority. Lower layers mu
 
 ## Expected Outcome
 
-This keeps the implementation aligned with the actual product contract and avoids hidden mismatches between GS-mq and GS-WebGate.
+This keeps the implementation aligned with the actual product contract and avoids hidden mismatches between GS-relay and GS-WebGate.

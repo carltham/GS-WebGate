@@ -4,18 +4,18 @@
 
 The client is the initiator of the flow. It is responsible for:
 - creating a search request,
-- sending it to GS-mq,
+- sending it to GS-relay,
 - polling for the matching response,
 - handling the business outcome.
 
 The client does not perform the search itself.
 
-## 2. GS-mq
+## 2. GS-relay
 
-GS-mq is the coordination layer. It is responsible for:
-- accepting incoming search requests,
-- storing pending requests,
-- delivering requests to GS-WebGate,
+GS-relay is the coordination and persistence layer. It is responsible for:
+- accepting incoming search requests over REST,
+- storing pending requests with the simplest possible persistence,
+- exposing a simple endpoint for GS-WebGate to poll for work,
 - storing completed responses,
 - correlating each response with its request ID.
 
@@ -45,21 +45,21 @@ GS-mq is the coordination layer. It is responsible for:
 ## 3. GS-WebGate
 
 GS-WebGate is the execution layer. It is responsible for:
-- polling GS-mq for pending requests,
+- polling GS-relay for pending requests,
 - executing the search,
 - building the structured response,
-- publishing the response back to GS-mq.
+- publishing the response back to GS-relay.
 
 It is the only component expected to reach the external search provider directly.
 
 ## Interaction Summary
 
 ```text
-Client -> GS-mq : enqueue request
-GS-WebGate -> GS-mq : dequeue request
+Client -> GS-relay : POST /requests
+GS-WebGate -> GS-relay : GET /requests/pending
 GS-WebGate -> External Search Provider : execute search
-GS-WebGate -> GS-mq : enqueue response
-Client -> GS-mq : fetch response
+GS-WebGate -> GS-relay : POST /responses
+Client -> GS-relay : GET /responses/{requestId}
 ```
 
 ## Supported Search Modes

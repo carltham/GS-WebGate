@@ -1,13 +1,13 @@
-# GS-mq Component Architecture
+# GS-relay Component Architecture
 
 ## Role
 
-GS-mq is the transport and coordination layer for the system. It allows clients and the private searcher to exchange work without needing to be online at the same time.
+GS-relay is the coordination and persistence layer for the system. It allows clients and the private searcher to exchange work without needing to be online at the same time.
 
 ## Responsibilities
 
-- store pending search requests,
-- deliver requests to GS-WebGate,
+- store pending search requests with minimal persistence,
+- expose simple REST endpoints for GS-WebGate to poll for work,
 - store completed responses,
 - allow clients to retrieve the response later,
 - preserve request/response correlation using the request ID.
@@ -39,15 +39,15 @@ GS-mq is the transport and coordination layer for the system. It allows clients 
 ## Interaction Pattern
 
 ```text
-Client -> GS-mq : enqueue request
-GS-WebGate -> GS-mq : dequeue request
-GS-WebGate -> GS-mq : enqueue response
-Client -> GS-mq : fetch response by requestId
+Client -> GS-relay : POST /requests
+GS-WebGate -> GS-relay : GET /requests/pending
+GS-WebGate -> GS-relay : POST /responses
+Client -> GS-relay : GET /responses/{requestId}
 ```
 
 ## Design Notes
 
-- the queue should stay lightweight and predictable,
-- the broker should tolerate temporary searcher downtime,
+- the persistence layer should stay lightweight and predictable,
+- the service should tolerate temporary searcher downtime,
 - request/response pairing should be explicit and simple,
 - the system should support multiple clients and multiple searcher instances if needed.

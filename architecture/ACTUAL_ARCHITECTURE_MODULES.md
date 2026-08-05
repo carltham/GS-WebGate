@@ -1,85 +1,71 @@
-# GS-WebGate Modules
+# Components and Contracts
 
-**Version:** 2.0  
-**Last Updated:** 2026-08-05
+## 1. Client Application
 
----
+The client is the initiator of the flow. It is responsible for:
+- creating a search request,
+- sending it to GS-mq,
+- polling for the matching response,
+- handling the business outcome.
 
-## Module 1: GS-WebGate
+The client does not perform the search itself.
 
-**Location:** GS-WebGate-pom/GS-WebGate
+## 2. GS-mq
 
-**Purpose:**
-A private search worker that runs on a local or private machine and performs internet searches for incoming queue messages.
+GS-mq is the coordination layer. It is responsible for:
+- accepting incoming search requests,
+- storing pending requests,
+- delivering requests to GS-WebGate,
+- storing completed responses,
+- correlating each response with its request ID.
 
-**Responsibilities:**
-- Poll GS-mq for search requests
-- Process each request independently
-- Use an external search provider such as DuckDuckGo
-- Convert results into a structured response object
-- Publish the result back to GS-mq
+### Request contract
+```json
+{
+  "requestId": "req-1001",
+  "type": "search",
+  "question": "What is the weather in London?",
+  "context": "travel"
+}
+```
 
-**Core responsibilities in practice:**
-- request polling
-- search execution
-- result enrichment
-- error handling and retry logic
+### Response contract
+```json
+{
+  "requestId": "req-1001",
+  "type": "search-result",
+  "answerFound": true,
+  "answer": "Mostly cloudy with light rain",
+  "confidence": 0.87,
+  "sources": ["DuckDuckGo"],
+  "processingTimeMs": 412
+}
+```
 
-**Design notes:**
-- The module should be able to run without inbound connectivity requirements.
-- It should be able to operate behind NAT or on a private host.
-- It should be safe to run on a machine that can reach the internet but should not expose a public service unnecessarily.
+## 3. GS-WebGate
 
----
+GS-WebGate is the execution layer. It is responsible for:
+- polling GS-mq for pending requests,
+- executing the search,
+- building the structured response,
+- publishing the response back to GS-mq.
 
-## Module 2: GS-mq
+It is the only component expected to reach the external search provider directly.
 
-**Location:** GS-WebGate-pom/GS-mq
-
-**Purpose:**
-The transport and coordination layer between client applications and the private searcher.
-
-**Responsibilities:**
-- Receive search requests from clients
-- Store pending requests
-- Deliver work to the searcher
-- Receive results from the searcher
-- Expose completed responses to the original client
-- Keep request and response state correlated by request ID
-
-**Core characteristics:**
-- queue-based communication
-- simple request/response correlation
-- asynchronous processing
-- lightweight operational model
-
----
-
-## Cross-Module Interaction
+## Interaction Summary
 
 ```text
 Client -> GS-mq : enqueue request
 GS-WebGate -> GS-mq : dequeue request
-GS-WebGate -> Internet : run search
+GS-WebGate -> External Search Provider : execute search
 GS-WebGate -> GS-mq : enqueue response
-Client -> GS-mq : retrieve response
+Client -> GS-mq : fetch response
 ```
 
----
-
-## Search Types Supported
+## Supported Search Modes
 
 The architecture is intended to support:
-- generic web searches
-- site-specific searches
-- context-aware search requests
-- search tasks that require a private machine to access external search services
-
----
-
-## Summary
-
-The architecture is centered on a simple separation of concerns:
-- GS-mq handles transport and coordination
-- GS-WebGate handles execution and search logic
-- client applications handle business usage and consume results
+- generic web searches,
+- site-specific searches,
+- context-aware searches,
+- searches that require a private machine to reach the internet.

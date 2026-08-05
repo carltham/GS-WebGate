@@ -1,95 +1,48 @@
-# GS-WebGate Request and Response Flow
+# Runtime Flows
 
-**Version:** 2.0  
-**Last Updated:** 2026-08-05
+## Happy Path
 
----
-
-## Main Flow: Client Submits a Search
+1. The client creates a search request.
+2. The request is enqueued in GS-mq.
+3. GS-WebGate polls GS-mq for pending work.
+4. GS-WebGate dequeues the request.
+5. GS-WebGate executes the search.
+6. GS-WebGate publishes a structured result back to GS-mq.
+7. The client polls for the response and consumes it.
 
 ```text
-Client Application
-  |
-  | 1. Create search request
-  v
-GS-mq
-  | 2. Store request in pending queue
-  v
-GS-WebGate
-  | 3. Poll queue for work
-  | 4. Dequeue request
-  | 5. Run search against internet
-  | 6. Build structured result
-  v
-GS-mq
-  | 7. Store response by request ID
-  v
-Client Application
-  | 8. Poll for response
-  | 9. Consume result
+Client -> GS-mq -> GS-WebGate -> External Search Provider
+                ^                           |
+                |                           |
+                +------ response -----------+
 ```
 
----
+## State Transitions
 
-## Example Message Lifecycle
-
-### Request message
-```json
-{
-  "requestId": "req-1001",
-  "type": "search",
-  "question": "What is the current weather in London?",
-  "context": "travel",
-  "createdAt": 1722810000
-}
-```
-
-### Response message
-```json
-{
-  "requestId": "req-1001",
-  "type": "search-result",
-  "answerFound": true,
-  "answer": "The weather is mostly cloudy with light rain.",
-  "confidence": 0.87,
-  "sources": ["DuckDuckGo"],
-  "processingTimeMs": 412
-}
-```
-
----
-
-## Searcher Processing Steps
-
-1. The searcher connects to GS-mq.
-2. It repeatedly polls for pending requests.
-3. When a request is found, it dequeues it.
-4. It performs the search using a search provider.
-5. It formats the result as a structured response.
-6. It publishes the response back to GS-mq.
-
----
+A request moves through a simple lifecycle:
+- created / enqueued
+- dequeued / processing
+- completed / published
+- consumed / removed
 
 ## Failure Handling
 
 ### GS-mq unavailable
-- The searcher retries its connection.
-- The client continues to hold the request until the queue is available again.
-- No direct dependency on the searcher being reachable by the client is required.
+- the searcher retries its connection,
+- requests remain pending until the queue becomes reachable,
+- clients can retry later if needed.
 
-### Searcher unavailable
-- Requests remain queued until the searcher comes back online.
-- The client can retry or wait for completion.
+### GS-WebGate unavailable
+- requests remain queued,
+- processing resumes once the searcher is available again.
 
-### Search provider unavailable
-- The searcher returns a graceful failure response with a low-confidence or empty result.
-- The client can decide how to handle this case.
+### External search provider unavailable
+- the searcher returns a degraded response,
+- the response can carry low confidence or no answer,
+- the client can decide how to interpret that result.
 
----
+## Operational Notes
 
-## Why this model works
-
-- The queue is the integration contract.
-- The searcher can live behind NAT or on a private host.
-- The client does not need to be online at the same time as the searcher.
-- The design supports both generic searches and site-specific searches.
+- The queue is the main integration boundary.
+- The client and searcher do not need to be online at the same time.
+- The design is well suited to private-host deployment and outbound-only networking.

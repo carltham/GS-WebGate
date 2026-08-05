@@ -1,26 +1,25 @@
-# GS-WebGate Design Patterns
+# Design Decisions and Trade-offs
 
-**Version:** 2.0  
-**Last Updated:** 2026-08-05
+## 1. Queue-based decoupling
 
----
+The core decision is to use a queue as the integration boundary. This keeps the client and searcher decoupled and allows asynchronous processing.
 
-## Queue-based decoupling
+## 2. Polling instead of push
 
-The core pattern is asynchronous decoupling through GS-mq. Clients submit work without needing to wait for the searcher to be online.
+GS-WebGate uses polling because the searcher is expected to run on a private or NATed host. Polling avoids the need for inbound connectivity and keeps the system operational in restricted environments.
 
-## Polling pattern
+## 3. Request ID correlation
 
-GS-WebGate uses a polling loop to check the queue for work. This avoids the need for inbound connectivity and fits the private-machine deployment model.
+Every message carries a request ID so that responses can be matched to the original work item.
 
-## Request/response correlation
+## 4. Outbound-only execution
 
-Each message carries a request ID so that responses can be matched to the original request even when processing happens later.
+The searcher is designed to make outbound calls only. That makes it suitable for private hosts and reduces exposure to inbound network risk.
 
-## Outbound-only execution
+## 5. Graceful degradation
 
-The searcher is designed to make outbound calls only. This makes it suitable for private hosts and NAT environments.
+If the search provider or queue is temporarily unavailable, the system can degrade gracefully and return an incomplete or low-confidence result instead of failing completely.
 
-## Graceful degradation
+## Summary
 
-If the search provider is unavailable or the queue is temporarily unreachable, the system can continue to operate in a degraded mode and return partial or no-result responses.
+The architecture favors simplicity, decoupling, and resilience over a more complex synchronous integration model.

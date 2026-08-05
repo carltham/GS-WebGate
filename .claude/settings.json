@@ -1,16 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(\n# Copy old files to new location\ncp /mnt/DATA/Projects/0.present-projects/Active/TextAnalyser/GS-WebGate-pom/TextAnalyser-webgate/src/main/java/com/noprobit/webgate/*.java \\\\\n   /mnt/DATA/Projects/0.present-projects/Active/TextAnalyser/GS-WebGate-pom/TextAnalyser-webgate/src/main/java/com/noprobit/analyzers/webgate/\n\n# Remove old directory\nrm -rf /mnt/DATA/Projects/0.present-projects/Active/TextAnalyser/GS-WebGate-pom/TextAnalyser-webgate/src/main/java/com/noprobit/webgate/\n\necho \"Files migrated to com/noprobit/analyzers/webgate/\"\nls /mnt/DATA/Projects/0.present-projects/Active/TextAnalyser/GS-WebGate-pom/TextAnalyser-webgate/src/main/java/com/noprobit/analyzers/webgate/\n)",
-      "Bash(mvn -pl TextAnalyser-webgate clean compile -DskipTests)",
-      "Bash(mvn -pl TextAnalyser-webgate test -P all-tests)",
-      "Bash(grep -E \"\\\\.\\(json|properties\\)$\")",
-      "Bash(mkdir -p webgate)",
-      "Bash(mv analyzers/webgate/* webgate/)",
-      "Bash(rmdir analyzers *)"
+      "Bash(mvn -pl GS-WebGate clean compile -DskipTests)",
+      "Bash(mvn -pl GS-WebGate test -P all-tests)",
+      "Bash(grep -E \"\\.\\(json|properties\\)$\")"
     ],
     "additionalDirectories": [
-      "/mnt/DATA/Projects/0.present-projects/Active/TextAnalyser/GS-WebGate-pom/TextAnalyser-webgate/src/main/java/com/noprobit/webgate",
+      "/mnt/DATA/Projects/0.present-projects/Active/GS-WebGate/GS-WebGate-pom/GS-WebGate/src/main/java",
       "/mnt/DATA/WORKSPACE/global-resources/AI-logs"
     ]
   }

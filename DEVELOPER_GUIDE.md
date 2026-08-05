@@ -35,18 +35,11 @@ See [planning/TDD_TOP_DOWN_GUIDE.md](planning/TDD_TOP_DOWN_GUIDE.md) for the ful
 
 ### Project Structure
 ```
-TextAnalyser-UI-swing/
-├── src/main/java/com/noprobit/tools/ui/    # Implementation files
-│   ├── TextAnalyserApplication.java         # Main entry point
-│   ├── MainWindow.java                      # Main UI container (6 phases)
-│   ├── Phase 0: Application Launcher        # Startup & initialization
-│   ├── Phase 1: Project Selection          # Project switching
-│   ├── Phase 2: Analysis Execution         # Background analysis
-│   ├── Phase 3: Report Display             # Results viewing
-│   ├── Phase 4: Configuration Editor       # Settings management
-│   └── Phase 5: Dashboard                  # Metrics & trends
-├── src/test/java/com/noprobit/tools/ui/    # Test files (249 total)
-└── pom.xml                                  # Maven configuration
+GS-WebGate-pom/
+├── GS-WebGate/                             # Private worker / gateway module
+├── GS-mq/                                  # Queue and correlation module
+├── config/                                 # Shared configuration
+└── pom.xml                                 # Parent Maven build
 ```
 
 ---
@@ -67,49 +60,44 @@ git --version
 
 ### Initial Setup
 ```bash
-cd GS-WebGate-pom/TextAnalyser-UI-swing
+cd GS-WebGate-pom
 mvn clean install
 ```
 
 ### Running Tests
 ```bash
-mvn clean test                              # All 249 tests
-mvn test -Dtest=DashboardControllerTest    # Specific test
+mvn clean test
 ```
 
 ### Running Application
 ```bash
-mvn exec:java -Dexec.mainClass="com.noprobit.tools.ui.TextAnalyserApplication"
+mvn -pl GS-WebGate spring-boot:run
 ```
 
 ---
 
 ## Architecture & Design
 
-### MVC Pattern
-- **Models:** ProjectMetadata, AnalysisReport, etc.
-- **Views:** JPanel components (ProjectListPanel, DashboardPanel, etc.)
-- **Controllers:** *Controller classes (ProjectSelectionController, DashboardController, etc.)
+### Application Pattern
+- **Request/Response Contracts:** define the queue payloads first
+- **Services:** contain the core business behavior
+- **Adapters:** bridge the queue and the worker execution layer
 
-### Phase Dependencies
+### Delivery Phases
 ```
-Phase 0: Application Launcher (foundation)
+Phase 0: Contracts and test harness
     ↓
-Phase 1: Project Selection (depends on Phase 0)
+Phase 1: GS-mq queue behavior
     ↓
-Phase 2: Analysis Execution (depends on Phase 1)
+Phase 2: GS-WebGate worker loop
     ↓
-Phase 3: Report Display (depends on Phase 2)
-    ↓
-Phase 4: Configuration Editor (parallel to Phase 2-3)
-    ↓
-Phase 5: Dashboard (depends on Phase 3)
+Phase 3: Integration and resilience
 ```
 
-### Threading Model
-- **EDT (Event Dispatch Thread):** UI operations only
-- **Worker Threads:** Long-running analysis via SwingWorker
-- **Safe Synchronization:** volatile fields, synchronized blocks where needed
+### Concurrency Model
+- **Worker loop:** processes queue entries asynchronously
+- **Queue boundary:** keeps the worker isolated from direct client coupling
+- **Operational safety:** retries and timeouts should be handled at the boundary
 
 ---
 
@@ -178,41 +166,24 @@ Tests: N tests added, all passing."
 
 ## Key Classes
 
-### TextAnalyserApplication
-Entry point, initializes projects and main window.
+### GSWebGateApplication
+Entry point for the gateway module.
 ```java
-TextAnalyserApplication app = new TextAnalyserApplication();
-// Application starts with default project
+GSWebGateApplication app = new GSWebGateApplication();
 ```
 
-### MainWindow
-Main UI container with tabbed interface for all phases.
+### QueueService
+Coordinates request and response storage.
 ```java
-MainWindow window = new MainWindow(config, projects);
-window.setVisible(true);
+QueueService service = new QueueService();
+String requestId = service.enqueueRequest(request);
 ```
 
-### DashboardController
-Aggregates metrics across projects.
+### WorkerOrchestrator
+Coordinates the worker loop and result publication.
 ```java
-DashboardController controller = new DashboardController();
-controller.loadProjectStatistics("MyProject");
-double avg = controller.getAverageViolationsPerFile();
-```
-
-### ReportController
-Manages report display and export.
-```java
-ReportController controller = new ReportController();
-controller.displayReport(analysisReport);
-controller.exportToCSV("/path/to/file.csv");
-```
-
-### AnalysisWorker
-Background thread for analysis (SwingWorker).
-```java
-AnalysisWorker worker = new AnalysisWorker();
-worker.execute();  // Runs in background thread
+WorkerOrchestrator orchestrator = new WorkerOrchestrator();
+orchestrator.processNextRequest();
 ```
 
 ---
@@ -224,7 +195,7 @@ worker.execute();  // Runs in background thread
 @Test
 @DisplayName("Should calculate average violations correctly")
 void testAverageViolationsPerFile() {
-    DashboardController controller = new DashboardController();
+    QueueService controller = new QueueService();
     controller.loadProjectStatistics("Test");
     assertTrue(controller.getAverageViolationsPerFile() >= 0);
 }
@@ -233,13 +204,13 @@ void testAverageViolationsPerFile() {
 ### Integration Tests
 ```java
 @Test
-@DisplayName("Should complete end-to-end workflow")
-void testCompleteWorkflow() {
+@DisplayName("Should complete the queue workflow")
+void testCompleteQueueWorkflow() {
     // Setup
-    TextAnalyserApplication app = new TextAnalyserApplication();
-    
-    // Execute phases
-    // Assert results
+    QueueService service = new QueueService();
+
+    // Execute request and response flow
+    // Assert result correlation
 }
 ```
 
@@ -247,9 +218,9 @@ void testCompleteWorkflow() {
 ```java
 @Test
 void testWithMock() {
-    DashboardController controller = Mockito.mock(DashboardController.class);
-    when(controller.getTotalViolations()).thenReturn(50);
-    assertEquals(50, controller.getTotalViolations());
+    QueueService service = Mockito.mock(QueueService.class);
+    when(service.enqueueRequest(any())).thenReturn("req-1");
+    assertEquals("req-1", service.enqueueRequest(new RequestPayload()));
 }
 ```
 

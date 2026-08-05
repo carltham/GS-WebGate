@@ -12,8 +12,6 @@
         <project.reporting.outputEncoding>ISO-8859-1</project.reporting.outputEncoding>
     </properties>
     <modules>
-        <module>TextAnalyser-UI-swing</module>
-        <module>TextAnalyser-jar</module>
         <module>GS-WebGate</module>
         <module>GS-mq</module>
     </modules>

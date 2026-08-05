@@ -31,12 +31,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- TextAnalyser Core -->
-        <dependency>
-            <groupId>com.noprobit.gspos</groupId>
-            <artifactId>TextAnalyser-jar</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+        <!-- GS-WebGate core dependencies can be added here as the implementation grows -->
 
         <!-- JSON Processing -->
         <dependency>

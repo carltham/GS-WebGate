@@ -28,7 +28,7 @@ Commit the 5 Phase 5 (Dashboard) implementation files that were created but not 
 
 ### Untracked Files to Commit
 
-**Location:** `GS-WebGate-pom/TextAnalyser-UI-swing/src/main/java/com/noprobit/tools/ui/`
+**Location:** `GS-WebGate-pom/GS-WebGate-UI-swing/src/main/java/com/noprobit/tools/ui/`
 
 ```
 ├── DashboardController.java
@@ -62,13 +62,13 @@ Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>
 ### Commands
 
 ```bash
-cd /mnt/DATA/Projects/0.present-projects/Active/TextAnalyser
+cd /mnt/DATA/Projects/0.present-projects/Active/GS-WebGate
 
 git status  # Verify Phase 5 files show as untracked
 
-git add GS-WebGate-pom/TextAnalyser-UI-swing/src/main/java/com/noprobit/tools/ui/Dashboard* \
-        GS-WebGate-pom/TextAnalyser-UI-swing/src/main/java/com/noprobit/tools/ui/ProjectOverview.java \
-        GS-WebGate-pom/TextAnalyser-UI-swing/src/main/java/com/noprobit/tools/ui/StatisticsDisplay.java
+git add GS-WebGate-pom/GS-WebGate-UI-swing/src/main/java/com/noprobit/tools/ui/Dashboard* \
+        GS-WebGate-pom/GS-WebGate-UI-swing/src/main/java/com/noprobit/tools/ui/ProjectOverview.java \
+        GS-WebGate-pom/GS-WebGate-UI-swing/src/main/java/com/noprobit/tools/ui/StatisticsDisplay.java
 
 git commit -m "feat: Phase 5 implementation - Dashboard & Statistics
 

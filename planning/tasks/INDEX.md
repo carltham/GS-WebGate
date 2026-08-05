@@ -160,7 +160,7 @@ Each task file follows this structure:
 ### Starting Phase 0
 
 ```bash
-cd /mnt/DATA/Projects/0.present-projects/Active/TextAnalyser/planning/tasks
+cd /mnt/DATA/Projects/0.present-projects/Active/GS-WebGate/planning/tasks
 
 # Open first task
 cat phase-0/0.1-planning-setup.md

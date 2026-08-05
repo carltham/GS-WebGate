@@ -15,7 +15,7 @@ Commit the 4 comprehensive architecture documentation files to git with appropri
 
 ## Checklist
 
-- [ ] Verify all 4 ACTUAL_ARCHITECTURE_*.md files exist in `/TextAnalyser/architecture/`
+- [ ] Verify all 4 ACTUAL_ARCHITECTURE_*.md files exist in `/GS-WebGate/architecture/`
 - [ ] Review commit message
 - [ ] Stage files: `git add architecture/ACTUAL_*.md`
 - [ ] Create commit with provided message
@@ -29,7 +29,7 @@ Commit the 4 comprehensive architecture documentation files to git with appropri
 ### Files to Commit
 
 ```
-/TextAnalyser/architecture/
+/GS-WebGate/architecture/
 ├── ACTUAL_ARCHITECTURE_OVERVIEW.md (508 lines)
 ├── ACTUAL_ARCHITECTURE_MODULES.md (758 lines)
 ├── ACTUAL_ARCHITECTURE_DATAFLOW.md (676 lines)
@@ -55,9 +55,9 @@ Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>
 ### Commands
 
 ```bash
-cd /mnt/DATA/Projects/0.present-projects/Active/TextAnalyser
+cd /mnt/DATA/Projects/0.present-projects/Active/GS-WebGate
 
-git add TextAnalyser/architecture/ACTUAL_*.md
+git add GS-WebGate/architecture/ACTUAL_*.md
 
 git commit -m "docs: Add comprehensive architecture documentation based on actual code analysis
 

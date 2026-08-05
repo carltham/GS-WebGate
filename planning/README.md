@@ -6,6 +6,17 @@
 
 ---
 
+## Development Methodology
+
+This project will use a contract-driven, top-down TDD workflow.
+
+- Start from the client-visible contract.
+- Push tests down through handlers, services, and adapters.
+- Pop tests back up and fix the lower layers to satisfy the higher contract.
+- Prefer real implementations and let integration issues surface early.
+
+For the full workflow, see [TDD_TOP_DOWN_GUIDE.md](TDD_TOP_DOWN_GUIDE.md).
+
 ## Folder Structure
 
 ```
@@ -320,7 +331,7 @@ This helps future implementations and maintains accuracy.
 ## File Locations
 
 All planning documents are now in:
-`/mnt/DATA/Projects/0.present-projects/Active/TextAnalyser/planning/`
+`/mnt/DATA/Projects/0.present-projects/Active/GS-WebGate/planning/`
 
 Implementation code will go in:
 `src/main/java/com/noprobit/tools/ui/`

@@ -9,16 +9,16 @@
 
 ## Overview
 
-Systematically explore and analyze the actual TextAnalyser codebase to understand real structure, data flows, and design patterns.
+Systematically explore and analyze the actual GS-WebGate codebase to understand real structure, data flows, and design patterns.
 
 ---
 
 ## Checklist
 
 - [x] Explore root project structure
-- [x] Analyze TextAnalyser-jar module (core engine)
-- [x] Analyze TextAnalyser-UI-swing module (desktop UI)
-- [x] Analyze TextAnalyser-webgate module (Spring Boot gateway)
+- [x] Analyze GS-WebGate-jar module (core engine)
+- [x] Analyze GS-WebGate-UI-swing module (desktop UI)
+- [x] Analyze GS-WebGate-webgate module (Spring Boot gateway)
 - [x] Map all package structures
 - [x] Identify core classes and responsibilities
 - [x] Understand real data flows
@@ -32,20 +32,20 @@ Systematically explore and analyze the actual TextAnalyser codebase to understan
 
 ### What Was Analyzed
 
-1. **TextAnalyser-jar** (Core Analysis Engine)
+1. **GS-WebGate-jar** (Core Analysis Engine)
    - 40+ classes across 9 packages
    - Embedded HTTP server on port 8081
    - Purpose detection via pattern matching
    - FileDB persistence
    - Multiple linting systems
 
-2. **TextAnalyser-UI-swing** (Desktop Application)
+2. **GS-WebGate-UI-swing** (Desktop Application)
    - MVC architecture with 5 phase-specific controllers
    - SwingWorker for async processing
    - REST client to jar module
    - Dashboard and reporting capabilities
 
-3. **TextAnalyser-webgate** (Spring Boot Gateway)
+3. **GS-WebGate-webgate** (Spring Boot Gateway)
    - REST API for external verification
    - DuckDuckGo API integration
    - Generic query support

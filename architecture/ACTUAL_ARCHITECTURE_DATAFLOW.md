@@ -1,226 +1,95 @@
-# WebGate & MQ: Data Flow & Communication
+# GS-WebGate Request and Response Flow
 
-**Version:** 1.0 (WebGate/MQ focused)  
-**Date:** 2026-07-20
+**Version:** 2.0  
+**Last Updated:** 2026-08-05
 
 ---
 
-## Workflow: WebGate Verifies Purpose (via REST API)
+## Main Flow: Client Submits a Search
 
-### Purpose Verification Flow
-
-```
-JAR Module has detected purpose: CONTROLLER
-  ↓
-If RemoteVerification enabled:
-  ├─→ Call WebGate API
-  │   └─→ POST http://localhost:8080/webgate/api/verify-purpose
-  │
-  └─→ Request payload:
-      {
-        "className": "UserController",
-        "detectedPurpose": "CONTROLLER",
-        "keyword": "controller"
-      }
-  ↓
-WebGate receives request
-  └─→ PurposeVerificationController.verifyPurpose()
-      ├─→ InternetSearchService.verifyPurpose()
-      │   ├─→ Build DuckDuckGo query
-      │   │   └─→ "UserController controller pattern"
-      │   ├─→ HTTP GET to https://api.duckduckgo.com/
-      │   │
-      │   ├─→ Parse DuckDuckGo response:
-      │   │   ├─ Instant answer (if present): confidence 0.95
-      │   │   ├─ Abstract (if present): confidence 0.80
-      │   │   └─ Related topics (if present): confidence 0.70
-      │   │
-      │   └─→ Return RemoteVerificationResult {
-      │         className: "UserController",
-      │         purpose: "CONTROLLER",
-      │         verified: true,
-      │         confidence: 0.92,
-      │         sources: ["DuckDuckGo Instant Answer"]
-      │       }
-      │
-      └─→ Send JSON response
-  ↓
-JAR Module receives verification
-  ├─→ Update confidence score
-  │   └─→ 0.95 (local) * 0.92 (verification) = 0.874
-  └─→ Include in AnalysisResult
+```text
+Client Application
+  |
+  | 1. Create search request
+  v
+GS-mq
+  | 2. Store request in pending queue
+  v
+GS-WebGate
+  | 3. Poll queue for work
+  | 4. Dequeue request
+  | 5. Run search against internet
+  | 6. Build structured result
+  v
+GS-mq
+  | 7. Store response by request ID
+  v
+Client Application
+  | 8. Poll for response
+  | 9. Consume result
 ```
 
 ---
 
-## Workflow: WebGate Generic Query (via REST API)
+## Example Message Lifecycle
 
-### Generic Query Flow
-
+### Request message
+```json
+{
+  "requestId": "req-1001",
+  "type": "search",
+  "question": "What is the current weather in London?",
+  "context": "travel",
+  "createdAt": 1722810000
+}
 ```
-Any system queries WebGate for general knowledge
-  ↓
-POST http://localhost:8080/webgate/api/query
-  └─→ {
-      "question": "What is REST API?",
-      "context": "java spring boot",
-      "maxResults": 5,
-      "timeout": 5000
-    }
-  ↓
-WebGate.PurposeVerificationController.queryGeneric()
-  └─→ InternetSearchService.queryGeneric()
-      ├─→ Build DuckDuckGo query
-      │   ├─ Add question: "What is REST API?"
-      │   ├─ Add context: "java spring boot"
-      │   └─ Set max results: 5
-      │
-      ├─→ HTTP GET to DuckDuckGo API
-      │   └─→ https://api.duckduckgo.com/?q=What+is+REST+API+java+spring+boot
-      │
-      ├─→ Parse response:
-      │   ├─ Extract instant answer (confidence 0.95)
-      │   │   └─→ "REST is Representational State Transfer, an architectural style..."
-      │   ├─ Extract abstract (confidence 0.80)
-      │   ├─ Extract related topics (confidence 0.70)
-      │   └─ Extract sources
-      │
-      └─→ Return QueryResponse {
-        question: "What is REST API?",
-        answerFound: true,
-        answer: "REST is Representational State Transfer...",
-        confidence: 0.92,
-        summary: "Direct answer found",
-        processingTime: 245,
-        sources: ["DuckDuckGo", "Wikipedia", "MDN"]
-      }
-  ↓
-Client receives answer with confidence score
+
+### Response message
+```json
+{
+  "requestId": "req-1001",
+  "type": "search-result",
+  "answerFound": true,
+  "answer": "The weather is mostly cloudy with light rain.",
+  "confidence": 0.87,
+  "sources": ["DuckDuckGo"],
+  "processingTimeMs": 412
+}
 ```
 
 ---
 
-## Workflow: MQ Request-Response Cycle
+## Searcher Processing Steps
 
-### Message Queue Communication
-
-```
-JAR Module needs verification
-  ├─→ Enqueue request to MQ
-  │   POST with command: "enqueue_request"
-  │   {
-  │     "id": "req-12345",
-  │     "question": "What is REST API?",
-  │     "context": "java spring boot"
-  │   }
-  │
-  └─→ MQ Server stores request (FIFO queue)
-  
-WebGate polls MQ
-  ├─→ Periodic polling (every 500ms)
-  │   POST with command: "dequeue_request"
-  │
-  ├─→ MQ Server returns oldest request
-  │   {
-  │     "id": "req-12345",
-  │     "question": "What is REST API?",
-  │     "context": "java spring boot"
-  │   }
-  │
-  └─→ WebGate marks as "processing"
-
-WebGate processes request
-  ├─→ Call DuckDuckGo API
-  ├─→ Parse response
-  ├─→ Calculate confidence
-  └─→ Build response object
-
-WebGate enqueues response to MQ
-  ├─→ POST with command: "enqueue_response"
-  │   {
-  │     "id": "req-12345",
-  │     "queryResponse": {
-  │       "question": "What is REST API?",
-  │       "answerFound": true,
-  │       "answer": "REST is Representational State Transfer...",
-  │       "confidence": 0.92,
-  │       "sources": ["DuckDuckGo"]
-  │     }
-  │   }
-  │
-  └─→ MQ Server stores response (by requestId)
-
-JAR Module polls MQ for response
-  ├─→ POST with command: "has_response"
-  │   { "requestId": "req-12345" }
-  │
-  ├─→ MQ Server checks storage
-  │
-  └─→ When response is ready:
-      POST with command: "dequeue_response"
-      { "requestId": "req-12345" }
-      
-      MQ Server returns response and deletes from storage
-
-JAR Module receives answer
-  ├─→ Processes verification result
-  └─→ Continues analysis
-```
+1. The searcher connects to GS-mq.
+2. It repeatedly polls for pending requests.
+3. When a request is found, it dequeues it.
+4. It performs the search using a search provider.
+5. It formats the result as a structured response.
+6. It publishes the response back to GS-mq.
 
 ---
 
-## Error Handling: WebGate Unavailable (Graceful Degradation)
+## Failure Handling
 
-```
-JAR tries to verify purpose via WebGate
-  ├─→ POST to http://localhost:8080/webgate/api/verify-purpose
-  ├─→ Connection timeout (WebGate not running)
-  │
-  └─→ InternetSearchService catches exception:
-      ├─→ Log warning
-      ├─→ Continue with local confidence score (no verification)
-      ├─→ Mark source as "Local analysis only"
-      └─→ Return result with original confidence
-```
+### GS-mq unavailable
+- The searcher retries its connection.
+- The client continues to hold the request until the queue is available again.
+- No direct dependency on the searcher being reachable by the client is required.
 
----
+### Searcher unavailable
+- Requests remain queued until the searcher comes back online.
+- The client can retry or wait for completion.
 
-## Error Handling: MQ Unavailable (Graceful Degradation)
-
-```
-WebGate tries to poll MQ
-  ├─→ TCP connection attempt to MQ server
-  ├─→ Connection refused (MQ not running)
-  │
-  └─→ MQPoller catches exception:
-      ├─→ Log error
-      ├─→ Wait and retry (exponential backoff)
-      ├─→ No requests to process during outage
-      └─→ Resume polling when MQ comes back online
-```
+### Search provider unavailable
+- The searcher returns a graceful failure response with a low-confidence or empty result.
+- The client can decide how to handle this case.
 
 ---
 
-## Summary: Communication Patterns
+## Why this model works
 
-WebGate supports two communication modes:
-
-**Mode 1: Direct REST API (Synchronous)**
-- JAR calls WebGate directly via HTTP
-- WebGate immediately queries DuckDuckGo
-- Response returned synchronously
-- Used for optional verification during analysis
-- Gracefully degrades if WebGate unavailable
-
-**Mode 2: Message Queue (Asynchronous)**
-- JAR enqueues request to MQ
-- WebGate polls MQ periodically
-- WebGate processes independently
-- Response stored in MQ for later retrieval
-- Decoupled: either service can be down temporarily
-- Planned for Phase 6+
-
-Both modes use the same underlying:
-- DuckDuckGo API for searches
-- Confidence scoring (0.0-1.0)
-- Source attribution
+- The queue is the integration contract.
+- The searcher can live behind NAT or on a private host.
+- The client does not need to be online at the same time as the searcher.
+- The design supports both generic searches and site-specific searches.

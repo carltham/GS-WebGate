@@ -22,7 +22,7 @@ Plan and set up Phase 6 (Message Queue) implementation. Define requirements, arc
 - [ ] Identify test specifications needed
 - [ ] Create test specification document (RED_SPECIFICATION.md)
 - [ ] Create directory structure for Phase 6
-- [ ] Set up Maven module (TextAnalyser-mq)
+- [ ] Set up Maven module (GS-WebGate-mq)
 - [ ] Plan integration with existing modules
 
 ---
@@ -86,7 +86,7 @@ WebGate Module (localhost:8080)
 
 ```
 GS-WebGate-pom/
-└── TextAnalyser-mq/
+└── GS-WebGate-mq/
     ├── pom.xml (Maven configuration)
     ├── src/
     │   ├── main/java/com/noprobit/mq/
@@ -162,7 +162,7 @@ GS-WebGate-pom/
 
 ## References
 
-- `/TextAnalyser/architecture/MQ_ARCHITECTURE.md` - Planned MQ architecture
+- `/GS-WebGate/architecture/MQ_ARCHITECTURE.md` - Planned MQ architecture
 - `/planning/phases/phase-6/` (to be created)
 - Current JAR module HTTP server implementation
 - WebGate Spring Boot implementation

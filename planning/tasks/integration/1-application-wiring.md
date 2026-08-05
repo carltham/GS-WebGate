@@ -15,7 +15,7 @@ Wire all 6 development phases into a cohesive Swing application with main entry 
 
 ## Checklist
 
-- [ ] Verify TextAnalyserApplication.java is entry point
+- [ ] Verify GS-WebGateApplication.java is entry point
 - [ ] Verify MainWindow.java contains all panels
 - [ ] Test complete workflow: Project Selection → Analysis → Report → Dashboard
 - [ ] Test all phase transitions and data flow
@@ -29,7 +29,7 @@ Wire all 6 development phases into a cohesive Swing application with main entry 
 ```bash
 mvn clean compile
 mvn clean test
-java -cp target/classes com.noprobit.tools.ui.TextAnalyserApplication
+java -cp target/classes com.noprobit.tools.ui.GS-WebGateApplication
 ```
 
 All tests passing, application starts cleanly, all phases accessible from main window.

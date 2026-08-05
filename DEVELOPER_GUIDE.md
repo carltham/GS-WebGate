@@ -1,8 +1,37 @@
-# TextAnalyser Swing UI - Developer Guide
+# GS-WebGate Developer Guide
 
 ## Architecture Overview
 
-The Swing UI is built using Test-Driven Development (TDD) with 6 phases, each implementing a complete feature.
+The GS-WebGate project will follow a contract-driven, top-down TDD approach. The client-facing behavior defines the contract first, and every lower layer must adapt to satisfy that contract.
+
+## Contract-Driven Top-Down TDD
+
+### Core principle
+- The client contract is the primary authority.
+- Tests are written from the outside in.
+- Lower layers are adjusted to match the contract of the layer above them.
+
+### Workflow
+1. Start with an end-to-end or client-level test that defines the expected behavior.
+2. Let that test fail at the first missing boundary.
+3. Add the next test at the next layer below.
+4. Continue until the lowest implementation layer is reached.
+5. Re-run tests from the bottom up and fix the implementation to satisfy the higher-level contract.
+
+### Rules
+- Prefer real implementations over mocks.
+- Mocks should only be used outside the system, such as for external calls or network boundaries.
+- Do not hide integration mismatches with overly permissive test doubles.
+- Keep tests focused on observable behavior, not internal implementation details.
+
+### Practical checklist
+- Define the request and response contract first.
+- Write the client-facing test.
+- Add the handler or orchestration test next.
+- Then add the service test.
+- Implement the adapter or integration layer last.
+
+See [planning/TDD_TOP_DOWN_GUIDE.md](planning/TDD_TOP_DOWN_GUIDE.md) for the full working pattern.
 
 ### Project Structure
 ```

@@ -28,7 +28,7 @@ Comprehensive documentation of all mistakes made during architecture analysis wo
 
 ### File Created
 
-**Location:** `/mnt/DATA/WORKSPACE/global-resources/AI-logs/TextAnalyser-AI-Mistakes.md`
+**Location:** `/mnt/DATA/WORKSPACE/global-resources/AI-logs/GS-WebGate-AI-Mistakes.md`
 
 ### Mistakes Documented
 
@@ -126,8 +126,8 @@ This documentation ensures:
 
 ## Related Files
 
-- `/mnt/DATA/WORKSPACE/global-resources/AI-logs/TextAnalyser-AI-Mistakes.md` (Main document)
-- `/home/carl/.claude/projects/TextAnalyser/memory/feedback_destructive_actions.md` (Memory directive)
+- `/mnt/DATA/WORKSPACE/global-resources/AI-logs/GS-WebGate-AI-Mistakes.md` (Main document)
+- `/home/carl/.claude/projects/GS-WebGate/memory/feedback_destructive_actions.md` (Memory directive)
 
 ---
 

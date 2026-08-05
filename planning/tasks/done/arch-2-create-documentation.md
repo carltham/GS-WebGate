@@ -19,7 +19,7 @@ Create 4 comprehensive architecture documentation files based on actual codebase
 - [x] Create ACTUAL_ARCHITECTURE_MODULES.md (758 lines)
 - [x] Create ACTUAL_ARCHITECTURE_DATAFLOW.md (676 lines)
 - [x] Create ACTUAL_ARCHITECTURE_DESIGN_PATTERNS.md (754 lines)
-- [x] Verify all files placed in `/TextAnalyser/architecture/`
+- [x] Verify all files placed in `/GS-WebGate/architecture/`
 - [x] Confirm files are alongside existing docs (not replacing)
 - [x] Total: 2,696 lines of documentation
 - [x] All based on actual code inspection
@@ -29,7 +29,7 @@ Create 4 comprehensive architecture documentation files based on actual codebase
 ## Files Created
 
 ### 1. ACTUAL_ARCHITECTURE_OVERVIEW.md
-- What TextAnalyser actually is and does
+- What GS-WebGate actually is and does
 - Three-module architecture diagram
 - Core analysis process
 - Configuration system
@@ -87,7 +87,7 @@ Create 4 comprehensive architecture documentation files based on actual codebase
 
 ### File Placement
 
-- ✅ All files in `/TextAnalyser/architecture/` root
+- ✅ All files in `/GS-WebGate/architecture/` root
 - ✅ Alongside existing architecture files (not inside pom projects)
 - ✅ Clearly labeled "ACTUAL_" prefix to distinguish from previous docs
 - ✅ No existing files deleted or overwritten

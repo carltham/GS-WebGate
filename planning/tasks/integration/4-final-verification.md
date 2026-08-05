@@ -41,7 +41,7 @@
 ```bash
 # Build and verify
 mvn clean package
-java -jar target/TextAnalyser-UI-swing-*.jar
+java -jar target/GS-WebGate-UI-swing-*.jar
 
 # Tag release
 git tag -a v1.0-swing-ui -m "Swing UI MVP - All 6 phases complete"

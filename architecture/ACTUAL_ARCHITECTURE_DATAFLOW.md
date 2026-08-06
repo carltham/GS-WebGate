@@ -38,8 +38,8 @@ A work item moves through a simple lifecycle:
 - processing resumes once the searcher is available again.
 
 ### External search provider unavailable
-- the searcher returns a degraded response,
-- the response can carry low confidence or no answer,
+- the searcher returns a degraded result,
+- the result can carry low confidence or no answer,
 - the client can decide how to interpret that result.
 
 ## Operational Notes

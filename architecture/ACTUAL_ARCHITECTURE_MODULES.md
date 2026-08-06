@@ -20,7 +20,7 @@ GS-relay is the coordination and persistence layer. It is responsible for:
 - storing completed results,
 - correlating each result with its message ID.
 
-### Request contract
+### Work-item contract
 ```json
 {
   "messageId": "msg-1001",
@@ -30,7 +30,7 @@ GS-relay is the coordination and persistence layer. It is responsible for:
 }
 ```
 
-### Response contract
+### Result contract
 ```json
 {
   "messageId": "msg-1001",

@@ -2,13 +2,13 @@
 
 ## Happy Path
 
-1. The client creates a search request.
-2. The request is submitted to GS-relay over REST.
+1. The client creates a work item.
+2. The work item is submitted to GS-relay over REST.
 3. GS-relay stores it as pending work and returns a message ID.
-4. GS-WebGate polls GS-relay for pending work through a simple REST endpoint.
-5. GS-WebGate claims the work and executes the search.
+4. GS-WebGate polls GS-relay for the next pending work item through a simple REST endpoint.
+5. GS-WebGate claims the work item and executes the search.
 6. GS-WebGate publishes a structured result back to GS-relay.
-7. The client retrieves the response through REST by message ID and consumes it.
+7. The client retrieves the result through REST by message ID and consumes it.
 
 ```text
 Client -> REST -> GS-relay -> GS-WebGate -> External Search Provider

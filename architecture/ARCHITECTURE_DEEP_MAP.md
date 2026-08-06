@@ -1,53 +1,53 @@
 # GS-WebGate Deep Map
 
 **Version:** 2.0  
-**Last Updated:** 2026-08-05
+**Last Updated:** 2026-08-06
 
 ---
 
 ## System Layers
 
 ### 1. Client layer
-- Submits search requests to GS-relay
-- Polls GS-relay for responses
+- Submits work items to GS-relay
+- Polls GS-relay for results by message ID
 - Owns the business use case that requires a search
 
-### 2. Queue layer
-- GS-relay stores requests and responses
-- Correlates them via request ID
+### 2. Relay layer
+- GS-relay stores pending work items and completed results
+- Correlates them via message ID
 - Decouples the client from the searcher
 
 ### 3. Searcher layer
-- GS-WebGate polls GS-relay for work
+- GS-WebGate polls GS-relay for the next pending work item
 - Executes the internet search
-- Publishes a structured response back to the queue
+- Publishes a structured result back to the relay
 
 ---
 
 ## Message Flow
 
 ```text
-Client -> GS-relay : enqueue request
-GS-WebGate -> GS-relay : dequeue request
+Client -> GS-relay : submit work item
+GS-WebGate -> GS-relay : fetch next pending work item
 GS-WebGate -> Internet : run search
-GS-WebGate -> GS-relay : enqueue response
-Client -> GS-relay : fetch response
+GS-WebGate -> GS-relay : publish result
+Client -> GS-relay : fetch result by message ID
 ```
 
 ---
 
 ## Important Concepts
 
-### Request
-A request should contain:
-- requestId
+### Work item
+A work item should contain:
+- messageId
 - question
 - optional context
 - optional target or mode
 
-### Response
-A response should contain:
-- requestId
+### Result
+A result should contain:
+- messageId
 - answerFound
 - answer
 - confidence
@@ -60,7 +60,7 @@ A response should contain:
 
 - The searcher can run on a private machine
 - The searcher can remain outbound-only
-- The queue is the integration boundary
+- The relay is the integration boundary
 - The client and searcher do not need to be online at the same time
 
 ---
@@ -68,18 +68,18 @@ A response should contain:
 ## Suggested Module Responsibilities
 
 ### GS-WebGate
-- queue polling
+- polling for the next pending work item
 - search execution
 - formatting results
 - graceful error handling
 
 ### GS-relay
-- persistence of pending requests
-- persistence of completed responses
-- correlation by request ID
+- persistence of pending work items
+- persistence of completed results
+- correlation by message ID
 - asynchronous delivery
 
 ### Client application
-- creating requests
+- creating work items
 - consuming completed results
 - handling business logic around the returned answer

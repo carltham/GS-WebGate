@@ -8,7 +8,7 @@ The contract between the caller and the system is the authority. Lower layers mu
 
 ## Workflow
 
-1. Start with a client-visible test for the request/result flow.
+1. Start with a client-visible test for the work-item/result flow.
 2. Let that test fail at the first missing boundary.
 3. Add the next layer below with the smallest implementation needed.
 4. Repeat until the infrastructure layer is covered.
@@ -23,7 +23,7 @@ The contract between the caller and the system is the authority. Lower layers mu
 
 ## Practical Checklist
 
-- Write the request/response contract first.
+- Write the work-item/result contract first.
 - Add the client-facing test.
 - Add the handler or orchestration test next.
 - Add the service test after that.

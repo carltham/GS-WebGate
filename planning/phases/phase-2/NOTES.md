@@ -2,4 +2,4 @@
 
 - Keep the worker loop small and observable.
 - Make errors visible instead of hiding them inside the loop.
-- Preserve request IDs on every publish path.
+- Preserve message IDs on every publish path.

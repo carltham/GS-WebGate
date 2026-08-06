@@ -1,6 +1,6 @@
 # What Is This Good For?
 
-GS-WebGate is a private-search gateway for scenarios where search work must be executed on a private machine, while the request and response flow is coordinated through a lightweight relay service.
+GS-WebGate is a private-search gateway for scenarios where search work must be executed on a private machine, while the work-item/result flow is coordinated through a lightweight relay service.
 
 The idea is simple:
 

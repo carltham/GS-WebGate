@@ -5,13 +5,13 @@
 1. The client creates a work item.
 2. The work item is submitted to GS-relay over REST.
 3. GS-relay stores it as pending work and returns a message ID.
-4. GS-WebGate polls GS-relay for the next pending work item through a simple REST endpoint.
-5. GS-WebGate claims the work item and executes the search.
-6. GS-WebGate publishes a structured result back to GS-relay.
+4. GS-searcher polls GS-relay for the next pending work item through a simple REST endpoint.
+5. GS-searcher claims the work item and executes the search.
+6. GS-searcher publishes a structured result back to GS-relay.
 7. The client retrieves the result through REST by message ID and consumes it.
 
 ```text
-Client -> REST -> GS-relay -> GS-WebGate -> External Search Provider
+Client -> REST -> GS-relay -> GS-searcher -> External Search Provider
                    ^                     |
                    |                     |
                    +------ result <------+ 

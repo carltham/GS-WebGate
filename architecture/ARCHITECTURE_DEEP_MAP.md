@@ -18,7 +18,7 @@
 - Decouples the client from the searcher
 
 ### 3. Searcher layer
-- GS-WebGate polls GS-relay for the next pending work item
+- GS-searcher polls GS-relay for the next pending work item
 - Executes the internet search
 - Publishes a structured result back to the relay
 
@@ -28,9 +28,9 @@
 
 ```text
 Client -> GS-relay : submit work item
-GS-WebGate -> GS-relay : fetch next pending work item
-GS-WebGate -> Internet : run search
-GS-WebGate -> GS-relay : publish result
+GS-searcher -> GS-relay : fetch next pending work item
+GS-searcher -> Internet : run search
+GS-searcher -> GS-relay : publish result
 Client -> GS-relay : fetch result by message ID
 ```
 

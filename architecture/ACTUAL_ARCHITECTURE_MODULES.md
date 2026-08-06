@@ -1,5 +1,11 @@
 # Components and Contracts
 
+## Architecture principles
+- Keep each component focused on a single role.
+- Use the simplest contract possible for each interaction.
+- Separate the client-facing flow from the worker execution flow.
+- Do not mix search execution into the relay layer.
+
 ## 1. Client Application
 
 The client is the initiator of the flow. It is responsible for:
@@ -14,13 +20,14 @@ The client does not perform the search itself.
 ## 2. GS-relay
 
 GS-relay is the coordination and persistence layer. It is responsible for:
-- accepting incoming work submissions over REST,
-- storing pending work items with the simplest possible persistence,
-- exposing a simple endpoint for GS-WebGate to fetch the next pending work item,
-- storing completed results,
-- correlating each result with its message ID.
+- owning the client-facing API for submitting work and fetching results,
+- storing pending work items and completed results,
+- exposing a dedicated worker polling endpoint for GS-searcher,
+- correlating each work item with its message ID.
 
-### Work-item contract
+GS-relay does not perform searches. It only coordinates and stores state.
+
+### Relay API contract
 ```json
 {
   "messageId": "msg-1001",
@@ -43,24 +50,24 @@ GS-relay is the coordination and persistence layer. It is responsible for:
 }
 ```
 
-## 3. GS-WebGate
+## 3. GS-searcher
 
-GS-WebGate is the execution layer. It is responsible for:
+GS-searcher is the execution layer. It is responsible for:
 - polling GS-relay for the next pending work item,
 - claiming that work item,
-- executing the search,
+- executing the search against the external provider,
 - building the structured result,
 - publishing the result back to GS-relay.
 
-It is the only component expected to reach the external search provider directly.
+GS-searcher is the only component that communicates with the external search provider.
 
 ## Interaction Summary
 
 ```text
 Client -> GS-relay : POST /messages
-GS-WebGate -> GS-relay : GET /messages/next
-GS-WebGate -> External Search Provider : execute search
-GS-WebGate -> GS-relay : POST /results
+GS-searcher -> GS-relay : GET /messages/next
+GS-searcher -> External Search Provider : execute search
+GS-searcher -> GS-relay : POST /results
 Client -> GS-relay : GET /results/{messageId}
 ```
 

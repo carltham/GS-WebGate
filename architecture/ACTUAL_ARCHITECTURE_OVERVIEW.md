@@ -16,13 +16,13 @@ The system solves a simple integration problem:
 
 - Client application: submits a work item to GS-relay over REST and later polls for the result by message ID.
 - GS-relay: stores pending work items, exposes an endpoint to fetch the next pending item, and stores completed results for later retrieval.
-- GS-WebGate: polls for work through REST, claims one work item at a time, performs the search, and publishes the result back to GS-relay.
+- GS-searcher: polls for work through REST, claims one work item at a time, performs the search, and publishes the result back to GS-relay.
 - External search provider: provides the actual internet search results.
 
 ## High-Level Shape
 
 ```text
-Client -> REST -> GS-relay -> GS-WebGate -> External Search Provider
+Client -> REST -> GS-relay -> GS-searcher -> External Search Provider
                    ^                     |
                    |                     |
                    +------ result <------+ 
@@ -38,7 +38,7 @@ This design is useful when:
 
 ## Boundaries
 
-- GS-WebGate is the execution layer.
+- GS-searcher is the execution layer.
 - GS-relay is the coordination layer.
 - Clients are the consumers of the service.
 - The external search provider is an external dependency.

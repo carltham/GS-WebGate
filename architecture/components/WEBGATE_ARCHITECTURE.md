@@ -1,8 +1,8 @@
-# GS-WebGate Component Architecture
+# GS-searcher Component Architecture
 
 ## Role
 
-GS-WebGate is the execution component of the system. It is responsible for taking work from GS-relay, performing the search, and publishing the outcome back to the service.
+GS-searcher is the execution component of the system. It is responsible for taking work from GS-relay, performing the search, and publishing the outcome back to the service.
 
 ## Responsibilities
 
@@ -44,4 +44,4 @@ A result should contain at least:
 
 ## Deployment Notes
 
-GS-WebGate should run in a location that has outbound internet access and where inbound connectivity is not required. A private workstation, laptop, or local server is a good fit.
+GS-searcher should run in a location that has outbound internet access and where inbound connectivity is not required. A private workstation, laptop, or local server is a good fit.

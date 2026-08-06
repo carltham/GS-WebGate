@@ -24,6 +24,13 @@ public class WorkItemRequest {
         this.context = context;
     }
 
+    public WorkItemRequest(String question, String context, String target, String mode) {
+        this.question = question;
+        this.context = context;
+        this.target = target;
+        this.mode = mode;
+    }
+
     public String getQuestion() {
         return question;
     }

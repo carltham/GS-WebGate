@@ -25,6 +25,13 @@ public class RelayClient {
     }
 
     /**
+     * Get the relay base URL for validation purposes.
+     */
+    public String getRelayBaseUrl() {
+        return relayBaseUrl;
+    }
+
+    /**
      * Poll the relay for the next pending work item.
      * 
      * @return The next pending work item with message ID, or empty if none exist

@@ -48,3 +48,4 @@ This design is useful when:
 - outbound-only connectivity for the searcher,
 - REST as the primary client-to-relay contract,
 - minimal persistence for pending work and completed results,
+- contract-first, test-first, top-down TDD as the implementation discipline.

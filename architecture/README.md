@@ -22,3 +22,7 @@ The design is intentionally simple: clients submit work over REST, the relay sto
 ## Key Idea
 
 The relay is the integration boundary. The searcher can live behind NAT or on a private host, while clients remain decoupled from the search execution layer.
+
+## Implementation Approach
+
+Implementation should follow a contract-first, test-first, top-down TDD approach. The work-item and result contracts define the behavior first, and lower layers must adapt to satisfy those contracts rather than inventing their own semantics.

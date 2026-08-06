@@ -4,13 +4,13 @@
 
 The core decision is to use REST as the integration boundary. This keeps the client and searcher decoupled and allows asynchronous processing without requiring a more complex messaging broker.
 
-## 2. Simple polling instead of push
+## 2. Polling over live sockets
 
 GS-WebGate uses polling because the searcher is expected to run on a private or NATed host. Polling avoids the need for inbound connectivity and keeps the system operational in restricted environments.
 
-## 3. Request ID correlation
+## 3. Message ID correlation
 
-Every message carries a request ID so that responses can be matched to the original work item.
+Every work item carries a message ID so that results can be matched to the original submission and later retrieved by the client.
 
 ## 4. Outbound-only execution
 

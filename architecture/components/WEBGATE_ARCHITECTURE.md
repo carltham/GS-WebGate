@@ -6,11 +6,11 @@ GS-WebGate is the execution component of the system. It is responsible for takin
 
 ## Responsibilities
 
-- poll GS-relay for pending requests over REST,
-- claim work when available,
+- poll GS-relay for pending work over REST,
+- claim or consume a bundle of pending items,
 - call the external search provider,
 - build a structured response,
-- publish the result back to GS-relay using the original request ID,
+- publish the result back to GS-relay using the original message ID,
 - recover gracefully when GS-relay or the external provider is unavailable.
 
 ## Runtime Loop
@@ -18,16 +18,16 @@ GS-WebGate is the execution component of the system. It is responsible for takin
 ```text
 connect to GS-relay
 loop:
-  GET pending request
-  if request exists -> process it
+  GET pending work bundle
+  if work exists -> process it
   POST result
   wait briefly
 ```
 
 ## Expected Request Shape
 
-A request should contain at least:
-- requestId
+A work item should contain at least:
+- messageId
 - question
 - optional context
 - optional target or mode
@@ -35,7 +35,7 @@ A request should contain at least:
 ## Expected Response Shape
 
 A response should contain at least:
-- requestId
+- messageId
 - answerFound
 - answer
 - confidence

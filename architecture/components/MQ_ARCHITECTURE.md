@@ -6,28 +6,28 @@ GS-relay is the coordination and persistence layer for the system. It allows cli
 
 ## Responsibilities
 
-- store pending search requests with minimal persistence,
+- store pending work submissions with minimal persistence,
 - expose simple REST endpoints for GS-WebGate to poll for work,
-- store completed responses,
-- allow clients to retrieve the response later,
-- preserve request/response correlation using the request ID.
+- store completed results,
+- allow clients to retrieve the result later,
+- preserve work/result correlation using the message ID.
 
 ## Message Model
 
-### Request
+### Submission
 ```json
 {
-  "requestId": "req-1001",
+  "messageId": "msg-1001",
   "type": "search",
   "question": "Find news about AI startups",
   "context": "business"
 }
 ```
 
-### Response
+### Result
 ```json
 {
-  "requestId": "req-1001",
+  "messageId": "msg-1001",
   "type": "search-result",
   "answerFound": true,
   "answer": "Results found",
@@ -39,15 +39,15 @@ GS-relay is the coordination and persistence layer for the system. It allows cli
 ## Interaction Pattern
 
 ```text
-Client -> GS-relay : POST /requests
-GS-WebGate -> GS-relay : GET /requests/pending
-GS-WebGate -> GS-relay : POST /responses
-Client -> GS-relay : GET /responses/{requestId}
+Client -> GS-relay : POST /messages
+GS-WebGate -> GS-relay : GET /messages/pending
+GS-WebGate -> GS-relay : POST /results
+Client -> GS-relay : GET /results/{messageId}
 ```
 
 ## Design Notes
 
 - the persistence layer should stay lightweight and predictable,
 - the service should tolerate temporary searcher downtime,
-- request/response pairing should be explicit and simple,
+- work/result pairing should be explicit and simple,
 - the system should support multiple clients and multiple searcher instances if needed.

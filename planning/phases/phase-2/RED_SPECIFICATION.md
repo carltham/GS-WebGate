@@ -6,14 +6,14 @@ Implement the private worker loop that polls for work over REST, executes a sear
 
 ## Acceptance Criteria
 
-1. The worker can poll for pending requests over REST.
+1. The worker can poll for pending work over REST.
 2. The worker can execute the search step using an injected search handler.
-3. The worker publishes a response with the original request ID.
+3. The worker publishes a result with the original message ID.
 4. The worker handles execution errors without crashing the loop.
 
 ## Test Cases
 
-- poll_for_pending_request_over_rest
+- poll_for_pending_work_over_rest
 - execute_search_and_publish_result
 - publish_error_result_when_search_fails
 - continue_loop_after_failed_execution

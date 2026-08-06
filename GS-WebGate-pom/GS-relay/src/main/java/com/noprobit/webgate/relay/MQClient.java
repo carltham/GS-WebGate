@@ -1,4 +1,4 @@
-package com.noprobit.webgate.coordinator;
+package com.noprobit.webgate.relay;
 
 import java.io.*;
 import java.net.*;

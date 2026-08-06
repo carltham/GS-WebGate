@@ -8,7 +8,7 @@ GS-WebGate is a two-part system:
 - GS-WebGate runs on a private machine and performs internet searches.
 - GS-relay acts as the coordination layer between clients and the searcher.
 
-The design is intentionally simple: clients enqueue work, the searcher polls for it, and results are returned asynchronously through the queue.
+The design is intentionally simple: clients submit work over REST, the relay stores it as pending work, the searcher polls for bundles of work, and results are returned asynchronously through the relay.
 
 ## Recommended Reading Order
 
@@ -21,4 +21,4 @@ The design is intentionally simple: clients enqueue work, the searcher polls for
 
 ## Key Idea
 
-The queue is the integration boundary. The searcher can live behind NAT or on a private host, while clients remain decoupled from the search execution layer.
+The relay is the integration boundary. The searcher can live behind NAT or on a private host, while clients remain decoupled from the search execution layer.

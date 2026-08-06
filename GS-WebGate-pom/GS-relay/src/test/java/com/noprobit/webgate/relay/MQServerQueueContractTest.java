@@ -1,6 +1,6 @@
-package com.noprobit.webgate.coordinator;
+package com.noprobit.webgate.relay;
 
-import com.noprobit.webgate.coordinator.models.QueueMessage;
+import com.noprobit.webgate.relay.models.QueueMessage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

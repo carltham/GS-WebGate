@@ -14,18 +14,18 @@ The system solves a simple integration problem:
 
 ## Main Actors
 
-- Client application: creates a search request and later consumes the result through REST.
-- GS-relay: stores pending requests and completed responses using the simplest possible persistence approach.
-- GS-WebGate: polls for work through REST, performs the search, and publishes the result back to GS-relay.
+- Client application: submits a work item to GS-relay over REST and later polls for the result by message ID.
+- GS-relay: stores pending work items, exposes an endpoint to fetch the next pending item, and stores completed results for later retrieval.
+- GS-WebGate: polls for work through REST, claims one work item at a time, performs the search, and publishes the result back to GS-relay.
 - External search provider: provides the actual internet search results.
 
 ## High-Level Shape
 
 ```text
 Client -> REST -> GS-relay -> GS-WebGate -> External Search Provider
-                 ^                     |
-                 |                     |
-                 +------ result <------+
+                   ^                     |
+                   |                     |
+                   +------ result <------+ 
 ```
 
 ## Why this architecture exists
@@ -46,6 +46,5 @@ This design is useful when:
 ## Design Principles
 
 - outbound-only connectivity for the searcher,
-- REST as the primary client-to-mq contract,
-- minimal persistence for requests and results,
-- no hard dependency on direct inbound connectivity.
+- REST as the primary client-to-relay contract,
+- minimal persistence for pending work and completed results,

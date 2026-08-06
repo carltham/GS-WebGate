@@ -1,6 +1,6 @@
-package com.noprobit.webgate.coordinator.storage;
+package com.noprobit.webgate.relay.storage;
 
-import com.noprobit.webgate.coordinator.models.QueueMessage;
+import com.noprobit.webgate.relay.models.QueueMessage;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

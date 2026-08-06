@@ -1,4 +1,4 @@
-package com.noprobit.webgate.coordinator.models;
+package com.noprobit.webgate.relay.models;
 
 import java.util.Objects;
 import java.util.UUID;

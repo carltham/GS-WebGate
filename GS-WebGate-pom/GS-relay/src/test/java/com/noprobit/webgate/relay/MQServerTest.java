@@ -1,4 +1,4 @@
-package com.noprobit.webgate.coordinator;
+package com.noprobit.webgate.relay;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

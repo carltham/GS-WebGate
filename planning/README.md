@@ -7,7 +7,7 @@
 
 GS-WebGate is a two-part system:
 - GS-WebGate runs on a private machine and performs outbound search work.
-- GS-relay accepts requests over REST, stores them with minimal persistence, and returns results asynchronously.
+- GS-relay accepts work submissions over REST, stores them with minimal persistence, and returns results asynchronously.
 
 The planning here is intentionally smaller and more implementation-focused than the old Swing-era plan.
 
@@ -21,21 +21,22 @@ The planning here is intentionally smaller and more implementation-focused than 
 ## Delivery Phases
 
 ### Phase 0 — Contracts and test harness
-Focus on the shared request/response contract and the first failing tests.
+Focus on the shared submission/result contract and the first failing tests.
 
 Deliverables:
-- request and response message shapes
-- test harness for REST submission and retrieval
+- submission and result message shapes
+- test harness for submission and retrieval
 - initial acceptance tests for submit/poll/retrieve flow
+- a clear state lifecycle: submitted → pending → claimed → completed → consumed
 
 ### Phase 1 — GS-relay core behavior
-Implement the persistence service so it can accept work, hold it until a worker claims it, and return results by request ID.
+Implement the persistence service so it can accept work, hold it until a worker claims it, and return results by message ID.
 
 Deliverables:
-- request storage with minimal persistence
-- response storage
-- correlation by request ID
-- basic polling and retrieval behavior
+- pending work storage with minimal persistence
+- result storage
+- correlation by message ID
+- basic polling and retrieval behavior for the next pending work item
 
 ### Phase 2 — GS-WebGate worker loop
 Implement the private worker so it can poll for work over REST, execute the search step, and publish the result.
@@ -50,7 +51,7 @@ Deliverables:
 Wire the modules together and harden the path for real use.
 
 Deliverables:
-- end-to-end request/result flow
+- end-to-end work/result flow
 - logging and error handling
 - configuration and operational defaults
 - documentation updates

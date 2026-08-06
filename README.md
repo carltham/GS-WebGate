@@ -1,10 +1,11 @@
 # GS-WebGate
 
-GS-WebGate is a private-search gateway built around a simple pattern:
+GS-WebGate is a private-search gateway built around a simple asynchronous work-queue pattern:
 
-- a client submits a search request,
-- a lightweight relay accepts and logs the request/response flow,
-- a searcher running on a private machine performs the actual search and returns the result.
+- a client submits work to a relay over REST,
+- the relay stores the work and assigns a message ID,
+- a searcher running on a private machine polls for pending work, executes it, and publishes the result back,
+- the client later polls the relay for the result using the message ID.
 
 ## Purpose
 
@@ -14,10 +15,10 @@ This project is designed for scenarios where search execution must remain inside
 
 - GS-WebGate-pom/ - Maven parent build and module configuration
 - GS-WebGate-pom/GS-searcher/ - search execution component
-- GS-WebGate-pom/GS-relay/ - relay service for request/response flow and logging
+- GS-WebGate-pom/GS-relay/ - relay service for work submission, polling, and result storage
 - architecture/ - architecture documentation
 - planning/ - planning and phase notes
 
 ## Status
 
-The repository is currently being structured around the relay/searcher architecture and the initial request/response flow.
+The repository is currently being structured around the relay/searcher architecture and the initial REST-based polling workflow.

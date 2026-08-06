@@ -1,4 +1,4 @@
-package com.noprobit.webgate.coordinator;
+package com.noprobit.webgate.relay;
 
 public class PortUnavailableException extends RuntimeException {
     public PortUnavailableException(String message) {

@@ -21,4 +21,19 @@ This project is designed for scenarios where search execution must remain inside
 
 ## Status
 
-The repository is currently being structured around the relay/searcher architecture and the initial REST-based polling workflow.
+### ✅ Phase 0: Complete
+- **Contract Definition**: WorkItemRequest, WorkItemResponse, SearchResult, PolledWork
+- **GS-relay**: 5 tests passing
+  - REST endpoints: Submit work, poll for work, store result, retrieve result
+  - Persistence: H2 database with WorkItem/Result entities
+  - Message correlation: Message ID links submissions to results
+- **GS-searcher**: 5 tests passing
+  - Worker loop: Poll relay → Execute search → Submit result
+  - HTTP client: Real communication with relay (no mocks)
+  - Search executor: Mock implementation for testing
+- **Build Status**: 10/10 tests passing, BUILD SUCCESS
+- **Date Completed**: 2026-08-06
+
+### 🔄 Phase 1: In Progress
+- Planned: Resilience, retry logic, timeouts, dead-letter queue
+- See [planning/tasks/INDEX.md](planning/tasks/INDEX.md) for task tracking

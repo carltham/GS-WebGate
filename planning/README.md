@@ -1,6 +1,6 @@
 # GS-WebGate Planning
 
-**Status:** Reset for the current architecture
+**Status:** Phase 0 COMPLETE (2026-08-06) | Phase 1 IN PROGRESS
 **Purpose:** Implement the GS-WebGate private-search gateway and its REST-based coordination layer with the simplest possible persistence.
 
 ## Current Product Direction
@@ -20,14 +20,17 @@ The planning here is intentionally smaller and more implementation-focused than 
 
 ## Delivery Phases
 
-### Phase 0 — Contracts and test harness
+### Phase 0 — Contracts and test harness ✅ COMPLETE (2026-08-06)
 Focus on the shared submission/result contract and the first failing tests.
 
 Deliverables:
-- submission and result message shapes
-- test harness for submission and retrieval
-- initial acceptance tests for submit/poll/retrieve flow
-- a clear state lifecycle: submitted → pending → claimed → completed → consumed
+- ✅ submission and result message shapes (WorkItemRequest, WorkItemResponse, SearchResult)
+- ✅ test harness for submission and retrieval (5 relay tests + 5 searcher tests)
+- ✅ initial acceptance tests for submit/poll/retrieve flow (all 10 tests passing)
+- ✅ a clear state lifecycle: submitted → pending → claimed → completed → consumed
+- ✅ PolledWork contract for message ID correlation in poll responses
+- ✅ Real HTTP integration between relay and searcher modules (not mocked)
+- ✅ Message ID generation and tracking (UUID-based correlation)
 
 ### Phase 1 — GS-relay core behavior
 Implement the persistence service so it can accept work, hold it until a worker claims it, and return results by message ID.

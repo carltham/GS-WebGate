@@ -29,6 +29,9 @@ public class SearcherWorker {
 
     @Autowired(required = false)
     private SecurityValidator securityValidator;
+
+    @Autowired(required = false)
+    private DeadLetterQueueService deadLetterQueueService;
     
     @Value("${searcher.max-poll-retries:3}")
     private int maxPollRetries;
@@ -69,6 +72,16 @@ public class SearcherWorker {
     public SearcherWorker(RelayClient relayClient, SearchExecutor searchExecutor,
                          int maxPollRetries, int maxSubmitRetries,
                          long pollTimeoutMs, long searchTimeoutMs, SecurityValidator securityValidator) {
+        this(relayClient, searchExecutor, maxPollRetries, maxSubmitRetries, pollTimeoutMs, searchTimeoutMs, securityValidator, null);
+    }
+
+    /**
+     * Full constructor with DLQ service for production use.
+     */
+    public SearcherWorker(RelayClient relayClient, SearchExecutor searchExecutor,
+                         int maxPollRetries, int maxSubmitRetries,
+                         long pollTimeoutMs, long searchTimeoutMs, SecurityValidator securityValidator,
+                         DeadLetterQueueService deadLetterQueueService) {
         this.relayClient = relayClient;
         this.searchExecutor = searchExecutor;
         this.maxPollRetries = maxPollRetries;
@@ -76,6 +89,7 @@ public class SearcherWorker {
         this.pollTimeoutMs = pollTimeoutMs;
         this.searchTimeoutMs = searchTimeoutMs;
         this.securityValidator = securityValidator;
+        this.deadLetterQueueService = deadLetterQueueService;
     }
 
     /**
@@ -126,13 +140,60 @@ public class SearcherWorker {
             } else {
                 logger.error("Failed to submit result after retries: messageId={}", 
                            work.getMessageId());
+                
+                // Capture submission failure to DLQ
+                if (deadLetterQueueService != null) {
+                    deadLetterQueueService.captureFailure(
+                        work.getMessageId(),
+                        work.getQuestion(),
+                        work.getContext(),
+                        work.getTarget(),
+                        work.getMode(),
+                        "Failed to submit result after " + maxSubmitRetries + " attempts",
+                        com.gswebgate.searcher.db.FailureRecord.FailureReason.NETWORK_ERROR
+                    );
+                }
+                
                 return false;
             }
         } catch (Exception e) {
             logger.error("Error processing work: messageId={}, error={}", 
                         work.getMessageId(), e.getMessage(), e);
+            
+            // Capture to DLQ for investigation
+            if (deadLetterQueueService != null) {
+                com.gswebgate.searcher.db.FailureRecord.FailureReason reason = 
+                    determineFailureReason(e);
+                deadLetterQueueService.captureFailure(
+                    work.getMessageId(),
+                    work.getQuestion(),
+                    work.getContext(),
+                    work.getTarget(),
+                    work.getMode(),
+                    e.getMessage(),
+                    reason
+                );
+            }
+            
             return false;
         }
+    }
+
+    /**
+     * Determine the failure reason from an exception.
+     */
+    private com.gswebgate.searcher.db.FailureRecord.FailureReason determineFailureReason(Exception e) {
+        String message = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
+        
+        if (message.contains("timeout")) {
+            return com.gswebgate.searcher.db.FailureRecord.FailureReason.TIMEOUT;
+        } else if (message.contains("network") || message.contains("connection")) {
+            return com.gswebgate.searcher.db.FailureRecord.FailureReason.NETWORK_ERROR;
+        } else if (message.contains("search") || message.contains("execution")) {
+            return com.gswebgate.searcher.db.FailureRecord.FailureReason.SEARCH_EXECUTION_ERROR;
+        }
+        
+        return com.gswebgate.searcher.db.FailureRecord.FailureReason.UNKNOWN_ERROR;
     }
 
     /**

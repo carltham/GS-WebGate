@@ -1,5 +1,11 @@
 package com.gswebgate.relay.contract;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,11 +14,22 @@ import java.util.Objects;
  * Contains the answer, confidence, and processing metadata.
  */
 public class SearchResult {
+    @NotBlank(message = "Message ID is required")
     private String messageId;
-    private boolean answerFound;
+
+    @NotNull(message = "Answer found flag is required")
+    private Boolean answerFound;
+
+    @Size(max = 5000, message = "Answer must not exceed 5000 characters")
     private String answer;
-    private double confidence;
+
+    @DecimalMin(value = "0.0", message = "Confidence must be >= 0")
+    @DecimalMax(value = "1.0", message = "Confidence must be <= 1.0")
+    private Double confidence;
+
     private List<String> sources;
+
+    @Min(value = 0, message = "Processing time must be >= 0")
     private long processingTimeMs;
 
     public SearchResult() {

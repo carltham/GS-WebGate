@@ -1,5 +1,7 @@
 package com.gswebgate.relay.contract;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.util.Objects;
 
 /**
@@ -7,9 +9,17 @@ import java.util.Objects;
  * Contains the question and optional context for search execution.
  */
 public class WorkItemRequest {
+    @NotBlank(message = "Question is required")
+    @Size(min = 1, max = 1000, message = "Question must be between 1 and 1000 characters")
     private String question;
+
+    @Size(max = 5000, message = "Context must not exceed 5000 characters")
     private String context;
+
+    @Size(max = 500, message = "Target must not exceed 500 characters")
     private String target;
+
+    @Size(max = 100, message = "Mode must not exceed 100 characters")
     private String mode;
 
     public WorkItemRequest() {

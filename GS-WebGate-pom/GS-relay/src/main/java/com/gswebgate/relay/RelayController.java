@@ -6,6 +6,7 @@ import com.gswebgate.relay.contract.SearchResult;
 import com.gswebgate.relay.contract.WorkItemRequest;
 import com.gswebgate.relay.contract.WorkItemResponse;
 import com.gswebgate.relay.db.WorkItem;
+import com.gswebgate.relay.metrics.OperationalMetrics;
 import com.gswebgate.relay.service.DLQSyncService;
 import com.gswebgate.relay.service.ResultService;
 import com.gswebgate.relay.service.WorkItemService;
@@ -26,11 +27,14 @@ public class RelayController {
     private final WorkItemService workItemService;
     private final ResultService resultService;
     private final DLQSyncService dlqSyncService;
+    private final OperationalMetrics metrics;
 
-    public RelayController(WorkItemService workItemService, ResultService resultService, DLQSyncService dlqSyncService) {
+    public RelayController(WorkItemService workItemService, ResultService resultService, 
+                          DLQSyncService dlqSyncService, OperationalMetrics metrics) {
         this.workItemService = workItemService;
         this.resultService = resultService;
         this.dlqSyncService = dlqSyncService;
+        this.metrics = metrics;
     }
 
     /**
@@ -41,6 +45,7 @@ public class RelayController {
      */
     @PostMapping
     public ResponseEntity<WorkItemResponse> submitWork(@Valid @RequestBody WorkItemRequest request) {
+        metrics.recordWorkItemSubmitted();
         WorkItemResponse response = workItemService.submitWork(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -78,6 +83,7 @@ public class RelayController {
     @PostMapping("/results")
     public ResponseEntity<Void> storeResult(@Valid @RequestBody SearchResult result) {
         resultService.storeResult(result);
+        metrics.recordWorkItemCompleted();
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -102,7 +108,9 @@ public class RelayController {
      */
     @PostMapping("/dlq/failures")
     public ResponseEntity<Void> syncDLQFailure(@Valid @RequestBody DLQSyncRequest request) {
+        metrics.recordDLQFailureReceived();
         dlqSyncService.syncFailureFromSearcher(request);
+        metrics.recordDLQFailureSynced();
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }
